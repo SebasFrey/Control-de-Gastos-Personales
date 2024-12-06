@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control de Gastos Personales</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Control de Gastos Personales</h1>
+    </header>
+    <main>
+      <section id="form-section">
+        <h2>Registrar Transacción</h2>
+        <form id="transaction-form">
+          <div class="form-group">
+            <label for="description">Descripción:</label>
+            <input type="text" id="description" required />
+          </div>
+          <div class="form-group">
+            <label for="amount">Monto:</label>
+            <input type="number" id="amount" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label for="type">Tipo:</label>
+            <select id="type" required>
+              <option value="income">Ingreso</option>
+              <option value="expense">Gasto</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="category">Categoría:</label>
+            <select id="category" required>
+              <option value="salary">Salario</option>
+              <option value="food">Alimentación</option>
+              <option value="transport">Transporte</option>
+              <option value="entertainment">Entretenimiento</option>
+              <option value="other">Otro</option>
+            </select>
+          </div>
+          <button type="submit">Agregar Transacción</button>
+        </form>
+      </section>
+
+      <section id="summary-section">
+        <h2>Resumen</h2>
+        <div id="total-balance">
+          Saldo Total: $<span id="balance">0.00</span>
+        </div>
+        <div id="total-income">
+          Total Ingresos: $<span id="income">0.00</span>
+        </div>
+        <div id="total-expenses">
+          Total Gastos: $<span id="expenses">0.00</span>
+        </div>
+        <div id="category-summary">
+          <h3>Resumen por Categoría</h3>
+          <ul id="category-list"></ul>
+        </div>
+        <div id="chart-container">
+          <h3>Distribución de Gastos</h3>
+          <div id="expense-chart"></div>
+        </div>
+      </section>
+
+      <section id="history-section">
+        <h2>Historial de Transacciones</h2>
+        <div id="filter-container">
+          <label for="filter">Filtrar por:</label>
+          <select id="filter">
+            <option value="all">Todos</option>
+            <option value="income">Ingresos</option>
+            <option value="expense">Gastos</option>
+          </select>
+        </div>
+        <ul id="transaction-list"></ul>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
