@@ -1,3 +1,4 @@
+// Función para formatear números a formato de moneda
 function formatearNumero(numero) {
     return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero);
 }
@@ -14,8 +15,8 @@ const elementoGastos = document.getElementById('gastos');
 const listaCategoria = document.getElementById('lista-categoria');
 const listaTransacciones = document.getElementById('lista-transacciones');
 const seleccionFiltro = document.getElementById('filtro');
-const entradaOtraCategoria = document.getElementById('otro-categoria');
-const contenedorOtraCategoria = document.getElementById('otro-categoria-container');
+const entradaOtraCategoria = document.getElementById('otra-categoria');
+const contenedorOtraCategoria = document.getElementById('contenedor-otra-categoria');
 const botonExportar = document.getElementById('exportar-excel');
 
 // Estado de la aplicación
@@ -54,14 +55,14 @@ function actualizarResumenCategoria() {
     }
 }
 
-function agregarTransaccionAlDOM(transaccion, index) {
+function agregarTransaccionAlDOM(transaccion, indice) {
     const li = document.createElement('li');
     li.className = `item-transaccion ${transaccion.tipo}`;
     li.innerHTML = `
         <span>${transaccion.descripcion}</span>
         <span>$${formatearNumero(transaccion.monto)}</span>
         <span>${transaccion.categoria}</span>
-        <button class="delete-btn" onclick="eliminarTransaccion(${index})">
+        <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
             <i data-feather="trash-2"></i>
         </button>
     `;
@@ -74,8 +75,8 @@ function actualizarListaTransacciones() {
     const transaccionesFiltradas = transacciones.filter(transaccion => {
         return seleccionFiltro.value === 'todos' || transaccion.tipo === seleccionFiltro.value;
     });
-    transaccionesFiltradas.forEach((transaccion, index) => {
-        agregarTransaccionAlDOM(transaccion, index);
+    transaccionesFiltradas.forEach((transaccion, indice) => {
+        agregarTransaccionAlDOM(transaccion, indice);
     });
 }
 
@@ -83,14 +84,14 @@ function guardarTransacciones() {
     localStorage.setItem('transacciones', JSON.stringify(transacciones));
 }
 
-function eliminarTransaccion(index) {
-    const transaccion = transacciones[index];
+function eliminarTransaccion(indice) {
+    const transaccion = transacciones[indice];
     if (transaccion.tipo === 'ingreso') {
         ingresos -= transaccion.monto;
     } else {
         gastos -= transaccion.monto;
     }
-    transacciones.splice(index, 1);
+    transacciones.splice(indice, 1);
     actualizarSaldo();
     actualizarResumenCategoria();
     actualizarListaTransacciones();
@@ -167,21 +168,21 @@ function inicializar() {
 }
 
 function exportarExcel() {
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Descripción,Monto,Tipo,Categoría\n";
+    let contenidoCSV = "data:text/csv;charset=utf-8,";
+    contenidoCSV += "Descripción,Monto,Tipo,Categoría\n";
 
     transacciones.forEach(transaccion => {
-        let row = `${transaccion.descripcion},${transaccion.monto},${transaccion.tipo},${transaccion.categoria}\n`;
-        csvContent += row;
+        let fila = `${transaccion.descripcion},${transaccion.monto},${transaccion.tipo},${transaccion.categoria}\n`;
+        contenidoCSV += fila;
     });
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "control_gastos_personales.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const uriCodificada = encodeURI(contenidoCSV);
+    const enlace = document.createElement("a");
+    enlace.setAttribute("href", uriCodificada);
+    enlace.setAttribute("download", "control_gastos_personales.csv");
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
 }
 
 inicializar();

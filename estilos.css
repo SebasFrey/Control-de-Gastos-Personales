@@ -1,17 +1,19 @@
+/* Definición de variables de color y estilo */
 :root {
-  --color-background: #f5f5f5;
-  --color-text: #333;
-  --color-primary: #000;
-  --color-secondary: #666;
-  --color-accent: #ddd;
-  --color-white: #fff;
+  --color-fondo: #f5f5f5;
+  --color-texto: #333;
+  --color-primario: #000;
+  --color-secundario: #666;
+  --color-acento: #ddd;
+  --color-blanco: #fff;
   --color-ingreso: #4caf50;
   --color-gasto: #f44336;
-  --border-radius: 4px;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
+  --radio-borde: 4px;
+  --sombra-caja: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --transicion: all 0.3s ease;
 }
 
+/* Estilos generales */
 * {
   margin: 0;
   padding: 0;
@@ -21,13 +23,14 @@
 body {
   font-family: 'Roboto', sans-serif;
   line-height: 1.6;
-  background-color: var(--color-background);
-  color: var(--color-text);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
 }
 
+/* Estilos del encabezado */
 header {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
   text-align: center;
   padding: 1rem;
 }
@@ -36,6 +39,7 @@ h1 {
   font-size: 2rem;
 }
 
+/* Diseño principal */
 main {
   max-width: 1200px;
   margin: 2rem auto;
@@ -48,19 +52,19 @@ main {
 h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  border-bottom: 2px solid var(--color-accent);
+  border-bottom: 2px solid var(--color-acento);
   padding-bottom: 0.5rem;
 }
 
 .tarjeta {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  background-color: var(--color-blanco);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-caja);
   padding: 1rem;
   margin-bottom: 1rem;
 }
 
-/* Formulario */
+/* Estilos del formulario */
 #seccion-formulario {
   grid-column: 1 / 2;
 }
@@ -78,27 +82,27 @@ label {
 input, select {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid var(--color-accent);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--color-acento);
+  border-radius: var(--radio-borde);
   font-size: 1rem;
 }
 
 button {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
   border: none;
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  border-radius: var(--border-radius);
+  border-radius: var(--radio-borde);
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transicion);
 }
 
 button:hover {
-  background-color: var(--color-secondary);
+  background-color: var(--color-secundario);
 }
 
-/* Resumen */
+/* Estilos del resumen */
 #seccion-resumen {
   grid-column: 2 / 3;
   grid-row: 1 / 3;
@@ -121,8 +125,8 @@ button:hover {
 }
 
 #saldo-total {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
 }
 
 .ingreso {
@@ -141,10 +145,10 @@ button:hover {
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--color-accent);
+  border-bottom: 1px solid var(--color-acento);
 }
 
-/* Historial */
+/* Estilos del historial */
 #seccion-historial {
   grid-column: 1 / 2;
 }
@@ -162,28 +166,28 @@ button:hover {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  border-bottom: 1px solid var(--color-accent);
-  transition: var(--transition);
+  border-bottom: 1px solid var(--color-acento);
+  transition: var(--transicion);
 }
 
 .item-transaccion:hover {
-  background-color: var(--color-accent);
+  background-color: var(--color-acento);
 }
 
-.item-transaccion .delete-btn {
+.item-transaccion .boton-eliminar {
   background: none;
   border: none;
-  color: var(--color-secondary);
+  color: var(--color-secundario);
   cursor: pointer;
   padding: 0.25rem;
-  transition: var(--transition);
+  transition: var(--transicion);
 }
 
-.item-transaccion .delete-btn:hover {
+.item-transaccion .boton-eliminar:hover {
   color: var(--color-gasto);
 }
 
-/* Responsive */
+/* Estilos responsivos */
 @media (max-width: 768px) {
   main {
       grid-template-columns: 1fr;
@@ -198,11 +202,11 @@ button:hover {
   }
 }
 
-#otro-categoria-container {
+#contenedor-otra-categoria {
   margin-top: 1rem;
 }
 
-.exportar-btn {
+.boton-exportar {
   background-color: #4CAF50;
   color: white;
   padding: 10px 15px;
@@ -213,7 +217,7 @@ button:hover {
   margin-top: 1rem;
 }
 
-.exportar-btn:hover {
+.boton-exportar:hover {
   background-color: #45a049;
 }
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Gastos Personales</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="estilos.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -12,6 +12,7 @@
         <h1>Control de Gastos Personales</h1>
     </header>
     <main>
+        <!-- Sección para agregar nuevas transacciones -->
         <section id="seccion-formulario">
             <h2>Nueva Transacción</h2>
             <form id="formulario-transaccion">
@@ -40,14 +41,17 @@
                         <option value="otro">Otro</option>
                     </select>
                 </div>
-                <div class="grupo-formulario" id="otro-categoria-container" style="display: none;">
-                    <label for="otro-categoria">Nombre para "Otro":</label>
-                    <input type="text" id="otro-categoria" placeholder="Especifique la categoría">
+                <!-- Campo para especificar una categoría personalizada -->
+                <div class="grupo-formulario" id="contenedor-otra-categoria" style="display: none;">
+                    <label for="otra-categoria">Nombre para "Otro":</label>
+                    <input type="text" id="otra-categoria" placeholder="Especifique la categoría">
                 </div>
                 <button type="submit">Agregar Transacción</button>
             </form>
-            <button id="exportar-excel" class="exportar-btn">Exportar a Excel</button>
+            <!-- Botón para exportar datos a Excel -->
+            <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
         </section>
+        <!-- Sección que muestra el resumen financiero -->
         <section id="seccion-resumen">
             <h2>Resumen Financiero</h2>
             <div class="tarjetas-resumen">
@@ -69,6 +73,7 @@
                 <ul id="lista-categoria"></ul>
             </div>
         </section>
+        <!-- Sección que muestra el historial de transacciones -->
         <section id="seccion-historial">
             <h2>Historial de Transacciones</h2>
             <div id="contenedor-filtro">
@@ -79,14 +84,14 @@
                     <option value="gasto">Gastos</option>
                 </select>
             </div>
-            <ul id="lista-transacciones" data-testid="transaction-list"></ul>
+            <ul id="lista-transacciones" data-testid="lista-transacciones"></ul>
         </section>
     </main>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-<script>
-  feather.replace()
-</script>
+    <script>
+      feather.replace()
+    </script>
 </body>
 </html>
 
