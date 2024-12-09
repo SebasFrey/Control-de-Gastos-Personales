@@ -1,41 +1,37 @@
 <!DOCTYPE html>
-<!-- Estructura principal de la página de Control de Gastos Personales -->
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Control de Gastos Personales</title>
     <link rel="stylesheet" href="styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <header>
-      <!-- Sección de encabezado -->
       <h1>Control de Gastos Personales</h1>
     </header>
     <main>
-      <!-- Sección principal con formulario, resumen e historial -->
       <section id="seccion-formulario">
-        <!-- Sección de formulario para agregar transacciones -->
         <h2>Registrar Transacción</h2>
         <form id="formulario-transaccion">
           <div class="grupo-formulario">
-            <label for="descripcion">Descripción:</label>
+            <label for="descripcion">Descripción</label>
             <input type="text" id="descripcion" required />
           </div>
           <div class="grupo-formulario">
-            <label for="monto">Monto:</label>
+            <label for="monto">Monto</label>
             <input type="number" id="monto" step="0.01" required />
           </div>
           <div class="grupo-formulario">
-            <label for="tipo">Tipo:</label>
+            <label for="tipo">Tipo</label>
             <select id="tipo" required>
               <option value="ingreso">Ingreso</option>
               <option value="gasto">Gasto</option>
             </select>
           </div>
           <div class="grupo-formulario">
-            <label for="categoria">Categoría:</label>
+            <label for="categoria">Categoría</label>
             <select id="categoria" required>
               <option value="salario">Salario</option>
               <option value="alimentacion">Alimentación</option>
@@ -49,16 +45,20 @@
       </section>
 
       <section id="seccion-resumen">
-        <!-- Sección de resumen con saldos y gráficos -->
         <h2>Resumen</h2>
-        <div id="saldo-total" class="tarjeta">
-          Saldo Total: $<span id="saldo">0.00</span>
-        </div>
-        <div id="total-ingresos" class="tarjeta ingreso">
-          Total Ingresos: $<span id="ingresos">0.00</span>
-        </div>
-        <div id="total-gastos" class="tarjeta gasto">
-          Total Gastos: $<span id="gastos">0.00</span>
+        <div class="tarjetas-resumen">
+          <div id="saldo-total" class="tarjeta">
+            <h3>Saldo Total</h3>
+            <p>$<span id="saldo">0.00</span></p>
+          </div>
+          <div id="total-ingresos" class="tarjeta ingreso">
+            <h3>Total Ingresos</h3>
+            <p>$<span id="ingresos">0.00</span></p>
+          </div>
+          <div id="total-gastos" class="tarjeta gasto">
+            <h3>Total Gastos</h3>
+            <p>$<span id="gastos">0.00</span></p>
+          </div>
         </div>
         <div id="resumen-categoria" class="tarjeta">
           <h3>Resumen por Categoría</h3>
@@ -71,7 +71,6 @@
       </section>
 
       <section id="seccion-historial">
-        <!-- Sección de historial de transacciones -->
         <h2>Historial de Transacciones</h2>
         <div id="contenedor-filtro">
           <label for="filtro">Filtrar por:</label>

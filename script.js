@@ -20,8 +20,6 @@ let gastos = 0;
 let resumenCategoria = {};
 
 // Funciones auxiliares
-
-// Actualiza el saldo total, ingresos y gastos en la interfaz
 function actualizarSaldo() {
     saldo = ingresos - gastos;
     elementoSaldo.textContent = saldo.toFixed(2);
@@ -29,7 +27,6 @@ function actualizarSaldo() {
     elementoGastos.textContent = gastos.toFixed(2);
 }
 
-// Actualiza el resumen por categoría en la interfaz
 function actualizarResumenCategoria() {
     resumenCategoria = {};
     transacciones.forEach(transaccion => {
@@ -52,7 +49,6 @@ function actualizarResumenCategoria() {
     }
 }
 
-// Actualiza el gráfico de gastos en la interfaz
 function actualizarGraficoGastos() {
     graficoGastos.innerHTML = '';
     const categoriasGastos = Object.entries(resumenCategoria).filter(([, monto]) => monto < 0);
@@ -62,13 +58,12 @@ function actualizarGraficoGastos() {
         const porcentaje = (Math.abs(monto) / totalGastos) * 100;
         const barra = document.createElement('div');
         barra.className = 'barra-grafico';
-        barra.style.height = `${porcentaje}%`;
+        barra.style.height= `${porcentaje}%`;
         barra.setAttribute('data-tooltip', `${categoria}: $${Math.abs(monto).toFixed(2)} (${porcentaje.toFixed(2)}%)`);
         graficoGastos.appendChild(barra);
     });
 }
 
-// Agrega una transacción al DOM
 function agregarTransaccionAlDOM(transaccion) {
     const li = document.createElement('li');
     li.className = `item-transaccion ${transaccion.tipo}`;
@@ -80,7 +75,6 @@ function agregarTransaccionAlDOM(transaccion) {
     listaTransacciones.appendChild(li);
 }
 
-// Actualiza la lista de transacciones en la interfaz
 function actualizarListaTransacciones() {
     listaTransacciones.innerHTML = '';
     const transaccionesFiltradas = transacciones.filter(transaccion => {
@@ -89,14 +83,11 @@ function actualizarListaTransacciones() {
     transaccionesFiltradas.forEach(agregarTransaccionAlDOM);
 }
 
-// Guarda las transacciones en el almacenamiento local
 function guardarTransacciones() {
     localStorage.setItem('transacciones', JSON.stringify(transacciones));
 }
 
 // Event Listeners
-
-// Maneja el envío del formulario de transacción
 formulario.addEventListener('submit', e => {
     e.preventDefault();
 
@@ -129,7 +120,6 @@ formulario.addEventListener('submit', e => {
     formulario.reset();
 });
 
-// Maneja el cambio en el filtro de transacciones
 seleccionFiltro.addEventListener('change', actualizarListaTransacciones);
 
 // Inicialización
@@ -149,6 +139,3 @@ function inicializar() {
 }
 
 inicializar();
-
-// Fin del archivo script.js
-
