@@ -160,6 +160,7 @@ button:hover {
 .item-transaccion {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.75rem;
   border-bottom: 1px solid var(--color-accent);
   transition: var(--transition);
@@ -167,6 +168,19 @@ button:hover {
 
 .item-transaccion:hover {
   background-color: var(--color-accent);
+}
+
+.item-transaccion .delete-btn {
+  background: none;
+  border: none;
+  color: var(--color-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: var(--transition);
+}
+
+.item-transaccion .delete-btn:hover {
+  color: var(--color-gasto);
 }
 
 /* Responsive */

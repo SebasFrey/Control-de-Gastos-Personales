@@ -51,15 +51,19 @@ function actualizarResumenCategoria() {
     }
 }
 
-function agregarTransaccionAlDOM(transaccion) {
+function agregarTransaccionAlDOM(transaccion, index) {
     const li = document.createElement('li');
     li.className = `item-transaccion ${transaccion.tipo}`;
     li.innerHTML = `
         <span>${transaccion.descripcion}</span>
         <span>$${formatearNumero(transaccion.monto)}</span>
         <span>${transaccion.categoria}</span>
+        <button class="delete-btn" onclick="eliminarTransaccion(${index})">
+            <i data-feather="trash-2"></i>
+        </button>
     `;
     listaTransacciones.appendChild(li);
+    feather.replace();
 }
 
 function actualizarListaTransacciones() {
@@ -67,11 +71,27 @@ function actualizarListaTransacciones() {
     const transaccionesFiltradas = transacciones.filter(transaccion => {
         return seleccionFiltro.value === 'todos' || transaccion.tipo === seleccionFiltro.value;
     });
-    transaccionesFiltradas.forEach(agregarTransaccionAlDOM);
+    transaccionesFiltradas.forEach((transaccion, index) => {
+        agregarTransaccionAlDOM(transaccion, index);
+    });
 }
 
 function guardarTransacciones() {
     localStorage.setItem('transacciones', JSON.stringify(transacciones));
+}
+
+function eliminarTransaccion(index) {
+    const transaccion = transacciones[index];
+    if (transaccion.tipo === 'ingreso') {
+        ingresos -= transaccion.monto;
+    } else {
+        gastos -= transaccion.monto;
+    }
+    transacciones.splice(index, 1);
+    actualizarSaldo();
+    actualizarResumenCategoria();
+    actualizarListaTransacciones();
+    guardarTransacciones();
 }
 
 // Event Listeners
@@ -99,7 +119,7 @@ formulario.addEventListener('submit', e => {
 
     actualizarSaldo();
     actualizarResumenCategoria();
-    agregarTransaccionAlDOM(transaccion);
+    actualizarListaTransacciones();
     guardarTransacciones();
 
     // Limpiar el formulario
