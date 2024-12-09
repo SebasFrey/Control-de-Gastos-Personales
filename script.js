@@ -1,3 +1,7 @@
+function formatearNumero(numero) {
+    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero);
+}
+
 // Elementos del DOM
 const formulario = document.getElementById('formulario-transaccion');
 const entradaDescripcion = document.getElementById('descripcion');
@@ -10,7 +14,7 @@ const elementoGastos = document.getElementById('gastos');
 const listaCategoria = document.getElementById('lista-categoria');
 const listaTransacciones = document.getElementById('lista-transacciones');
 const seleccionFiltro = document.getElementById('filtro');
-const graficoGastos = document.getElementById('grafico-gastos');
+const graficoGastos = document.getElementById('grafico-gastos'); //This element is not used anymore
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
@@ -22,9 +26,9 @@ let resumenCategoria = {};
 // Funciones auxiliares
 function actualizarSaldo() {
     saldo = ingresos - gastos;
-    elementoSaldo.textContent = saldo.toFixed(2);
-    elementoIngresos.textContent = ingresos.toFixed(2);
-    elementoGastos.textContent = gastos.toFixed(2);
+    elementoSaldo.textContent = formatearNumero(saldo);
+    elementoIngresos.textContent = formatearNumero(ingresos);
+    elementoGastos.textContent = formatearNumero(gastos);
 }
 
 function actualizarResumenCategoria() {
@@ -43,33 +47,60 @@ function actualizarResumenCategoria() {
     listaCategoria.innerHTML = '';
     for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${categoria}</span><span>$${Math.abs(monto).toFixed(2)}</span>`;
-        li.className = monto >= 0 ? 'ingreso' : 'gasto';
+        li.innerHTML = `<span>${categoria}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
         listaCategoria.appendChild(li);
     }
 }
 
-function actualizarGraficoGastos() {
-    graficoGastos.innerHTML = '';
-    const categoriasGastos = Object.entries(resumenCategoria).filter(([, monto]) => monto < 0);
-    const totalGastos = categoriasGastos.reduce((total, [, monto]) => total + Math.abs(monto), 0);
+function actualizarGraficoIngresoGasto() {
+    const ctx = document.getElementById('grafico-ingresos-gastos').getContext('2d');
 
-    categoriasGastos.forEach(([categoria, monto]) => {
-        const porcentaje = (Math.abs(monto) / totalGastos) * 100;
-        const barra = document.createElement('div');
-        barra.className = 'barra-grafico';
-        barra.style.height= `${porcentaje}%`;
-        barra.setAttribute('data-tooltip', `${categoria}: $${Math.abs(monto).toFixed(2)} (${porcentaje.toFixed(2)}%)`);
-        graficoGastos.appendChild(barra);
+    if (window.miGrafico) {
+        window.miGrafico.destroy();
+    }
+
+    window.miGrafico = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Ingresos', 'Gastos'],
+            datasets: [{
+                data: [ingresos, gastos],
+                backgroundColor: ['#4caf50', '#f44336'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += formatearNumero(context.parsed) + ' (' +
+                                    formatearNumero((context.parsed / (ingresos + gastos)) * 100) + '%)';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
     });
 }
+
 
 function agregarTransaccionAlDOM(transaccion) {
     const li = document.createElement('li');
     li.className = `item-transaccion ${transaccion.tipo}`;
     li.innerHTML = `
         <span>${transaccion.descripcion}</span>
-        <span>$${transaccion.monto.toFixed(2)}</span>
+        <span>$${formatearNumero(transaccion.monto)}</span>
         <span>${transaccion.categoria}</span>
     `;
     listaTransacciones.appendChild(li);
@@ -112,7 +143,7 @@ formulario.addEventListener('submit', e => {
 
     actualizarSaldo();
     actualizarResumenCategoria();
-    actualizarGraficoGastos();
+    actualizarGraficoIngresoGasto();
     agregarTransaccionAlDOM(transaccion);
     guardarTransacciones();
 
@@ -134,8 +165,9 @@ function inicializar() {
 
     actualizarSaldo();
     actualizarResumenCategoria();
-    actualizarGraficoGastos();
+    actualizarGraficoIngresoGasto();
     actualizarListaTransacciones();
 }
 
 inicializar();
+
