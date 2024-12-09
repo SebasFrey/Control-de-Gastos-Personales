@@ -14,7 +14,6 @@ const elementoGastos = document.getElementById('gastos');
 const listaCategoria = document.getElementById('lista-categoria');
 const listaTransacciones = document.getElementById('lista-transacciones');
 const seleccionFiltro = document.getElementById('filtro');
-const graficoGastos = document.getElementById('grafico-gastos'); //This element is not used anymore
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
@@ -51,49 +50,6 @@ function actualizarResumenCategoria() {
         listaCategoria.appendChild(li);
     }
 }
-
-function actualizarGraficoIngresoGasto() {
-    const ctx = document.getElementById('grafico-ingresos-gastos').getContext('2d');
-
-    if (window.miGrafico) {
-        window.miGrafico.destroy();
-    }
-
-    window.miGrafico = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Ingresos', 'Gastos'],
-            datasets: [{
-                data: [ingresos, gastos],
-                backgroundColor: ['#4caf50', '#f44336'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed !== null) {
-                                label += formatearNumero(context.parsed) + ' (' +
-                                    formatearNumero((context.parsed / (ingresos + gastos)) * 100) + '%)';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
 
 function agregarTransaccionAlDOM(transaccion) {
     const li = document.createElement('li');
@@ -143,7 +99,6 @@ formulario.addEventListener('submit', e => {
 
     actualizarSaldo();
     actualizarResumenCategoria();
-    actualizarGraficoIngresoGasto();
     agregarTransaccionAlDOM(transaccion);
     guardarTransacciones();
 
@@ -165,7 +120,6 @@ function inicializar() {
 
     actualizarSaldo();
     actualizarResumenCategoria();
-    actualizarGraficoIngresoGasto();
     actualizarListaTransacciones();
 }
 
