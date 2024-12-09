@@ -14,6 +14,9 @@ const elementoGastos = document.getElementById('gastos');
 const listaCategoria = document.getElementById('lista-categoria');
 const listaTransacciones = document.getElementById('lista-transacciones');
 const seleccionFiltro = document.getElementById('filtro');
+const entradaOtraCategoria = document.getElementById('otro-categoria');
+const contenedorOtraCategoria = document.getElementById('otro-categoria-container');
+const botonExportar = document.getElementById('exportar-excel');
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
@@ -101,11 +104,20 @@ formulario.addEventListener('submit', e => {
     const descripcion = entradaDescripcion.value;
     const monto = parseFloat(entradaMonto.value);
     const tipo = entradaTipo.value;
-    const categoria = entradaCategoria.value;
+    let categoria = entradaCategoria.value;
 
     if (descripcion.trim() === '' || isNaN(monto) || monto <= 0) {
         alert('Por favor, ingrese datos válidos.');
         return;
+    }
+
+    if (categoria === 'otro') {
+        const otraCategoria = entradaOtraCategoria.value.trim();
+        if (otraCategoria === '') {
+            alert('Por favor, especifique un nombre para la categoría "Otro".');
+            return;
+        }
+        categoria = otraCategoria;
     }
 
     const transaccion = { descripcion, monto, tipo, categoria };
@@ -124,9 +136,20 @@ formulario.addEventListener('submit', e => {
 
     // Limpiar el formulario
     formulario.reset();
+    contenedorOtraCategoria.style.display = 'none';
 });
 
 seleccionFiltro.addEventListener('change', actualizarListaTransacciones);
+
+entradaCategoria.addEventListener('change', (e) => {
+    if (e.target.value === 'otro') {
+        contenedorOtraCategoria.style.display = 'block';
+    } else {
+        contenedorOtraCategoria.style.display = 'none';
+    }
+});
+
+botonExportar.addEventListener('click', exportarExcel);
 
 // Inicialización
 function inicializar() {
@@ -141,6 +164,24 @@ function inicializar() {
     actualizarSaldo();
     actualizarResumenCategoria();
     actualizarListaTransacciones();
+}
+
+function exportarExcel() {
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Descripción,Monto,Tipo,Categoría\n";
+
+    transacciones.forEach(transaccion => {
+        let row = `${transaccion.descripcion},${transaccion.monto},${transaccion.tipo},${transaccion.categoria}\n`;
+        csvContent += row;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "control_gastos_personales.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 inicializar();

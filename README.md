@@ -10,6 +10,8 @@ Esta aplicación web permite a los usuarios llevar un registro de sus ingresos y
 - Filtrar transacciones por tipo (todos, ingresos, gastos).
 - Eliminar transacciones individuales.
 - Almacenamiento local de datos para persistencia entre sesiones.
+- Personalizar el nombre de la categoría "Otro" al agregar una transacción.
+- Exportar todas las transacciones en formato CSV (compatible con Excel).
 
 ## Tecnologías utilizadas
 
@@ -25,6 +27,8 @@ Esta aplicación web permite a los usuarios llevar un registro de sus ingresos y
 3. Vea el resumen financiero en la sección central.
 4. Utilice el filtro en la sección de historial para ver transacciones específicas.
 5. Haga clic en el icono de papelera junto a una transacción para eliminarla.
+6. Al seleccionar la categoría "Otro", ingrese un nombre personalizado para la categoría.
+7. Utilice el botón "Exportar a Excel" para descargar todas las transacciones en formato CSV.
 
 ## Estructura del proyecto
 
@@ -45,4 +49,8 @@ Algunas ideas para mejorar la aplicación en el futuro:
 ## Contribuciones
 
 Las contribuciones son bienvenidas. Por favor, abra un issue o realice un pull request con sus sugerencias.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulte el archivo `LICENSE` para obtener más detalles.
 
