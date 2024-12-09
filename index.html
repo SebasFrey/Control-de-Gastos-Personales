@@ -1,82 +1,90 @@
 <!DOCTYPE html>
+<!-- Estructura principal de la página de Control de Gastos Personales -->
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Control de Gastos Personales</title>
     <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <header>
+      <!-- Sección de encabezado -->
       <h1>Control de Gastos Personales</h1>
     </header>
     <main>
-      <section id="form-section">
+      <!-- Sección principal con formulario, resumen e historial -->
+      <section id="seccion-formulario">
+        <!-- Sección de formulario para agregar transacciones -->
         <h2>Registrar Transacción</h2>
-        <form id="transaction-form">
-          <div class="form-group">
-            <label for="description">Descripción:</label>
-            <input type="text" id="description" required />
+        <form id="formulario-transaccion">
+          <div class="grupo-formulario">
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" required />
           </div>
-          <div class="form-group">
-            <label for="amount">Monto:</label>
-            <input type="number" id="amount" step="0.01" required />
+          <div class="grupo-formulario">
+            <label for="monto">Monto:</label>
+            <input type="number" id="monto" step="0.01" required />
           </div>
-          <div class="form-group">
-            <label for="type">Tipo:</label>
-            <select id="type" required>
-              <option value="income">Ingreso</option>
-              <option value="expense">Gasto</option>
+          <div class="grupo-formulario">
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" required>
+              <option value="ingreso">Ingreso</option>
+              <option value="gasto">Gasto</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="category">Categoría:</label>
-            <select id="category" required>
-              <option value="salary">Salario</option>
-              <option value="food">Alimentación</option>
-              <option value="transport">Transporte</option>
-              <option value="entertainment">Entretenimiento</option>
-              <option value="other">Otro</option>
+          <div class="grupo-formulario">
+            <label for="categoria">Categoría:</label>
+            <select id="categoria" required>
+              <option value="salario">Salario</option>
+              <option value="alimentacion">Alimentación</option>
+              <option value="transporte">Transporte</option>
+              <option value="entretenimiento">Entretenimiento</option>
+              <option value="otro">Otro</option>
             </select>
           </div>
           <button type="submit">Agregar Transacción</button>
         </form>
       </section>
 
-      <section id="summary-section">
+      <section id="seccion-resumen">
+        <!-- Sección de resumen con saldos y gráficos -->
         <h2>Resumen</h2>
-        <div id="total-balance">
-          Saldo Total: $<span id="balance">0.00</span>
+        <div id="saldo-total" class="tarjeta">
+          Saldo Total: $<span id="saldo">0.00</span>
         </div>
-        <div id="total-income">
-          Total Ingresos: $<span id="income">0.00</span>
+        <div id="total-ingresos" class="tarjeta ingreso">
+          Total Ingresos: $<span id="ingresos">0.00</span>
         </div>
-        <div id="total-expenses">
-          Total Gastos: $<span id="expenses">0.00</span>
+        <div id="total-gastos" class="tarjeta gasto">
+          Total Gastos: $<span id="gastos">0.00</span>
         </div>
-        <div id="category-summary">
+        <div id="resumen-categoria" class="tarjeta">
           <h3>Resumen por Categoría</h3>
-          <ul id="category-list"></ul>
+          <ul id="lista-categoria"></ul>
         </div>
-        <div id="chart-container">
+        <div id="contenedor-grafico" class="tarjeta">
           <h3>Distribución de Gastos</h3>
-          <div id="expense-chart"></div>
+          <div id="grafico-gastos"></div>
         </div>
       </section>
 
-      <section id="history-section">
+      <section id="seccion-historial">
+        <!-- Sección de historial de transacciones -->
         <h2>Historial de Transacciones</h2>
-        <div id="filter-container">
-          <label for="filter">Filtrar por:</label>
-          <select id="filter">
-            <option value="all">Todos</option>
-            <option value="income">Ingresos</option>
-            <option value="expense">Gastos</option>
+        <div id="contenedor-filtro">
+          <label for="filtro">Filtrar por:</label>
+          <select id="filtro">
+            <option value="todos">Todos</option>
+            <option value="ingreso">Ingresos</option>
+            <option value="gasto">Gastos</option>
           </select>
         </div>
-        <ul id="transaction-list"></ul>
+        <ul id="lista-transacciones"></ul>
       </section>
     </main>
     <script src="script.js"></script>
   </body>
 </html>
+

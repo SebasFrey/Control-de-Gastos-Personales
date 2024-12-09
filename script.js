@@ -1,140 +1,154 @@
 // Elementos del DOM
-const form = document.getElementById('transaction-form');
-const descriptionInput = document.getElementById('description');
-const amountInput = document.getElementById('amount');
-const typeInput = document.getElementById('type');
-const categoryInput = document.getElementById('category');
-const balanceElement = document.getElementById('balance');
-const incomeElement = document.getElementById('income');
-const expensesElement = document.getElementById('expenses');
-const categoryList = document.getElementById('category-list');
-const transactionList = document.getElementById('transaction-list');
-const filterSelect = document.getElementById('filter');
-const expenseChart = document.getElementById('expense-chart');
+const formulario = document.getElementById('formulario-transaccion');
+const entradaDescripcion = document.getElementById('descripcion');
+const entradaMonto = document.getElementById('monto');
+const entradaTipo = document.getElementById('tipo');
+const entradaCategoria = document.getElementById('categoria');
+const elementoSaldo = document.getElementById('saldo');
+const elementoIngresos = document.getElementById('ingresos');
+const elementoGastos = document.getElementById('gastos');
+const listaCategoria = document.getElementById('lista-categoria');
+const listaTransacciones = document.getElementById('lista-transacciones');
+const seleccionFiltro = document.getElementById('filtro');
+const graficoGastos = document.getElementById('grafico-gastos');
 
 // Estado de la aplicación
-let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-let balance = 0;
-let income = 0;
-let expenses = 0;
-let categorySummary = {};
+let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
+let saldo = 0;
+let ingresos = 0;
+let gastos = 0;
+let resumenCategoria = {};
 
 // Funciones auxiliares
-function updateBalance() {
-    balance = income - expenses;
-    balanceElement.textContent = balance.toFixed(2);
-    incomeElement.textContent = income.toFixed(2);
-    expensesElement.textContent = expenses.toFixed(2);
+
+// Actualiza el saldo total, ingresos y gastos en la interfaz
+function actualizarSaldo() {
+    saldo = ingresos - gastos;
+    elementoSaldo.textContent = saldo.toFixed(2);
+    elementoIngresos.textContent = ingresos.toFixed(2);
+    elementoGastos.textContent = gastos.toFixed(2);
 }
 
-function updateCategorySummary() {
-    categorySummary = {};
-    transactions.forEach(transaction => {
-        if (!categorySummary[transaction.category]) {
-            categorySummary[transaction.category] = 0;
+// Actualiza el resumen por categoría en la interfaz
+function actualizarResumenCategoria() {
+    resumenCategoria = {};
+    transacciones.forEach(transaccion => {
+        if (!resumenCategoria[transaccion.categoria]) {
+            resumenCategoria[transaccion.categoria] = 0;
         }
-        if (transaction.type === 'income') {
-            categorySummary[transaction.category] += transaction.amount;
+        if (transaccion.tipo === 'ingreso') {
+            resumenCategoria[transaccion.categoria] += transaccion.monto;
         } else {
-            categorySummary[transaction.category] -= transaction.amount;
+            resumenCategoria[transaccion.categoria] -= transaccion.monto;
         }
     });
 
-    categoryList.innerHTML = '';
-    for (const [category, amount] of Object.entries(categorySummary)) {
+    listaCategoria.innerHTML = '';
+    for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
-        li.textContent = `${category}: $${amount.toFixed(2)}`;
-        categoryList.appendChild(li);
+        li.innerHTML = `<span>${categoria}</span><span>$${Math.abs(monto).toFixed(2)}</span>`;
+        li.className = monto >= 0 ? 'ingreso' : 'gasto';
+        listaCategoria.appendChild(li);
     }
 }
 
-function updateExpenseChart() {
-    expenseChart.innerHTML = '';
-    const expenseCategories = Object.entries(categorySummary).filter(([, amount]) => amount < 0);
-    const totalExpenses = expenseCategories.reduce((total, [, amount]) => total + Math.abs(amount), 0);
+// Actualiza el gráfico de gastos en la interfaz
+function actualizarGraficoGastos() {
+    graficoGastos.innerHTML = '';
+    const categoriasGastos = Object.entries(resumenCategoria).filter(([, monto]) => monto < 0);
+    const totalGastos = categoriasGastos.reduce((total, [, monto]) => total + Math.abs(monto), 0);
 
-    expenseCategories.forEach(([category, amount]) => {
-        const percentage = (Math.abs(amount) / totalExpenses) * 100;
-        const bar = document.createElement('div');
-        bar.className = 'chart-bar';
-        bar.style.height = `${percentage}%`;
-        bar.title = `${category}: $${Math.abs(amount).toFixed(2)} (${percentage.toFixed(2)}%)`;
-        expenseChart.appendChild(bar);
+    categoriasGastos.forEach(([categoria, monto]) => {
+        const porcentaje = (Math.abs(monto) / totalGastos) * 100;
+        const barra = document.createElement('div');
+        barra.className = 'barra-grafico';
+        barra.style.height = `${porcentaje}%`;
+        barra.setAttribute('data-tooltip', `${categoria}: $${Math.abs(monto).toFixed(2)} (${porcentaje.toFixed(2)}%)`);
+        graficoGastos.appendChild(barra);
     });
 }
 
-function addTransactionToDOM(transaction) {
+// Agrega una transacción al DOM
+function agregarTransaccionAlDOM(transaccion) {
     const li = document.createElement('li');
-    li.className = `transaction-item ${transaction.type}`;
+    li.className = `item-transaccion ${transaccion.tipo}`;
     li.innerHTML = `
-        <span>${transaction.description}</span>
-        <span>$${transaction.amount.toFixed(2)}</span>
-        <span>${transaction.category}</span>
+        <span>${transaccion.descripcion}</span>
+        <span>$${transaccion.monto.toFixed(2)}</span>
+        <span>${transaccion.categoria}</span>
     `;
-    transactionList.appendChild(li);
+    listaTransacciones.appendChild(li);
 }
 
-function updateTransactionList() {
-    transactionList.innerHTML = '';
-    const filteredTransactions = transactions.filter(transaction => {
-        return filterSelect.value === 'all' || transaction.type === filterSelect.value;
+// Actualiza la lista de transacciones en la interfaz
+function actualizarListaTransacciones() {
+    listaTransacciones.innerHTML = '';
+    const transaccionesFiltradas = transacciones.filter(transaccion => {
+        return seleccionFiltro.value === 'todos' || transaccion.tipo === seleccionFiltro.value;
     });
-    filteredTransactions.forEach(addTransactionToDOM);
+    transaccionesFiltradas.forEach(agregarTransaccionAlDOM);
 }
 
-function saveTransactions() {
-    localStorage.setItem('transactions', JSON.stringify(transactions));
+// Guarda las transacciones en el almacenamiento local
+function guardarTransacciones() {
+    localStorage.setItem('transacciones', JSON.stringify(transacciones));
 }
 
 // Event Listeners
-form.addEventListener('submit', e => {
+
+// Maneja el envío del formulario de transacción
+formulario.addEventListener('submit', e => {
     e.preventDefault();
 
-    const description = descriptionInput.value;
-    const amount = parseFloat(amountInput.value);
-    const type = typeInput.value;
-    const category = categoryInput.value;
+    const descripcion = entradaDescripcion.value;
+    const monto = parseFloat(entradaMonto.value);
+    const tipo = entradaTipo.value;
+    const categoria = entradaCategoria.value;
 
-    if (description.trim() === '' || isNaN(amount) || amount <= 0) {
+    if (descripcion.trim() === '' || isNaN(monto) || monto <= 0) {
         alert('Por favor, ingrese datos válidos.');
         return;
     }
 
-    const transaction = { description, amount, type, category };
-    transactions.push(transaction);
+    const transaccion = { descripcion, monto, tipo, categoria };
+    transacciones.push(transaccion);
 
-    if (type === 'income') {
-        income += amount;
+    if (tipo === 'ingreso') {
+        ingresos += monto;
     } else {
-        expenses += amount;
+        gastos += monto;
     }
 
-    updateBalance();
-    updateCategorySummary();
-    updateExpenseChart();
-    addTransactionToDOM(transaction);
-    saveTransactions();
+    actualizarSaldo();
+    actualizarResumenCategoria();
+    actualizarGraficoGastos();
+    agregarTransaccionAlDOM(transaccion);
+    guardarTransacciones();
 
     // Limpiar el formulario
-    form.reset();
+    formulario.reset();
 });
 
-filterSelect.addEventListener('change', updateTransactionList);
+// Maneja el cambio en el filtro de transacciones
+seleccionFiltro.addEventListener('change', actualizarListaTransacciones);
 
 // Inicialización
-function init() {
-    transactions.forEach(transaction => {
-        if (transaction.type === 'income') {
-            income += transaction.amount;
+function inicializar() {
+    transacciones.forEach(transaccion => {
+        if (transaccion.tipo === 'ingreso') {
+            ingresos += transaccion.monto;
         } else {
-            expenses += transaction.amount;
+            gastos += transaccion.monto;
         }
     });
 
-    updateBalance();
-    updateCategorySummary();
-    updateExpenseChart();
-    updateTransactionList();
+    actualizarSaldo();
+    actualizarResumenCategoria();
+    actualizarGraficoGastos();
+    actualizarListaTransacciones();
 }
 
-init();
+inicializar();
+
+// Fin del archivo script.js
+
