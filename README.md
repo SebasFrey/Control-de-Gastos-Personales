@@ -62,4 +62,3 @@ Las contribuciones son bienvenidas. Por favor, abra un issue o realice un pull r
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulte el archivo `LICENSE` para obtener más detalles.
-

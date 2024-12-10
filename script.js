@@ -115,7 +115,7 @@ function filtrarTransacciones() {
         const cumpleFiltroTipo = seleccionFiltroTipo.value === 'todos' || transaccion.tipo === seleccionFiltroTipo.value;
         const cumpleFiltroCategoria = seleccionFiltroCategoria.value === 'todas' || transaccion.categoria === seleccionFiltroCategoria.value;
         const cumpleFiltroFecha = (!filtroFechaInicio.value || new Date(transaccion.fecha) >= new Date(filtroFechaInicio.value)) &&
-                                  (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
+            (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
         return cumpleFiltroTipo && cumpleFiltroCategoria && cumpleFiltroFecha;
     });
 }
