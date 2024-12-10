@@ -168,21 +168,20 @@ function inicializar() {
 }
 
 function exportarExcel() {
-    let contenidoCSV = "data:text/csv;charset=utf-8,";
-    contenidoCSV += "Descripción,Monto,Tipo,Categoría\n";
+    // Crear una nueva hoja de cálculo
+    const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
+        Descripción: t.descripcion,
+        Monto: t.monto,
+        Tipo: t.tipo,
+        Categoría: t.categoria
+    })));
 
-    transacciones.forEach(transaccion => {
-        let fila = `${transaccion.descripcion},${transaccion.monto},${transaccion.tipo},${transaccion.categoria}\n`;
-        contenidoCSV += fila;
-    });
+    // Crear un nuevo libro de trabajo y agregar la hoja
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Transacciones");
 
-    const uriCodificada = encodeURI(contenidoCSV);
-    const enlace = document.createElement("a");
-    enlace.setAttribute("href", uriCodificada);
-    enlace.setAttribute("download", "control_gastos_personales.csv");
-    document.body.appendChild(enlace);
-    enlace.click();
-    document.body.removeChild(enlace);
+    // Generar el archivo Excel y descargarlo
+    XLSX.writeFile(wb, "control_gastos_personales.xlsx");
 }
 
 inicializar();
