@@ -14,17 +14,28 @@ const elementoIngresos = document.getElementById('ingresos');
 const elementoGastos = document.getElementById('gastos');
 const listaCategoria = document.getElementById('lista-categoria');
 const listaTransacciones = document.getElementById('lista-transacciones');
-const seleccionFiltro = document.getElementById('filtro');
+const seleccionFiltroTipo = document.getElementById('filtro-tipo');
+const seleccionFiltroCategoria = document.getElementById('filtro-categoria');
+const filtroFechaInicio = document.getElementById('filtro-fecha-inicio');
+const filtroFechaFin = document.getElementById('filtro-fecha-fin');
+const botonAplicarFiltros = document.getElementById('aplicar-filtros');
 const entradaOtraCategoria = document.getElementById('otra-categoria');
 const contenedorOtraCategoria = document.getElementById('contenedor-otra-categoria');
-const botonExportar = document.getElementById('exportar-excel');
+const botonExportarExcel = document.getElementById('exportar-excel');
+const botonExportarPDF = document.getElementById('exportar-pdf');
+const botonModoOscuro = document.getElementById('modo-oscuro');
+const botonAgregarCategoria = document.getElementById('agregar-categoria');
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
+let categorias = JSON.parse(localStorage.getItem('categorias')) || ['Salario', 'Alimentación', 'Transporte', 'Entretenimiento', 'Otro'];
 let saldo = 0;
 let ingresos = 0;
 let gastos = 0;
 let resumenCategoria = {};
+
+// Gráfico
+let graficoGastos;
 
 // Funciones auxiliares
 function actualizarSaldo() {
@@ -53,6 +64,8 @@ function actualizarResumenCategoria() {
         li.innerHTML = `<span>${categoria}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
         listaCategoria.appendChild(li);
     }
+
+    actualizarGraficoGastos();
 }
 
 function agregarTransaccionAlDOM(transaccion, indice) {
@@ -62,6 +75,7 @@ function agregarTransaccionAlDOM(transaccion, indice) {
         <span>${transaccion.descripcion}</span>
         <span>$${formatearNumero(transaccion.monto)}</span>
         <span>${transaccion.categoria}</span>
+        <span>${new Date(transaccion.fecha).toLocaleDateString()}</span>
         <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
             <i data-feather="trash-2"></i>
         </button>
@@ -72,9 +86,7 @@ function agregarTransaccionAlDOM(transaccion, indice) {
 
 function actualizarListaTransacciones() {
     listaTransacciones.innerHTML = '';
-    const transaccionesFiltradas = transacciones.filter(transaccion => {
-        return seleccionFiltro.value === 'todos' || transaccion.tipo === seleccionFiltro.value;
-    });
+    const transaccionesFiltradas = filtrarTransacciones();
     transaccionesFiltradas.forEach((transaccion, indice) => {
         agregarTransaccionAlDOM(transaccion, indice);
     });
@@ -82,6 +94,10 @@ function actualizarListaTransacciones() {
 
 function guardarTransacciones() {
     localStorage.setItem('transacciones', JSON.stringify(transacciones));
+}
+
+function guardarCategorias() {
+    localStorage.setItem('categorias', JSON.stringify(categorias));
 }
 
 function eliminarTransaccion(indice) {
@@ -96,6 +112,90 @@ function eliminarTransaccion(indice) {
     actualizarResumenCategoria();
     actualizarListaTransacciones();
     guardarTransacciones();
+}
+
+function filtrarTransacciones() {
+    return transacciones.filter(transaccion => {
+        const cumpleFiltroTipo = seleccionFiltroTipo.value === 'todos' || transaccion.tipo === seleccionFiltroTipo.value;
+        const cumpleFiltroCategoria = seleccionFiltroCategoria.value === 'todas' || transaccion.categoria === seleccionFiltroCategoria.value;
+        const cumpleFiltroFecha = (!filtroFechaInicio.value || new Date(transaccion.fecha) >= new Date(filtroFechaInicio.value)) &&
+                                  (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
+        return cumpleFiltroTipo && cumpleFiltroCategoria && cumpleFiltroFecha;
+    });
+}
+
+function actualizarGraficoGastos() {
+    const ctx = document.getElementById('grafico-circular').getContext('2d');
+    const datosGastos = Object.entries(resumenCategoria)
+        .filter(([, monto]) => monto < 0)
+        .map(([categoria, monto]) => ({ categoria, monto: Math.abs(monto) }));
+
+    if (graficoGastos) {
+        graficoGastos.destroy();
+    }
+
+    graficoGastos = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: datosGastos.map(d => d.categoria),
+            datasets: [{
+                data: datosGastos.map(d => d.monto),
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Distribución de Gastos por Categoría'
+            }
+        }
+    });
+}
+
+function exportarExcel() {
+    const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
+        Descripción: t.descripcion,
+        Monto: t.monto,
+        Tipo: t.tipo,
+        Categoría: t.categoria,
+        Fecha: new Date(t.fecha).toLocaleDateString()
+    })));
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Transacciones");
+
+    XLSX.writeFile(wb, "control_gastos_personales.xlsx");
+}
+
+function exportarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.text("Control de Gastos Personales", 14, 15);
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 25);
+    doc.text(`Saldo Total: $${formatearNumero(saldo)}`, 14, 35);
+    doc.text(`Total Ingresos: $${formatearNumero(ingresos)}`, 14, 45);
+    doc.text(`Total Gastos: $${formatearNumero(gastos)}`, 14, 55);
+
+    const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
+    const data = transacciones.map(t => [
+        t.descripcion,
+        `$${formatearNumero(t.monto)}`,
+        t.tipo,
+        t.categoria,
+        new Date(t.fecha).toLocaleDateString()
+    ]);
+
+    doc.autoTable({
+        head: [columns],
+        body: data,
+        startY: 65,
+    });
+
+    doc.save("control_gastos_personales.pdf");
 }
 
 // Event Listeners
@@ -119,9 +219,20 @@ formulario.addEventListener('submit', e => {
             return;
         }
         categoria = otraCategoria;
+        if (!categorias.includes(categoria)) {
+            categorias.push(categoria);
+            actualizarSelectCategorias();
+            guardarCategorias();
+        }
     }
 
-    const transaccion = { descripcion, monto, tipo, categoria };
+    const transaccion = {
+        descripcion,
+        monto,
+        tipo,
+        categoria,
+        fecha: new Date().toISOString()
+    };
     transacciones.push(transaccion);
 
     if (tipo === 'ingreso') {
@@ -135,12 +246,9 @@ formulario.addEventListener('submit', e => {
     actualizarListaTransacciones();
     guardarTransacciones();
 
-    // Limpiar el formulario
     formulario.reset();
     contenedorOtraCategoria.style.display = 'none';
 });
-
-seleccionFiltro.addEventListener('change', actualizarListaTransacciones);
 
 entradaCategoria.addEventListener('change', (e) => {
     if (e.target.value === 'otro') {
@@ -150,7 +258,36 @@ entradaCategoria.addEventListener('change', (e) => {
     }
 });
 
-botonExportar.addEventListener('click', exportarExcel);
+botonExportarExcel.addEventListener('click', exportarExcel);
+botonExportarPDF.addEventListener('click', exportarPDF);
+
+botonAplicarFiltros.addEventListener('click', actualizarListaTransacciones);
+
+botonModoOscuro.addEventListener('click', () => {
+    document.body.classList.toggle('modo-oscuro');
+    botonModoOscuro.textContent = document.body.classList.contains('modo-oscuro') ? '☀️' : '🌙';
+});
+
+botonAgregarCategoria.addEventListener('click', () => {
+    const nuevaCategoria = prompt('Ingrese el nombre de la nueva categoría:');
+    if (nuevaCategoria && !categorias.includes(nuevaCategoria)) {
+        categorias.push(nuevaCategoria);
+        actualizarSelectCategorias();
+        guardarCategorias();
+    }
+});
+
+function actualizarSelectCategorias() {
+    entradaCategoria.innerHTML = '';
+    seleccionFiltroCategoria.innerHTML = '<option value="todas">Todas</option>';
+    categorias.forEach(categoria => {
+        const option = document.createElement('option');
+        option.value = categoria.toLowerCase();
+        option.textContent = categoria;
+        entradaCategoria.appendChild(option.cloneNode(true));
+        seleccionFiltroCategoria.appendChild(option);
+    });
+}
 
 // Inicialización
 function inicializar() {
@@ -165,23 +302,7 @@ function inicializar() {
     actualizarSaldo();
     actualizarResumenCategoria();
     actualizarListaTransacciones();
-}
-
-function exportarExcel() {
-    // Crear una nueva hoja de cálculo
-    const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
-        Descripción: t.descripcion,
-        Monto: t.monto,
-        Tipo: t.tipo,
-        Categoría: t.categoria
-    })));
-
-    // Crear un nuevo libro de trabajo y agregar la hoja
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Transacciones");
-
-    // Generar el archivo Excel y descargarlo
-    XLSX.writeFile(wb, "control_gastos_personales.xlsx");
+    actualizarSelectCategorias();
 }
 
 inicializar();

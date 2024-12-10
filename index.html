@@ -10,9 +10,9 @@
 <body>
     <header>
         <h1>Control de Gastos Personales</h1>
+        <button id="modo-oscuro" aria-label="Cambiar modo oscuro">🌙</button>
     </header>
     <main>
-        <!-- Sección para agregar nuevas transacciones -->
         <section id="seccion-formulario">
             <h2>Nueva Transacción</h2>
             <form id="formulario-transaccion">
@@ -41,17 +41,16 @@
                         <option value="otro">Otro</option>
                     </select>
                 </div>
-                <!-- Campo para especificar una categoría personalizada -->
                 <div class="grupo-formulario" id="contenedor-otra-categoria" style="display: none;">
                     <label for="otra-categoria">Nombre para "Otro":</label>
                     <input type="text" id="otra-categoria" placeholder="Especifique la categoría">
                 </div>
                 <button type="submit">Agregar Transacción</button>
             </form>
-            <!-- Botón para exportar datos a Excel -->
+            <button id="agregar-categoria" class="boton-secundario">Agregar Nueva Categoría</button>
             <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
+            <button id="exportar-pdf" class="boton-exportar">Exportar a PDF</button>
         </section>
-        <!-- Sección que muestra el resumen financiero -->
         <section id="seccion-resumen">
             <h2>Resumen Financiero</h2>
             <div class="tarjetas-resumen">
@@ -72,27 +71,42 @@
                 <h3>Resumen por Categoría</h3>
                 <ul id="lista-categoria"></ul>
             </div>
+            <div id="grafico-gastos" class="tarjeta">
+                <h3>Distribución de Gastos</h3>
+                <canvas id="grafico-circular"></canvas>
+            </div>
         </section>
-        <!-- Sección que muestra el historial de transacciones -->
         <section id="seccion-historial">
             <h2>Historial de Transacciones</h2>
             <div id="contenedor-filtro">
-                <label for="filtro">Filtrar por:</label>
-                <select id="filtro">
+                <label for="filtro-tipo">Filtrar por tipo:</label>
+                <select id="filtro-tipo">
                     <option value="todos">Todos</option>
                     <option value="ingreso">Ingresos</option>
                     <option value="gasto">Gastos</option>
                 </select>
+                <label for="filtro-categoria">Filtrar por categoría:</label>
+                <select id="filtro-categoria">
+                    <option value="todas">Todas</option>
+                </select>
+                <label for="filtro-fecha-inicio">Desde:</label>
+                <input type="date" id="filtro-fecha-inicio">
+                <label for="filtro-fecha-fin">Hasta:</label>
+                <input type="date" id="filtro-fecha-fin">
+                <button id="aplicar-filtros">Aplicar Filtros</button>
             </div>
             <ul id="lista-transacciones" data-testid="lista-transacciones"></ul>
         </section>
     </main>
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script>
-      feather.replace()
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        feather.replace()
+    </script>
 </body>
 </html>
 
