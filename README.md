@@ -7,7 +7,6 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 - Agregar transacciones (ingresos y gastos) con descripción, monto, tipo, categoría y fecha.
 - Visualizar el saldo total, total de ingresos y total de gastos.
 - Ver un resumen de transacciones por categoría.
-- Gráfico circular para visualizar la distribución de gastos.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
 - Eliminar transacciones individuales.
 - Almacenamiento local de datos para persistencia entre sesiones.
@@ -22,7 +21,6 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 - HTML5
 - CSS3
 - JavaScript (ES6+)
-- Chart.js para gráficos
 - SheetJS para exportación a Excel
 - jsPDF para generación de PDF
 - Feather Icons para iconos de interfaz
@@ -31,7 +29,7 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 
 1. Abra el archivo `index.html` en su navegador web.
 2. Use el formulario en la parte superior izquierda para agregar nuevas transacciones.
-3. Vea el resumen financiero y el gráfico de distribución de gastos en la sección central.
+3. Vea el resumen financiero en la sección central.
 4. Utilice los filtros en la sección de historial para ver transacciones específicas.
 5. Haga clic en el icono de papelera junto a una transacción para eliminarla.
 6. Al seleccionar la categoría "Otro", ingrese un nombre personalizado para la categoría.

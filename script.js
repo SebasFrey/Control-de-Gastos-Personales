@@ -34,8 +34,6 @@ let ingresos = 0;
 let gastos = 0;
 let resumenCategoria = {};
 
-// Gráfico
-let graficoGastos;
 
 // Funciones auxiliares
 function actualizarSaldo() {
@@ -64,8 +62,6 @@ function actualizarResumenCategoria() {
         li.innerHTML = `<span>${categoria}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
         listaCategoria.appendChild(li);
     }
-
-    actualizarGraficoGastos();
 }
 
 function agregarTransaccionAlDOM(transaccion, indice) {
@@ -124,36 +120,6 @@ function filtrarTransacciones() {
     });
 }
 
-function actualizarGraficoGastos() {
-    const ctx = document.getElementById('grafico-circular').getContext('2d');
-    const datosGastos = Object.entries(resumenCategoria)
-        .filter(([, monto]) => monto < 0)
-        .map(([categoria, monto]) => ({ categoria, monto: Math.abs(monto) }));
-
-    if (graficoGastos) {
-        graficoGastos.destroy();
-    }
-
-    graficoGastos = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: datosGastos.map(d => d.categoria),
-            datasets: [{
-                data: datosGastos.map(d => d.monto),
-                backgroundColor: [
-                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            title: {
-                display: true,
-                text: 'Distribución de Gastos por Categoría'
-            }
-        }
-    });
-}
 
 function exportarExcel() {
     const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
