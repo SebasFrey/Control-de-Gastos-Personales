@@ -1,6 +1,6 @@
 // Función para formatear números a formato de moneda
 function formatearNumero(numero) {
-    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero);
+    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero.toFixed(2));
 }
 
 // Elementos del DOM
@@ -59,7 +59,7 @@ function actualizarResumenCategoria() {
     listaCategoria.innerHTML = '';
     for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${categoria}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
+        li.innerHTML = `<span>${capitalizarPalabras(categoria)}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
         listaCategoria.appendChild(li);
     }
 }
@@ -68,9 +68,9 @@ function agregarTransaccionAlDOM(transaccion, indice) {
     const li = document.createElement('li');
     li.className = `item-transaccion ${transaccion.tipo}`;
     li.innerHTML = `
-        <span>${transaccion.descripcion}</span>
+        <span>${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
         <span>$${formatearNumero(transaccion.monto)}</span>
-        <span>${transaccion.categoria}</span>
+        <span>${capitalizarPalabras(transaccion.categoria)}</span>
         <span>${new Date(transaccion.fecha).toLocaleDateString()}</span>
         <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
             <i data-feather="trash-2"></i>
@@ -115,7 +115,7 @@ function filtrarTransacciones() {
         const cumpleFiltroTipo = seleccionFiltroTipo.value === 'todos' || transaccion.tipo === seleccionFiltroTipo.value;
         const cumpleFiltroCategoria = seleccionFiltroCategoria.value === 'todas' || transaccion.categoria === seleccionFiltroCategoria.value;
         const cumpleFiltroFecha = (!filtroFechaInicio.value || new Date(transaccion.fecha) >= new Date(filtroFechaInicio.value)) &&
-            (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
+                                  (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
         return cumpleFiltroTipo && cumpleFiltroCategoria && cumpleFiltroFecha;
     });
 }
@@ -168,13 +168,13 @@ function exportarPDF() {
 formulario.addEventListener('submit', e => {
     e.preventDefault();
 
-    const descripcion = entradaDescripcion.value;
+    const descripcion = entradaDescripcion.value.trim();
     const monto = parseFloat(entradaMonto.value);
     const tipo = entradaTipo.value;
     let categoria = entradaCategoria.value;
 
-    if (descripcion.trim() === '' || isNaN(monto) || monto <= 0) {
-        alert('Por favor, ingrese datos válidos.');
+    if (isNaN(monto) || monto <= 0) {
+        alert('Por favor, ingrese un monto válido.');
         return;
     }
 
@@ -193,7 +193,7 @@ formulario.addEventListener('submit', e => {
     }
 
     const transaccion = {
-        descripcion,
+        descripcion: descripcion || null,
         monto,
         tipo,
         categoria,
@@ -272,4 +272,8 @@ function inicializar() {
 }
 
 inicializar();
+
+function capitalizarPalabras(str) {
+    return str.replace(/\b\w/g, l => l.toUpperCase());
+}
 

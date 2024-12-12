@@ -4,8 +4,8 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 
 ## Características
 
-- Agregar transacciones (ingresos y gastos) con descripción, monto, tipo, categoría y fecha.
-- Visualizar el saldo total, total de ingresos y total de gastos.
+- Agregar transacciones (ingresos y gastos) con monto, tipo, categoría y descripción opcional.
+- Visualizar el saldo total, total de ingresos y total de gastos con precisión de dos decimales.
 - Ver un resumen de transacciones por categoría.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
 - Eliminar transacciones individuales.
@@ -15,6 +15,7 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 - Exportar todas las transacciones en formato Excel (.xlsx).
 - Exportar un informe en formato PDF.
 - Modo oscuro para mejor visualización en entornos con poca luz.
+- Capitalización automática de la primera letra de cada palabra en descripciones y categorías.
 
 ## Tecnologías utilizadas
 
@@ -28,7 +29,11 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 ## Cómo usar
 
 1. Abra el archivo `index.html` en su navegador web.
-2. Use el formulario en la parte superior izquierda para agregar nuevas transacciones.
+2. Use el formulario en la parte superior izquierda para agregar nuevas transacciones:
+   - Ingrese el monto de la transacción.
+   - Seleccione el tipo (ingreso o gasto).
+   - Elija una categoría o cree una nueva.
+   - Opcionalmente, añada una descripción.
 3. Vea el resumen financiero en la sección central.
 4. Utilice los filtros en la sección de historial para ver transacciones específicas.
 5. Haga clic en el icono de papelera junto a una transacción para eliminarla.
@@ -62,3 +67,4 @@ Las contribuciones son bienvenidas. Por favor, abra un issue o realice un pull r
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulte el archivo `LICENSE` para obtener más detalles.
+
