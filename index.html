@@ -91,7 +91,27 @@
                 <input type="date" id="filtro-fecha-fin">
                 <button id="aplicar-filtros">Aplicar Filtros</button>
             </div>
-            <ul id="lista-transacciones" data-testid="lista-transacciones"></ul>
+            <div class="tabla-contenedor">
+                <table id="tabla-transacciones">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Tipo</th>
+                            <th>Categoría</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-transacciones"></tbody>
+                </table>
+            </div>
+        </section>
+        <section id="seccion-resumen-periodos" class="tarjeta">
+            <h2>Resumen por Períodos</h2>
+            <div id="resumen-diario"></div>
+            <div id="resumen-semanal"></div>
+            <div id="resumen-mensual"></div>
         </section>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

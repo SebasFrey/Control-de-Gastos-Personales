@@ -4,8 +4,8 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 
 ## Características
 
-- Agregar transacciones (ingresos y gastos) con monto, tipo, categoría y descripción opcional.
-- Visualizar el saldo total, total de ingresos y total de gastos con precisión de dos decimales.
+- Agregar transacciones (ingresos y gastos) con descripción, monto, tipo, categoría y fecha.
+- Visualizar el saldo total, total de ingresos y total de gastos.
 - Ver un resumen de transacciones por categoría.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
 - Eliminar transacciones individuales.
@@ -15,7 +15,9 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 - Exportar todas las transacciones en formato Excel (.xlsx).
 - Exportar un informe en formato PDF.
 - Modo oscuro para mejor visualización en entornos con poca luz.
-- Capitalización automática de la primera letra de cada palabra en descripciones y categorías.
+- Resumen de gastos e ingresos diarios, semanales y mensuales.
+- Diseño responsivo para dispositivos móviles y de escritorio.
+- Tabla de transacciones mejorada para una visualización más clara y ordenada.
 
 ## Tecnologías utilizadas
 
@@ -29,11 +31,7 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 ## Cómo usar
 
 1. Abra el archivo `index.html` en su navegador web.
-2. Use el formulario en la parte superior izquierda para agregar nuevas transacciones:
-   - Ingrese el monto de la transacción.
-   - Seleccione el tipo (ingreso o gasto).
-   - Elija una categoría o cree una nueva.
-   - Opcionalmente, añada una descripción.
+2. Use el formulario en la parte superior izquierda para agregar nuevas transacciones.
 3. Vea el resumen financiero en la sección central.
 4. Utilice los filtros en la sección de historial para ver transacciones específicas.
 5. Haga clic en el icono de papelera junto a una transacción para eliminarla.
@@ -41,6 +39,7 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 7. Utilice el botón "Agregar Nueva Categoría" para crear categorías personalizadas.
 8. Use los botones "Exportar a Excel" y "Exportar a PDF" para descargar los datos en los formatos respectivos.
 9. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
+10. Consulte los resúmenes diarios, semanales y mensuales en la sección correspondiente.
 
 ## Estructura del proyecto
 
@@ -59,6 +58,8 @@ Algunas ideas para mejorar la aplicación en el futuro:
 - Añadir soporte para múltiples cuentas y monedas.
 - Crear una versión móvil de la aplicación.
 - Implementar un sistema de respaldo en la nube.
+- Añadir gráficos interactivos para visualizar tendencias de gastos e ingresos.
+- Implementar notificaciones para recordatorios de pagos o cuando se exceden los límites de gastos.
 
 ## Contribuciones
 
