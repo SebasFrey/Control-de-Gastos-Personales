@@ -3,6 +3,11 @@ function formatearNumero(numero) {
     return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero.toFixed(2));
 }
 
+// Función para capitalizar solo la primera letra de cada palabra
+function capitalizarPrimeraLetra(str) {
+    return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+}
+
 // Elementos del DOM
 const formulario = document.getElementById('formulario-transaccion');
 const entradaDescripcion = document.getElementById('descripcion');
@@ -25,6 +30,7 @@ const botonExportarExcel = document.getElementById('exportar-excel');
 const botonExportarPDF = document.getElementById('exportar-pdf');
 const botonModoOscuro = document.getElementById('modo-oscuro');
 const botonAgregarCategoria = document.getElementById('agregar-categoria');
+const resumenPeriodico = document.getElementById('resumen-periodico');
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
@@ -33,7 +39,6 @@ let saldo = 0;
 let ingresos = 0;
 let gastos = 0;
 let resumenCategoria = {};
-
 
 // Funciones auxiliares
 function actualizarSaldo() {
@@ -59,7 +64,7 @@ function actualizarResumenCategoria() {
     listaCategoria.innerHTML = '';
     for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${capitalizarPalabras(categoria)}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
+        li.innerHTML = `<span>${capitalizarPrimeraLetra(categoria)}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
         listaCategoria.appendChild(li);
     }
 }
@@ -68,9 +73,9 @@ function agregarTransaccionAlDOM(transaccion, indice) {
     const li = document.createElement('li');
     li.className = `item-transaccion ${transaccion.tipo}`;
     li.innerHTML = `
-        <span>${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
+        <span>${capitalizarPrimeraLetra(transaccion.descripcion || 'Sin descripción')}</span>
         <span>$${formatearNumero(transaccion.monto)}</span>
-        <span>${capitalizarPalabras(transaccion.categoria)}</span>
+        <span>${capitalizarPrimeraLetra(transaccion.categoria)}</span>
         <span>${new Date(transaccion.fecha).toLocaleDateString()}</span>
         <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
             <i data-feather="trash-2"></i>
@@ -107,6 +112,7 @@ function eliminarTransaccion(indice) {
     actualizarSaldo();
     actualizarResumenCategoria();
     actualizarListaTransacciones();
+    actualizarResumenPeriodico();
     guardarTransacciones();
 }
 
@@ -119,7 +125,6 @@ function filtrarTransacciones() {
         return cumpleFiltroTipo && cumpleFiltroCategoria && cumpleFiltroFecha;
     });
 }
-
 
 function exportarExcel() {
     const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
@@ -162,6 +167,40 @@ function exportarPDF() {
     });
 
     doc.save("control_gastos_personales.pdf");
+}
+
+function actualizarResumenPeriodico() {
+    const hoy = new Date();
+    const unDiaAtras = new Date(hoy.getTime() - 24 * 60 * 60 * 1000);
+    const unaSemanaAtras = new Date(hoy.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const unMesAtras = new Date(hoy.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    const resumenDiario = calcularResumenPeriodo(unDiaAtras, hoy);
+    const resumenSemanal = calcularResumenPeriodo(unaSemanaAtras, hoy);
+    const resumenMensual = calcularResumenPeriodo(unMesAtras, hoy);
+
+    resumenPeriodico.innerHTML = `
+        <h3>Resumen Periódico</h3>
+        <p>Diario: Ingresos $${formatearNumero(resumenDiario.ingresos)}, Gastos $${formatearNumero(resumenDiario.gastos)}</p>
+        <p>Semanal: Ingresos $${formatearNumero(resumenSemanal.ingresos)}, Gastos $${formatearNumero(resumenSemanal.gastos)}</p>
+        <p>Mensual: Ingresos $${formatearNumero(resumenMensual.ingresos)}, Gastos $${formatearNumero(resumenMensual.gastos)}</p>
+    `;
+}
+
+function calcularResumenPeriodo(fechaInicio, fechaFin) {
+    const transaccionesPeriodo = transacciones.filter(t => {
+        const fechaTransaccion = new Date(t.fecha);
+        return fechaTransaccion >= fechaInicio && fechaTransaccion <= fechaFin;
+    });
+
+    return transaccionesPeriodo.reduce((acc, t) => {
+        if (t.tipo === 'ingreso') {
+            acc.ingresos += t.monto;
+        } else {
+            acc.gastos += t.monto;
+        }
+        return acc;
+    }, { ingresos: 0, gastos: 0 });
 }
 
 // Event Listeners
@@ -210,6 +249,7 @@ formulario.addEventListener('submit', e => {
     actualizarSaldo();
     actualizarResumenCategoria();
     actualizarListaTransacciones();
+    actualizarResumenPeriodico();
     guardarTransacciones();
 
     formulario.reset();
@@ -237,7 +277,7 @@ botonModoOscuro.addEventListener('click', () => {
 botonAgregarCategoria.addEventListener('click', () => {
     const nuevaCategoria = prompt('Ingrese el nombre de la nueva categoría:');
     if (nuevaCategoria && !categorias.includes(nuevaCategoria)) {
-        categorias.push(nuevaCategoria);
+        categorias.push(capitalizarPrimeraLetra(nuevaCategoria));
         actualizarSelectCategorias();
         guardarCategorias();
     }
@@ -249,7 +289,7 @@ function actualizarSelectCategorias() {
     categorias.forEach(categoria => {
         const option = document.createElement('option');
         option.value = categoria.toLowerCase();
-        option.textContent = categoria;
+        option.textContent = capitalizarPrimeraLetra(categoria);
         entradaCategoria.appendChild(option.cloneNode(true));
         seleccionFiltroCategoria.appendChild(option);
     });
@@ -269,11 +309,7 @@ function inicializar() {
     actualizarResumenCategoria();
     actualizarListaTransacciones();
     actualizarSelectCategorias();
+    actualizarResumenPeriodico();
 }
 
 inicializar();
-
-function capitalizarPalabras(str) {
-    return str.replace(/\b\w/g, l => l.toUpperCase());
-}
-
