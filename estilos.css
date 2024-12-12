@@ -164,7 +164,7 @@ button:hover {
 #contenedor-filtro {
   margin-bottom: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 0.5rem;
 }
 
@@ -266,13 +266,68 @@ button:hover {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
   .tarjetas-resumen {
     grid-template-columns: 1fr;
   }
 
   #contenedor-filtro {
     grid-template-columns: 1fr;
+  }
+
+  .tabla-contenedor {
+    overflow-x: scroll;
+  }
+
+  #tabla-transacciones {
+    font-size: 0.9rem;
+  }
+
+  #tabla-transacciones th,
+  #tabla-transacciones td {
+    padding: 0.5rem;
+  }
+
+  .boton-exportar, .boton-secundario {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  #seccion-resumen-periodos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+
+  .tarjeta p {
+    font-size: 1.1rem;
+  }
+
+  #tabla-transacciones {
+    font-size: 0.8rem;
+  }
+
+  #tabla-transacciones th,
+  #tabla-transacciones td {
+    padding: 0.4rem;
   }
 }
 
