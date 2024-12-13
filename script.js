@@ -68,10 +68,10 @@ function agregarTransaccionAlDOM(transaccion, indice) {
     const tr = document.createElement('tr');
     tr.className = `item-transaccion ${transaccion.tipo}`;
     tr.innerHTML = `
-        <td>${capitalizarPrimeraLetra(transaccion.descripcion || 'Sin descripción')}</td>
+        <td>${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</td>
         <td>$${formatearNumero(transaccion.monto)}</td>
         <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
-        <td>${capitalizarPrimeraLetra(transaccion.categoria)}</td>
+        <td>${capitalizarPalabras(transaccion.categoria)}</td>
         <td>${new Date(transaccion.fecha).toLocaleDateString()}</td>
         <td>
             <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
@@ -252,7 +252,7 @@ function actualizarSelectCategorias() {
     categorias.forEach(categoria => {
         const option = document.createElement('option');
         option.value = categoria.toLowerCase();
-        option.textContent = capitalizarPrimeraLetra(categoria);
+        option.textContent = capitalizarPalabras(categoria);
         entradaCategoria.appendChild(option.cloneNode(true));
         seleccionFiltroCategoria.appendChild(option);
     });
@@ -276,11 +276,17 @@ function inicializar() {
 
 inicializar();
 
-function capitalizarPalabras(str) {
-    return str.replace(/\b\w/g, l => l.toUpperCase());
+// Función para capitalizar solo la primera letra de una palabra
+function capitalizarPrimeraLetra(str) {
+    if (!str) return '';
+    return str.toLowerCase().replace(/^\w/, c => c.toUpperCase());
 }
 
-function capitalizarPrimeraLetra(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+// Función para capitalizar la primera letra de cada palabra
+function capitalizarPalabras(str) {
+    if (!str) return '';
+    return str.toLowerCase().split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 }
 
