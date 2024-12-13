@@ -2,6 +2,10 @@
 
 Esta aplicación web permite a los usuarios llevar un registro detallado de sus ingresos y gastos personales, proporcionando una visión general de su situación financiera.
 
+## Demo en vivo
+
+Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gastos Personales](https://control-de-gastos-personales.vercel.app/)
+
 ## Características
 
 - Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
@@ -14,6 +18,8 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 - Agregar nuevas categorías personalizadas.
 - Exportar todas las transacciones en formato Excel (.xlsx).
 - Exportar un informe en formato PDF.
+- Exportar todos los datos (transacciones y categorías) en formato JSON.
+- Importar datos desde un archivo JSON previamente exportado.
 - Modo oscuro para mejor visualización en entornos con poca luz.
 - Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
 
@@ -25,16 +31,18 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 - SheetJS para exportación a Excel
 - jsPDF para generación de PDF
 - Feather Icons para iconos de interfaz
+- Vercel para el despliegue
 
 ## Cómo usar
 
-1. Abra el archivo `index.html` en su navegador web.
+1. Visita [https://control-de-gastos-personales.vercel.app/](https://control-de-gastos-personales.vercel.app/)
 2. Use el formulario para agregar nuevas transacciones.
 3. Vea el resumen financiero en la sección central.
 4. Utilice los filtros para ver transacciones específicas.
 5. Haga clic en el icono de papelera junto a una transacción para eliminarla.
-6. Use los botones de exportación para descargar los datos en Excel o PDF.
-7. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
+6. Use los botones de exportación para descargar los datos en Excel, PDF o JSON.
+7. Use el botón de importación para cargar datos desde un archivo JSON.
+8. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
 
 ## Estructura del proyecto
 
@@ -45,24 +53,15 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 
 ## Mejoras recientes
 
+- Despliegue de la aplicación en Vercel
+- Implementación de exportación de datos a JSON para respaldo.
+- Adición de funcionalidad para importar datos desde archivos JSON.
+- Mejora en la capitalización de texto en toda la aplicación.
 - Optimización del diseño para dispositivos móviles.
-- Corrección de problemas de capitalización en textos.
-- Mejora en la visualización de elementos en pantallas pequeñas.
 
 ## Desarrollo futuro
 
 - Implementar un sistema de autenticación de usuarios.
 - Agregar la opción de crear presupuestos y metas de ahorro.
-- Implementar transacciones recurrentes.
 - Añadir soporte para múltiples cuentas y monedas.
-- Crear una versión móvil nativa de la aplicación.
 - Implementar un sistema de respaldo en la nube.
-
-## Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, abra un issue o realice un pull request con sus sugerencias.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulte el archivo `LICENSE` para obtener más detalles.
-

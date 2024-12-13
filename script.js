@@ -25,6 +25,9 @@ const botonExportarExcel = document.getElementById('exportar-excel');
 const botonExportarPDF = document.getElementById('exportar-pdf');
 const botonModoOscuro = document.getElementById('modo-oscuro');
 const botonAgregarCategoria = document.getElementById('agregar-categoria');
+const botonExportarJSON = document.getElementById('exportar-json');
+const botonImportarJSON = document.getElementById('importar-json');
+
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
@@ -167,6 +170,53 @@ function exportarPDF() {
     doc.save("control_gastos_personales.pdf");
 }
 
+// Función para exportar datos a JSON
+function exportarJSON() {
+    const datos = {
+        transacciones: transacciones,
+        categorias: categorias
+    };
+    const jsonString = JSON.stringify(datos, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'control_gastos_personales.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Función para importar datos desde JSON
+function importarJSON(evento) {
+    const archivo = evento.target.files[0];
+    if (archivo) {
+        const lector = new FileReader();
+        lector.onload = function(e) {
+            try {
+                const datos = JSON.parse(e.target.result);
+                transacciones = datos.transacciones;
+                categorias = datos.categorias;
+
+                // Reinicializar la aplicación
+                ingresos = 0;
+                gastos = 0;
+                inicializar();
+                guardarTransacciones();
+                guardarCategorias();
+
+                alert('Datos importados con éxito');
+            } catch (error) {
+                console.error('Error al importar datos:', error);
+                alert('Error al importar datos. Por favor, asegúrese de que el archivo es válido.');
+            }
+        };
+        lector.readAsText(archivo);
+    }
+}
+
 // Event Listeners
 formulario.addEventListener('submit', e => {
     e.preventDefault();
@@ -245,6 +295,9 @@ botonAgregarCategoria.addEventListener('click', () => {
         guardarCategorias();
     }
 });
+
+botonExportarJSON.addEventListener('click', exportarJSON);
+botonImportarJSON.addEventListener('change', importarJSON);
 
 function actualizarSelectCategorias() {
     entradaCategoria.innerHTML = '';
