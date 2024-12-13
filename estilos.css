@@ -29,7 +29,7 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   line-height: 1.6;
   background-color: var(--color-fondo);
   color: var(--color-texto);
@@ -88,7 +88,8 @@ label {
   font-weight: bold;
 }
 
-input, select {
+input,
+select {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid var(--color-acento);
@@ -210,7 +211,8 @@ button:hover {
   margin-top: 1rem;
 }
 
-.boton-exportar, .boton-secundario {
+.boton-exportar,
+.boton-secundario {
   background-color: var(--color-secundario);
   color: var(--color-blanco);
   padding: 10px 15px;
@@ -222,7 +224,8 @@ button:hover {
   margin-right: 0.5rem;
 }
 
-.boton-exportar:hover, .boton-secundario:hover {
+.boton-exportar:hover,
+.boton-secundario:hover {
   opacity: 0.9;
 }
 
@@ -240,7 +243,9 @@ button:hover {
   gap: 1rem;
 }
 
-#resumen-diario, #resumen-semanal, #resumen-mensual {
+#resumen-diario,
+#resumen-semanal,
+#resumen-mensual {
   background-color: var(--color-blanco);
   padding: 1rem;
   border-radius: var(--radio-borde);
@@ -261,7 +266,8 @@ button:hover {
     grid-row: 1 / 3;
   }
 
-  #seccion-historial, #seccion-resumen-periodos {
+  #seccion-historial,
+  #seccion-resumen-periodos {
     grid-column: 1 / -1;
   }
 }
@@ -290,7 +296,8 @@ button:hover {
   #tabla-transacciones td {
     padding: 0.3rem;
   }
-  .boton-exportar, .boton-secundario {
+  .boton-exportar,
+  .boton-secundario {
     width: 100%;
     margin-right: 0;
     margin-bottom: 0.5rem;
@@ -298,20 +305,20 @@ button:hover {
     padding: 8px 12px;
   }
   body {
-        font-size: 14px;
-    }
+    font-size: 14px;
+  }
 
-    header {
-        padding: 0.5rem;
-    }
+  header {
+    padding: 0.5rem;
+  }
 
-    main {
-        padding: 0 0.5rem;
-    }
+  main {
+    padding: 0 0.5rem;
+  }
 
-    .tarjeta {
-        padding: 0.75rem;
-    }
+  .tarjeta {
+    padding: 0.75rem;
+  }
   #seccion-resumen-periodos {
     grid-template-columns: 1fr;
   }
@@ -335,7 +342,6 @@ button:hover {
     padding: 0.2rem;
   }
   body {
-        font-size: 12px;
-    }
+    font-size: 12px;
+  }
 }
-
