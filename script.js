@@ -276,12 +276,10 @@ function inicializar() {
 
 inicializar();
 
-// Función para capitalizar solo la primera letra de cada palabra
 function capitalizarPalabras(str) {
     return str.replace(/\b\w/g, l => l.toUpperCase());
 }
 
-// Función para capitalizar solo la primera letra de la cadena
 function capitalizarPrimeraLetra(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }

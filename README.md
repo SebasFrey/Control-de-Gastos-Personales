@@ -1,10 +1,10 @@
 # Control de Gastos Personales
 
-Esta aplicación web permite a los usuarios llevar un registro detallado de sus ingresos y gastos personales, proporcionando una visión general de su situación financiera con herramientas visuales y funciones avanzadas.
+Esta aplicación web permite a los usuarios llevar un registro detallado de sus ingresos y gastos personales, proporcionando una visión general de su situación financiera.
 
 ## Características
 
-- Agregar transacciones (ingresos y gastos) con descripción, monto, tipo, categoría y fecha.
+- Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
 - Visualizar el saldo total, total de ingresos y total de gastos.
 - Ver un resumen de transacciones por categoría.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
@@ -15,9 +15,7 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 - Exportar todas las transacciones en formato Excel (.xlsx).
 - Exportar un informe en formato PDF.
 - Modo oscuro para mejor visualización en entornos con poca luz.
-- Resumen de gastos e ingresos diarios, semanales y mensuales.
 - Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
-- Tabla de transacciones mejorada para una visualización más clara y ordenada.
 
 ## Tecnologías utilizadas
 
@@ -31,15 +29,12 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 ## Cómo usar
 
 1. Abra el archivo `index.html` en su navegador web.
-2. Use el formulario en la parte superior para agregar nuevas transacciones.
+2. Use el formulario para agregar nuevas transacciones.
 3. Vea el resumen financiero en la sección central.
-4. Utilice los filtros en la sección de historial para ver transacciones específicas.
+4. Utilice los filtros para ver transacciones específicas.
 5. Haga clic en el icono de papelera junto a una transacción para eliminarla.
-6. Al seleccionar la categoría "Otro", ingrese un nombre personalizado para la categoría.
-7. Utilice el botón "Agregar Nueva Categoría" para crear categorías personalizadas.
-8. Use los botones "Exportar a Excel" y "Exportar a PDF" para descargar los datos en los formatos respectivos.
-9. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
-10. Consulte los resúmenes diarios, semanales y mensuales en la sección correspondiente.
+6. Use los botones de exportación para descargar los datos en Excel o PDF.
+7. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
 
 ## Estructura del proyecto
 
@@ -51,13 +46,10 @@ Esta aplicación web permite a los usuarios llevar un registro detallado de sus 
 ## Mejoras recientes
 
 - Optimización del diseño para dispositivos móviles.
-- Corrección de problemas de desbordamiento y espaciado en pantallas pequeñas.
-- Mejora en la visualización del encabezado en dispositivos móviles.
-- Ajustes en el tamaño de fuente y espaciado para mejorar la legibilidad en pantallas pequeñas.
+- Corrección de problemas de capitalización en textos.
+- Mejora en la visualización de elementos en pantallas pequeñas.
 
 ## Desarrollo futuro
-
-Algunas ideas para mejorar la aplicación en el futuro:
 
 - Implementar un sistema de autenticación de usuarios.
 - Agregar la opción de crear presupuestos y metas de ahorro.
@@ -65,8 +57,6 @@ Algunas ideas para mejorar la aplicación en el futuro:
 - Añadir soporte para múltiples cuentas y monedas.
 - Crear una versión móvil nativa de la aplicación.
 - Implementar un sistema de respaldo en la nube.
-- Añadir gráficos interactivos para visualizar tendencias de gastos e ingresos.
-- Implementar notificaciones para recordatorios de pagos o cuando se exceden los límites de gastos.
 
 ## Contribuciones
 
