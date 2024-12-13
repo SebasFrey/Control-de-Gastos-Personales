@@ -78,7 +78,8 @@ function agregarTransaccionAlDOM(transaccion, indice) {
         <td>${new Date(transaccion.fecha).toLocaleDateString()}</td>
         <td>
             <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
-                <i data-feather="trash-2"></i>
+
+            <i data-feather="trash-2"></i>
             </button>
         </td>
     `;
