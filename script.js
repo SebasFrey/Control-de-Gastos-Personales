@@ -140,7 +140,7 @@ function exportarExcel() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Transacciones");
 
-    XLSX.writeFile(wb, "control_gastos_personales.xlsx");
+    XLSX.writeFile(wb, "Control Gastos Personales.xlsx");
 }
 
 function exportarPDF() {
@@ -168,7 +168,7 @@ function exportarPDF() {
         startY: 65,
     });
 
-    doc.save("control_gastos_personales.pdf");
+    doc.save("Control Gastos Personales.pdf");
 }
 
 // Función para exportar datos a JSON
@@ -183,7 +183,7 @@ function exportarJSON() {
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'control_gastos_personales.json';
+    a.download = 'Control Gastos Personales.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
