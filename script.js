@@ -71,15 +71,20 @@ function agregarTransaccionAlDOM(transaccion, indice) {
     const tr = document.createElement('tr');
     tr.className = `item-transaccion ${transaccion.tipo}`;
     tr.innerHTML = `
-        <td>${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</td>
+        <td>
+            <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
+            <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
+        </td>
         <td>$${formatearNumero(transaccion.monto)}</td>
         <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
         <td>${capitalizarPalabras(transaccion.categoria)}</td>
         <td>${new Date(transaccion.fecha).toLocaleDateString()}</td>
         <td>
+            <button class="boton-editar" onclick="editarDescripcion(${indice})">
+                <i data-feather="edit-2"></i>
+            </button>
             <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
-
-            <i data-feather="trash-2"></i>
+                <i data-feather="trash-2"></i>
             </button>
         </td>
     `;
@@ -122,7 +127,7 @@ function filtrarTransacciones() {
         const cumpleFiltroTipo = seleccionFiltroTipo.value === 'todos' || transaccion.tipo === seleccionFiltroTipo.value;
         const cumpleFiltroCategoria = seleccionFiltroCategoria.value === 'todas' || transaccion.categoria === seleccionFiltroCategoria.value;
         const cumpleFiltroFecha = (!filtroFechaInicio.value || new Date(transaccion.fecha) >= new Date(filtroFechaInicio.value)) &&
-            (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
+                                  (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
         return cumpleFiltroTipo && cumpleFiltroCategoria && cumpleFiltroFecha;
     });
 }
@@ -140,7 +145,7 @@ function exportarExcel() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Transacciones");
 
-    XLSX.writeFile(wb, "Control Gastos Personales.xlsx");
+    XLSX.writeFile(wb, "control_gastos_personales.xlsx");
 }
 
 function exportarPDF() {
@@ -168,7 +173,7 @@ function exportarPDF() {
         startY: 65,
     });
 
-    doc.save("Control Gastos Personales.pdf");
+    doc.save("control_gastos_personales.pdf");
 }
 
 // Función para exportar datos a JSON
@@ -183,7 +188,7 @@ function exportarJSON() {
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Control Gastos Personales.json';
+    a.download = 'control_gastos_personales.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -195,7 +200,7 @@ function importarJSON(evento) {
     const archivo = evento.target.files[0];
     if (archivo) {
         const lector = new FileReader();
-        lector.onload = function (e) {
+        lector.onload = function(e) {
             try {
                 const datos = JSON.parse(e.target.result);
                 transacciones = datos.transacciones;
@@ -342,5 +347,28 @@ function capitalizarPalabras(str) {
     return str.toLowerCase().split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
+}
+
+function editarDescripcion(indice) {
+    const fila = listaTransacciones.children[indice];
+    const descripcionTexto = fila.querySelector('.descripcion-texto');
+    const descripcionInput = fila.querySelector('.editar-descripcion');
+    const botonEditar = fila.querySelector('.boton-editar');
+
+    if (descripcionInput.style.display === 'none') {
+        descripcionTexto.style.display = 'none';
+        descripcionInput.style.display = 'inline-block';
+        descripcionInput.focus();
+        botonEditar.innerHTML = '<i data-feather="check"></i>';
+    } else {
+        const nuevaDescripcion = descripcionInput.value.trim();
+        transacciones[indice].descripcion = nuevaDescripcion || null;
+        descripcionTexto.textContent = capitalizarPalabras(nuevaDescripcion || 'Sin descripción');
+        descripcionTexto.style.display = 'inline-block';
+        descripcionInput.style.display = 'none';
+        botonEditar.innerHTML = '<i data-feather="edit-2"></i>';
+        guardarTransacciones();
+    }
+    feather.replace();
 }
 

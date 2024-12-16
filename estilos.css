@@ -15,10 +15,12 @@
 .modo-oscuro {
   --color-fondo: #121212;
   --color-texto: #e0e0e0;
-  --color-primario: #bb86fc;
-  --color-secundario: #03dac6;
-  --color-acento: #3700b3;
-  --color-blanco: #121212;
+  --color-primario: #ffffff;
+  --color-secundario: #a0a0a0;
+  --color-acento: #333333;
+  --color-blanco: #1e1e1e;
+  --color-ingreso: #4caf50;
+  --color-gasto: #f44336;
   --sombra-caja: 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
@@ -29,7 +31,7 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   line-height: 1.6;
   background-color: var(--color-fondo);
   color: var(--color-texto);
@@ -88,8 +90,7 @@ label {
   font-weight: bold;
 }
 
-input,
-select {
+input, select {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid var(--color-acento);
@@ -211,8 +212,7 @@ button:hover {
   margin-top: 1rem;
 }
 
-.boton-exportar,
-.boton-secundario {
+.boton-exportar, .boton-secundario {
   background-color: var(--color-secundario);
   color: var(--color-blanco);
   padding: 10px 15px;
@@ -224,8 +224,7 @@ button:hover {
   margin-right: 0.5rem;
 }
 
-.boton-exportar:hover,
-.boton-secundario:hover {
+.boton-exportar:hover, .boton-secundario:hover {
   opacity: 0.9;
 }
 
@@ -243,9 +242,7 @@ button:hover {
   gap: 1rem;
 }
 
-#resumen-diario,
-#resumen-semanal,
-#resumen-mensual {
+#resumen-diario, #resumen-semanal, #resumen-mensual {
   background-color: var(--color-blanco);
   padding: 1rem;
   border-radius: var(--radio-borde);
@@ -266,8 +263,7 @@ button:hover {
     grid-row: 1 / 3;
   }
 
-  #seccion-historial,
-  #seccion-resumen-periodos {
+  #seccion-historial, #seccion-resumen-periodos {
     grid-column: 1 / -1;
   }
 }
@@ -296,8 +292,7 @@ button:hover {
   #tabla-transacciones td {
     padding: 0.3rem;
   }
-  .boton-exportar,
-  .boton-secundario {
+  .boton-exportar, .boton-secundario {
     width: 100%;
     margin-right: 0;
     margin-bottom: 0.5rem;
@@ -305,20 +300,20 @@ button:hover {
     padding: 8px 12px;
   }
   body {
-    font-size: 14px;
-  }
+        font-size: 14px;
+    }
 
-  header {
-    padding: 0.5rem;
-  }
+    header {
+        padding: 0.5rem;
+    }
 
-  main {
-    padding: 0 0.5rem;
-  }
+    main {
+        padding: 0 0.5rem;
+    }
 
-  .tarjeta {
-    padding: 0.75rem;
-  }
+    .tarjeta {
+        padding: 0.75rem;
+    }
   #seccion-resumen-periodos {
     grid-template-columns: 1fr;
   }
@@ -342,7 +337,64 @@ button:hover {
     padding: 0.2rem;
   }
   body {
-    font-size: 12px;
-  }
+        font-size: 12px;
+    }
+}
+
+.boton-editar {
+  background: none;
+  border: none;
+  color: var(--color-secundario);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: var(--transicion);
+}
+
+.boton-editar:hover {
+  color: var(--color-primario);
+}
+
+.editar-descripcion {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-acento);
+  border-radius: var(--radio-borde);
+  padding: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.modo-oscuro #tabla-transacciones th {
+  background-color: var(--color-acento);
+  color: var(--color-primario);
+}
+
+.modo-oscuro #tabla-transacciones tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.modo-oscuro .tarjeta {
+  background-color: var(--color-blanco);
+}
+
+.modo-oscuro input,
+.modo-oscuro select,
+.modo-oscuro .editar-descripcion {
+  background-color: #2c2c2c;
+  color: var(--color-texto);
+  border-color: var(--color-secundario);
+}
+
+.modo-oscuro button {
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+}
+
+.modo-oscuro button:hover {
+  background-color: var(--color-secundario);
+}
+
+.modo-oscuro #saldo-total {
+  background-color: var(--color-acento);
+  color: var(--color-primario);
 }
 
