@@ -17,9 +17,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Almacenamiento local de datos para persistencia entre sesiones.
 - Personalizar el nombre de la categoría "Otro" al agregar una transacción.
 - Agregar nuevas categorías personalizadas.
-- Exportar todas las transacciones en formato Excel (.xlsx).
-- Exportar un informe en formato PDF.
-- Exportar todos los datos (transacciones y categorías) en formato JSON.
+- Exportar todas las transacciones en formato Excel (.xlsx), PDF y JSON con nombres de archivo mejorados ("Control De Gastos Personales").
 - Importar datos desde un archivo JSON previamente exportado.
 - Modo oscuro mejorado para mejor visualización en entornos con poca luz.
 - Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
@@ -60,6 +58,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Optimización del diseño para dispositivos móviles.
 - Implementación de exportación de datos a JSON para respaldo.
 - Adición de funcionalidad para importar datos desde archivos JSON.
+- Refinado el formato de los nombres de archivos descargables para una presentación más profesional y consistente.
 
 ## Desarrollo futuro
 
