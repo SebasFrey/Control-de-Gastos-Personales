@@ -28,7 +28,6 @@ const botonAgregarCategoria = document.getElementById('agregar-categoria');
 const botonExportarJSON = document.getElementById('exportar-json');
 const botonImportarJSON = document.getElementById('importar-json');
 
-
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
 let categorias = JSON.parse(localStorage.getItem('categorias')) || ['Salario', 'Alimentación', 'Transporte', 'Entretenimiento', 'Otro'];
@@ -37,6 +36,17 @@ let ingresos = 0;
 let gastos = 0;
 let resumenCategoria = {};
 
+// Nueva función para actualizar el saldo de una categoría
+function actualizarSaldoCategoria(categoria, monto, tipo) {
+    if (!resumenCategoria[categoria]) {
+        resumenCategoria[categoria] = 0;
+    }
+    if (tipo === 'ingreso') {
+        resumenCategoria[categoria] += monto;
+    } else {
+        resumenCategoria[categoria] -= monto;
+    }
+}
 
 // Funciones auxiliares
 function actualizarSaldo() {
@@ -47,18 +57,6 @@ function actualizarSaldo() {
 }
 
 function actualizarResumenCategoria() {
-    resumenCategoria = {};
-    transacciones.forEach(transaccion => {
-        if (!resumenCategoria[transaccion.categoria]) {
-            resumenCategoria[transaccion.categoria] = 0;
-        }
-        if (transaccion.tipo === 'ingreso') {
-            resumenCategoria[transaccion.categoria] += transaccion.monto;
-        } else {
-            resumenCategoria[transaccion.categoria] -= transaccion.monto;
-        }
-    });
-
     listaCategoria.innerHTML = '';
     for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
@@ -115,6 +113,7 @@ function eliminarTransaccion(indice) {
     } else {
         gastos -= transaccion.monto;
     }
+    actualizarSaldoCategoria(transaccion.categoria, transaccion.monto, transaccion.tipo === 'ingreso' ? 'gasto' : 'ingreso');
     transacciones.splice(indice, 1);
     actualizarSaldo();
     actualizarResumenCategoria();
@@ -131,7 +130,6 @@ function filtrarTransacciones() {
         return cumpleFiltroTipo && cumpleFiltroCategoria && cumpleFiltroFecha;
     });
 }
-
 
 function exportarExcel() {
     const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
@@ -266,6 +264,7 @@ formulario.addEventListener('submit', e => {
         gastos += monto;
     }
 
+    actualizarSaldoCategoria(categoria, monto, tipo);
     actualizarSaldo();
     actualizarResumenCategoria();
     actualizarListaTransacciones();
@@ -319,12 +318,14 @@ function actualizarSelectCategorias() {
 
 // Inicialización
 function inicializar() {
+    resumenCategoria = {};
     transacciones.forEach(transaccion => {
         if (transaccion.tipo === 'ingreso') {
             ingresos += transaccion.monto;
         } else {
             gastos += transaccion.monto;
         }
+        actualizarSaldoCategoria(transaccion.categoria, transaccion.monto, transaccion.tipo);
     });
 
     actualizarSaldo();

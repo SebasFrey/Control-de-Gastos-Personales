@@ -11,7 +11,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
 - Editar la descripción de transacciones existentes.
 - Visualizar el saldo total, total de ingresos y total de gastos.
-- Ver un resumen de transacciones por categoría.
+- Ver un resumen de transacciones por categoría, con saldos actualizados automáticamente.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
 - Eliminar transacciones individuales.
 - Almacenamiento local de datos para persistencia entre sesiones.
@@ -36,7 +36,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 1. Visita [https://control-de-gastos-personales.vercel.app/](https://control-de-gastos-personales.vercel.app/)
 2. Use el formulario para agregar nuevas transacciones.
-3. Vea el resumen financiero en la sección central.
+3. Vea el resumen financiero en la sección central, incluyendo los saldos por categoría.
 4. Utilice los filtros para ver transacciones específicas.
 5. Haga clic en el icono de edición junto a una transacción para modificar su descripción.
 6. Haga clic en el icono de papelera junto a una transacción para eliminarla.
@@ -53,6 +53,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Mejoras recientes
 
+- Implementación de la actualización automática de saldos por categoría al agregar o eliminar transacciones.
 - Implementación de la funcionalidad para editar descripciones de transacciones.
 - Mejora en la paleta de colores para el modo oscuro.
 - Optimización del diseño para dispositivos móviles.
