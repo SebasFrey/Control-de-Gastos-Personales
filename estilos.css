@@ -398,3 +398,34 @@ button:hover {
   color: var(--color-primario);
 }
 
+.editar-monto {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    border: 1px solid var(--color-acento);
+    border-radius: var(--radio-borde);
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    width: 100px;
+}
+
+.boton-editar-descripcion,
+.boton-editar-monto {
+    background: none;
+    border: none;
+    color: var(--color-secundario);
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: var(--transicion);
+}
+
+.boton-editar-descripcion:hover,
+.boton-editar-monto:hover {
+    color: var(--color-primario);
+}
+
+.modo-oscuro .editar-monto {
+    background-color: #2c2c2c;
+    color: var(--color-texto);
+    border-color: var(--color-secundario);
+}
+

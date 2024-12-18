@@ -9,7 +9,8 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 ## Características
 
 - Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
-- Editar la descripción de transacciones existentes.
+- Editar la descripción y el monto de transacciones existentes.
+- Actualización automática de saldos al editar montos de transacciones.
 - Visualizar el saldo total, total de ingresos y total de gastos.
 - Ver un resumen de transacciones por categoría, con saldos actualizados automáticamente.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
@@ -38,11 +39,12 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 2. Use el formulario para agregar nuevas transacciones.
 3. Vea el resumen financiero en la sección central, incluyendo los saldos por categoría.
 4. Utilice los filtros para ver transacciones específicas.
-5. Haga clic en el icono de edición junto a una transacción para modificar su descripción.
-6. Haga clic en el icono de papelera junto a una transacción para eliminarla.
-7. Use los botones de exportación para descargar los datos en Excel, PDF o JSON.
-8. Use el botón de importación para cargar datos desde un archivo JSON.
-9. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
+5. Haga clic en el icono de edición (lápiz) junto a una transacción para modificar su descripción.
+6. Haga clic en el icono de moneda ($) junto a una transacción para modificar su monto.
+7. Haga clic en el icono de papelera junto a una transacción para eliminarla.
+8. Use los botones de exportación para descargar los datos en Excel, PDF o JSON.
+9. Use el botón de importación para cargar datos desde un archivo JSON.
+10. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
 
 ## Estructura del proyecto
 
@@ -53,6 +55,8 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Mejoras recientes
 
+- Implementación de la edición de montos en transacciones existentes.
+- Actualización automática de saldos financieros y por categoría al editar montos.
 - Implementación de la actualización automática de saldos por categoría al agregar o eliminar transacciones.
 - Implementación de la funcionalidad para editar descripciones de transacciones.
 - Mejora en la paleta de colores para el modo oscuro.

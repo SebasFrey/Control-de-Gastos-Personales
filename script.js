@@ -73,13 +73,19 @@ function agregarTransaccionAlDOM(transaccion, indice) {
             <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
             <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
         </td>
-        <td>$${formatearNumero(transaccion.monto)}</td>
+        <td>
+            <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
+            <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
+        </td>
         <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
         <td>${capitalizarPalabras(transaccion.categoria)}</td>
         <td>${new Date(transaccion.fecha).toLocaleDateString()}</td>
         <td>
-            <button class="boton-editar" onclick="editarDescripcion(${indice})">
+            <button class="boton-editar-descripcion" onclick="editarDescripcion(${indice})">
                 <i data-feather="edit-2"></i>
+            </button>
+            <button class="boton-editar-monto" onclick="editarMonto(${indice})">
+                <i data-feather="dollar-sign"></i>
             </button>
             <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
                 <i data-feather="trash-2"></i>
@@ -354,7 +360,7 @@ function editarDescripcion(indice) {
     const fila = listaTransacciones.children[indice];
     const descripcionTexto = fila.querySelector('.descripcion-texto');
     const descripcionInput = fila.querySelector('.editar-descripcion');
-    const botonEditar = fila.querySelector('.boton-editar');
+    const botonEditar = fila.querySelector('.boton-editar-descripcion');
 
     if (descripcionInput.style.display === 'none') {
         descripcionTexto.style.display = 'none';
@@ -368,6 +374,53 @@ function editarDescripcion(indice) {
         descripcionTexto.style.display = 'inline-block';
         descripcionInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="edit-2"></i>';
+        guardarTransacciones();
+    }
+    feather.replace();
+}
+
+function editarMonto(indice) {
+    const fila = listaTransacciones.children[indice];
+    const montoTexto = fila.querySelector('.monto-texto');
+    const montoInput = fila.querySelector('.editar-monto');
+    const botonEditar = fila.querySelector('.boton-editar-monto');
+
+    if (montoInput.style.display === 'none') {
+        montoTexto.style.display = 'none';
+        montoInput.style.display = 'inline-block';
+        montoInput.focus();
+        botonEditar.innerHTML = '<i data-feather="check"></i>';
+    } else {
+        const nuevoMonto = parseFloat(montoInput.value);
+        if (isNaN(nuevoMonto) || nuevoMonto <= 0) {
+            alert('Por favor, ingrese un monto válido mayor que 0.');
+            return;
+        }
+
+        const transaccion = transacciones[indice];
+        const montoAnterior = transaccion.monto;
+
+        // Actualizar saldos globales
+        if (transaccion.tipo === 'ingreso') {
+            ingresos = ingresos - montoAnterior + nuevoMonto;
+        } else {
+            gastos = gastos - montoAnterior + nuevoMonto;
+        }
+
+        // Actualizar saldo de categoría
+        actualizarSaldoCategoria(transaccion.categoria, montoAnterior, transaccion.tipo === 'ingreso' ? 'gasto' : 'ingreso');
+        actualizarSaldoCategoria(transaccion.categoria, nuevoMonto, transaccion.tipo);
+
+        // Actualizar transacción
+        transaccion.monto = nuevoMonto;
+        montoTexto.textContent = `$${formatearNumero(nuevoMonto)}`;
+        montoTexto.style.display = 'inline-block';
+        montoInput.style.display = 'none';
+        botonEditar.innerHTML = '<i data-feather="dollar-sign"></i>';
+
+        // Actualizar UI y guardar cambios
+        actualizarSaldo();
+        actualizarResumenCategoria();
         guardarTransacciones();
     }
     feather.replace();
