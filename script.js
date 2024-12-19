@@ -6,7 +6,7 @@ function formatearNumero(numero) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     }).format(numeroAbsoluto.toFixed(2));
-    return esNegativo ? `-$${numeroFormateado}` : `$${numeroFormateado}`;
+    return esNegativo ? `-${numeroFormateado}` : `${numeroFormateado}`;
 }
 
 // Elementos del DOM
@@ -423,7 +423,7 @@ function editarMonto(indice) {
 
         // Actualizar transacción
         transaccion.monto = nuevoMonto;
-        montoTexto.textContent = `$${formatearNumero(nuevoMonto)}`;
+        montoTexto.textContent = `${formatearNumero(nuevoMonto)}`;
         montoTexto.style.display = 'inline-block';
         montoInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="dollar-sign"></i>';
