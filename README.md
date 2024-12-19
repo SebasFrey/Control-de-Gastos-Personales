@@ -10,9 +10,11 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 - Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
 - Editar la descripción y el monto de transacciones existentes.
+- Visualización mejorada de valores negativos con signo "-" explícito.
 - Actualización automática de saldos al editar montos de transacciones.
 - Visualizar el saldo total, total de ingresos y total de gastos.
 - Ver un resumen de transacciones por categoría, con saldos actualizados automáticamente.
+- Tratamiento consistente de números negativos en todas las visualizaciones.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
 - Eliminar transacciones individuales.
 - Almacenamiento local de datos para persistencia entre sesiones.
@@ -38,13 +40,14 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 1. Visita [https://control-de-gastos-personales.vercel.app/](https://control-de-gastos-personales.vercel.app/)
 2. Use el formulario para agregar nuevas transacciones.
 3. Vea el resumen financiero en la sección central, incluyendo los saldos por categoría.
-4. Utilice los filtros para ver transacciones específicas.
-5. Haga clic en el icono de edición (lápiz) junto a una transacción para modificar su descripción.
-6. Haga clic en el icono de moneda ($) junto a una transacción para modificar su monto.
-7. Haga clic en el icono de papelera junto a una transacción para eliminarla.
-8. Use los botones de exportación para descargar los datos en Excel, PDF o JSON.
-9. Use el botón de importación para cargar datos desde un archivo JSON.
-10. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
+4. Los gastos se mostrarán como valores negativos (con signo "-") en rojo.
+5. Utilice los filtros para ver transacciones específicas.
+6. Haga clic en el icono de edición (lápiz) junto a una transacción para modificar su descripción.
+7. Haga clic en el icono de moneda ($) junto a una transacción para modificar su monto.
+8. Haga clic en el icono de papelera junto a una transacción para eliminarla.
+9. Use los botones de exportación para descargar los datos en Excel, PDF o JSON.
+10. Use el botón de importación para cargar datos desde un archivo JSON.
+11. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
 
 ## Estructura del proyecto
 
@@ -55,6 +58,8 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Mejoras recientes
 
+- Implementación de visualización mejorada de valores negativos.
+- Tratamiento consistente de números negativos en todas las vistas.
 - Implementación de la edición de montos en transacciones existentes.
 - Actualización automática de saldos financieros y por categoría al editar montos.
 - Implementación de la actualización automática de saldos por categoría al agregar o eliminar transacciones.

@@ -1,6 +1,12 @@
 // Función para formatear números a formato de moneda
 function formatearNumero(numero) {
-    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero.toFixed(2));
+    const esNegativo = numero < 0;
+    const numeroAbsoluto = Math.abs(numero);
+    const numeroFormateado = new Intl.NumberFormat('es-ES', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(numeroAbsoluto.toFixed(2));
+    return esNegativo ? `-$${numeroFormateado}` : `$${numeroFormateado}`;
 }
 
 // Elementos del DOM
@@ -60,7 +66,10 @@ function actualizarResumenCategoria() {
     listaCategoria.innerHTML = '';
     for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${capitalizarPalabras(categoria)}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">$${formatearNumero(Math.abs(monto))}</span>`;
+        li.innerHTML = `
+            <span>${capitalizarPalabras(categoria)}</span>
+            <span class="${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(monto)}</span>
+        `;
         listaCategoria.appendChild(li);
     }
 }
@@ -68,13 +77,14 @@ function actualizarResumenCategoria() {
 function agregarTransaccionAlDOM(transaccion, indice) {
     const tr = document.createElement('tr');
     tr.className = `item-transaccion ${transaccion.tipo}`;
+    const montoMostrado = transaccion.tipo === 'gasto' ? -transaccion.monto : transaccion.monto;
     tr.innerHTML = `
         <td>
             <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
             <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
         </td>
         <td>
-            <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
+            <span class="monto-texto ${transaccion.tipo}">${formatearNumero(montoMostrado)}</span>
             <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
         </td>
         <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
@@ -140,7 +150,7 @@ function filtrarTransacciones() {
 function exportarExcel() {
     const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
         Descripción: capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
-        Monto: t.monto,
+        Monto: t.tipo === 'gasto' ? -t.monto : t.monto,
         Tipo: capitalizarPrimeraLetra(t.tipo),
         Categoría: capitalizarPrimeraLetra(t.categoria),
         Fecha: new Date(t.fecha).toLocaleDateString()
@@ -158,14 +168,14 @@ function exportarPDF() {
 
     doc.text("Control de Gastos Personales", 14, 15);
     doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 25);
-    doc.text(`Saldo Total: $${formatearNumero(saldo)}`, 14, 35);
-    doc.text(`Total Ingresos: $${formatearNumero(ingresos)}`, 14, 45);
-    doc.text(`Total Gastos: $${formatearNumero(gastos)}`, 14, 55);
+    doc.text(`Saldo Total: ${formatearNumero(saldo)}`, 14, 35);
+    doc.text(`Total Ingresos: ${formatearNumero(ingresos)}`, 14, 45);
+    doc.text(`Total Gastos: ${formatearNumero(-gastos)}`, 14, 55);
 
     const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
     const data = transacciones.map(t => [
         capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
-        `$${formatearNumero(t.monto)}`,
+        formatearNumero(t.tipo === 'gasto' ? -t.monto : t.monto),
         capitalizarPrimeraLetra(t.tipo),
         capitalizarPrimeraLetra(t.categoria),
         new Date(t.fecha).toLocaleDateString()
