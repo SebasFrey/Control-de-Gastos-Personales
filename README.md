@@ -9,18 +9,17 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 ## Características
 
 - Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
+- Transferir fondos entre categorías con validación de saldo disponible.
 - Editar la descripción y el monto de transacciones existentes.
-- Visualización mejorada de valores negativos con signo "-" explícito.
 - Actualización automática de saldos al editar montos de transacciones.
 - Visualizar el saldo total, total de ingresos y total de gastos.
 - Ver un resumen de transacciones por categoría, con saldos actualizados automáticamente.
-- Tratamiento consistente de números negativos en todas las visualizaciones.
 - Filtrar transacciones por tipo, categoría y rango de fechas.
 - Eliminar transacciones individuales.
 - Almacenamiento local de datos para persistencia entre sesiones.
 - Personalizar el nombre de la categoría "Otro" al agregar una transacción.
 - Agregar nuevas categorías personalizadas.
-- Exportar todas las transacciones en formato Excel (.xlsx), PDF y JSON con nombres de archivo mejorados ("Control De Gastos Personales").
+- Exportar todas las transacciones en formato Excel (.xlsx), PDF y JSON.
 - Importar datos desde un archivo JSON previamente exportado.
 - Modo oscuro mejorado para mejor visualización en entornos con poca luz.
 - Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
@@ -40,7 +39,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 1. Visita [https://control-de-gastos-personales.vercel.app/](https://control-de-gastos-personales.vercel.app/)
 2. Use el formulario para agregar nuevas transacciones.
 3. Vea el resumen financiero en la sección central, incluyendo los saldos por categoría.
-4. Los gastos se mostrarán como valores negativos (con signo "-") en rojo.
+4. Utilice el botón "Transferir entre Categorías" para mover fondos entre categorías.
 5. Utilice los filtros para ver transacciones específicas.
 6. Haga clic en el icono de edición (lápiz) junto a una transacción para modificar su descripción.
 7. Haga clic en el icono de moneda ($) junto a una transacción para modificar su monto.
@@ -58,17 +57,16 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Mejoras recientes
 
-- Implementación de visualización mejorada de valores negativos.
-- Tratamiento consistente de números negativos en todas las vistas.
+- Implementación de transferencias entre categorías con validación de saldos.
+- Corrección del problema de duplicación del símbolo "$" en el resumen de categorías.
 - Implementación de la edición de montos en transacciones existentes.
 - Actualización automática de saldos financieros y por categoría al editar montos.
-- Implementación de la actualización automática de saldos por categoría al agregar o eliminar transacciones.
+- Implementación de la actualización automática de saldos por categoría.
 - Implementación de la funcionalidad para editar descripciones de transacciones.
 - Mejora en la paleta de colores para el modo oscuro.
 - Optimización del diseño para dispositivos móviles.
 - Implementación de exportación de datos a JSON para respaldo.
 - Adición de funcionalidad para importar datos desde archivos JSON.
-- Refinado el formato de los nombres de archivos descargables para una presentación más profesional y consistente.
 
 ## Desarrollo futuro
 
@@ -76,12 +74,3 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Agregar la opción de crear presupuestos y metas de ahorro.
 - Añadir soporte para múltiples cuentas y monedas.
 - Implementar un sistema de respaldo en la nube.
-
-## Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, abra un issue o realice un pull request con sus sugerencias.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulte el archivo `LICENSE` para obtener más detalles.
-

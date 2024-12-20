@@ -429,3 +429,53 @@ button:hover {
     border-color: var(--color-secundario);
 }
 
+/* Estilos para el modal de transferencia */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-contenido {
+    background-color: var(--color-blanco);
+    padding: 2rem;
+    border-radius: var(--radio-borde);
+    box-shadow: var(--sombra-caja);
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-contenido h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--color-texto);
+}
+
+.botones-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.boton-primario {
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+}
+
+.modo-oscuro .modal-contenido {
+    background-color: var(--color-blanco);
+    color: var(--color-texto);
+}
+
+.modo-oscuro .modal-contenido h3 {
+    color: var(--color-texto);
+}
+

@@ -1,12 +1,6 @@
 // Función para formatear números a formato de moneda
 function formatearNumero(numero) {
-    const esNegativo = numero < 0;
-    const numeroAbsoluto = Math.abs(numero);
-    const numeroFormateado = new Intl.NumberFormat('es-ES', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(numeroAbsoluto.toFixed(2));
-    return esNegativo ? `-${numeroFormateado}` : `${numeroFormateado}`;
+    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero.toFixed(2));
 }
 
 // Elementos del DOM
@@ -54,6 +48,114 @@ function actualizarSaldoCategoria(categoria, monto, tipo) {
     }
 }
 
+// Nueva función para realizar transferencias entre categorías
+function transferirEntreCategorias(categoriaOrigen, categoriaDestino, monto) {
+    if (!resumenCategoria[categoriaOrigen] || resumenCategoria[categoriaOrigen] < monto) {
+        alert('Saldo insuficiente en la categoría de origen.');
+        return false;
+    }
+
+    const fechaActual = new Date().toISOString();
+
+    // Crear transacción de salida
+    const transaccionSalida = {
+        descripcion: `Transferencia a ${capitalizarPalabras(categoriaDestino)}`,
+        monto: monto,
+        tipo: 'gasto',
+        categoria: categoriaOrigen,
+        fecha: fechaActual
+    };
+
+    // Crear transacción de entrada
+    const transaccionEntrada = {
+        descripcion: `Transferencia desde ${capitalizarPalabras(categoriaOrigen)}`,
+        monto: monto,
+        tipo: 'ingreso',
+        categoria: categoriaDestino,
+        fecha: fechaActual
+    };
+
+    // Agregar las transacciones
+    transacciones.push(transaccionSalida, transaccionEntrada);
+
+    // Actualizar saldos de categorías
+    actualizarSaldoCategoria(categoriaOrigen, monto, 'gasto');
+    actualizarSaldoCategoria(categoriaDestino, monto, 'ingreso');
+
+    // Actualizar UI y guardar cambios
+    actualizarListaTransacciones();
+    actualizarResumenCategoria();
+    guardarTransacciones();
+
+    return true;
+}
+
+// Función para mostrar el modal de transferencia
+function mostrarModalTransferencia() {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-contenido">
+            <h3>Transferir entre Categorías</h3>
+            <form id="formulario-transferencia">
+                <div class="grupo-formulario">
+                    <label for="categoria-origen">Categoría Origen:</label>
+                    <select id="categoria-origen" required>
+                        ${categorias.map(cat => `<option value="${cat.toLowerCase()}">${capitalizarPalabras(cat)}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="grupo-formulario">
+                    <label for="categoria-destino">Categoría Destino:</label>
+                    <select id="categoria-destino" required>
+                        ${categorias.map(cat => `<option value="${cat.toLowerCase()}">${capitalizarPalabras(cat)}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="grupo-formulario">
+                    <label for="monto-transferencia">Monto:</label>
+                    <input type="number" id="monto-transferencia" step="0.01" min="0.01" required>
+                </div>
+                <div class="botones-modal">
+                    <button type="submit" class="boton-primario">Transferir</button>
+                    <button type="button" class="boton-secundario" onclick="cerrarModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Event listener para el formulario de transferencia
+    document.getElementById('formulario-transferencia').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const categoriaOrigen = document.getElementById('categoria-origen').value;
+        const categoriaDestino = document.getElementById('categoria-destino').value;
+        const monto = parseFloat(document.getElementById('monto-transferencia').value);
+
+        if (categoriaOrigen === categoriaDestino) {
+            alert('Las categorías de origen y destino deben ser diferentes.');
+            return;
+        }
+
+        if (isNaN(monto) || monto <= 0) {
+            alert('Por favor, ingrese un monto válido mayor que 0.');
+            return;
+        }
+
+        if (transferirEntreCategorias(categoriaOrigen, categoriaDestino, monto)) {
+            cerrarModal();
+            alert('Transferencia realizada con éxito.');
+        }
+    });
+}
+
+// Función para cerrar el modal
+function cerrarModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+
 // Funciones auxiliares
 function actualizarSaldo() {
     saldo = ingresos - gastos;
@@ -62,14 +164,12 @@ function actualizarSaldo() {
     elementoGastos.textContent = formatearNumero(gastos);
 }
 
+// Modificar la función actualizarResumenCategoria para evitar la duplicación del símbolo $
 function actualizarResumenCategoria() {
     listaCategoria.innerHTML = '';
     for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${capitalizarPalabras(categoria)}</span>
-            <span class="${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(monto)}</span>
-        `;
+        li.innerHTML = `<span>${capitalizarPalabras(categoria)}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(Math.abs(monto))}</span>`;
         listaCategoria.appendChild(li);
     }
 }
@@ -77,14 +177,13 @@ function actualizarResumenCategoria() {
 function agregarTransaccionAlDOM(transaccion, indice) {
     const tr = document.createElement('tr');
     tr.className = `item-transaccion ${transaccion.tipo}`;
-    const montoMostrado = transaccion.tipo === 'gasto' ? -transaccion.monto : transaccion.monto;
     tr.innerHTML = `
         <td>
             <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
             <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
         </td>
         <td>
-            <span class="monto-texto ${transaccion.tipo}">${formatearNumero(montoMostrado)}</span>
+            <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
             <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
         </td>
         <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
@@ -150,7 +249,7 @@ function filtrarTransacciones() {
 function exportarExcel() {
     const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
         Descripción: capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
-        Monto: t.tipo === 'gasto' ? -t.monto : t.monto,
+        Monto: t.monto,
         Tipo: capitalizarPrimeraLetra(t.tipo),
         Categoría: capitalizarPrimeraLetra(t.categoria),
         Fecha: new Date(t.fecha).toLocaleDateString()
@@ -168,14 +267,14 @@ function exportarPDF() {
 
     doc.text("Control de Gastos Personales", 14, 15);
     doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 25);
-    doc.text(`Saldo Total: ${formatearNumero(saldo)}`, 14, 35);
-    doc.text(`Total Ingresos: ${formatearNumero(ingresos)}`, 14, 45);
-    doc.text(`Total Gastos: ${formatearNumero(-gastos)}`, 14, 55);
+    doc.text(`Saldo Total: $${formatearNumero(saldo)}`, 14, 35);
+    doc.text(`Total Ingresos: $${formatearNumero(ingresos)}`, 14, 45);
+    doc.text(`Total Gastos: $${formatearNumero(gastos)}`, 14, 55);
 
     const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
     const data = transacciones.map(t => [
         capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
-        formatearNumero(t.tipo === 'gasto' ? -t.monto : t.monto),
+        `$${formatearNumero(t.monto)}`,
         capitalizarPrimeraLetra(t.tipo),
         capitalizarPrimeraLetra(t.categoria),
         new Date(t.fecha).toLocaleDateString()
@@ -423,7 +522,7 @@ function editarMonto(indice) {
 
         // Actualizar transacción
         transaccion.monto = nuevoMonto;
-        montoTexto.textContent = `${formatearNumero(nuevoMonto)}`;
+        montoTexto.textContent = `$${formatearNumero(nuevoMonto)}`;
         montoTexto.style.display = 'inline-block';
         montoInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="dollar-sign"></i>';
@@ -435,4 +534,14 @@ function editarMonto(indice) {
     }
     feather.replace();
 }
+
+// Agregar botón de transferencia al DOM
+const botonTransferencia = document.createElement('button');
+botonTransferencia.id = 'transferir-categoria';
+botonTransferencia.className = 'boton-secundario';
+botonTransferencia.textContent = 'Transferir entre Categorías';
+botonTransferencia.onclick = mostrarModalTransferencia;
+
+// Insertar el botón después del botón de agregar categoría
+document.getElementById('agregar-categoria').insertAdjacentElement('afterend', botonTransferencia);
 
