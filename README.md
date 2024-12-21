@@ -57,6 +57,10 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Mejoras recientes
 
+- Reorganización de la interfaz de botones para mejor usabilidad:
+  - Agrupación intuitiva de botones por función (gestión y datos)
+  - Mejor organización visual con separadores claros
+  - Diseño responsivo mejorado para los controles
 - Implementación de transferencias entre categorías con validación de saldos.
 - Corrección del problema de duplicación del símbolo "$" en el resumen de categorías.
 - Implementación de la edición de montos en transacciones existentes.

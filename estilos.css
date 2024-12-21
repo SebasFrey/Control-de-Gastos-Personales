@@ -228,6 +228,49 @@ button:hover {
   opacity: 0.9;
 }
 
+.grupos-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.grupo-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-blanco);
+  box-shadow: var(--sombra-caja);
+}
+
+.grupo-gestion {
+  border-left: 4px solid var(--color-primario);
+}
+
+.grupo-datos {
+  border-left: 4px solid var(--color-secundario);
+}
+
+.grupo-botones button,
+.grupo-botones label {
+  flex: 1;
+  min-width: 200px;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .grupo-botones {
+    flex-direction: column;
+  }
+
+  .grupo-botones button,
+  .grupo-botones label {
+    width: 100%;
+  }
+}
+
 #modo-oscuro {
   background: none;
   border: none;
@@ -427,6 +470,10 @@ button:hover {
     background-color: #2c2c2c;
     color: var(--color-texto);
     border-color: var(--color-secundario);
+}
+
+.modo-oscuro .grupo-botones {
+  background-color: var(--color-blanco);
 }
 
 /* Estilos para el modal de transferencia */

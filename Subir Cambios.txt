@@ -1,0 +1,17 @@
+git add .
+git commit -m "Actualización 1.30 - Reorganización de la interfaz de botones
+
+- Implementada nueva organización visual de botones por grupos funcionales
+- Agregados contenedores separados para botones de gestión y datos
+- Mejorado el diseño responsivo de los grupos de botones
+- Actualizada la documentación en el README
+- Mantenida la compatibilidad con todas las funcionalidades existentes
+- Optimizada la experiencia de usuario con una disposición más intuitiva"
+
+git push -u origin fuegote
+
+git checkout main
+git pull origin main
+git merge fuegote
+git push origin main
+git checkout fuegote

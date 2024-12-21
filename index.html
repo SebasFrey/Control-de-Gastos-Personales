@@ -45,16 +45,23 @@
                     <label for="descripcion">Descripción (Opcional)</label>
                     <input type="text" id="descripcion">
                 </div>
-                <button type="submit">Agregar Transacción</button>
+                <div class="grupos-botones">
+                  <div class="grupo-botones grupo-gestion">
+                    <button type="submit">Agregar Transacción</button>
+                    <button id="agregar-categoria" class="boton-secundario">Agregar Nueva Categoría</button>
+                    <button type="button" id="transferir-categoria" class="boton-secundario">Transferir entre Categorías</button>
+                  </div>
+                  <div class="grupo-botones grupo-datos">
+                    <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
+                    <button id="exportar-pdf" class="boton-exportar">Exportar a PDF</button>
+                    <button id="exportar-json" class="boton-exportar">Exportar datos</button>
+                    <label for="importar-json" class="boton-exportar" style="display: inline-block;">
+                      Importar datos
+                      <input type="file" id="importar-json" style="display: none;" accept=".json">
+                    </label>
+                  </div>
+                </div>
             </form>
-            <button id="agregar-categoria" class="boton-secundario">Agregar Nueva Categoría</button>
-            <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
-            <button id="exportar-pdf" class="boton-exportar">Exportar a PDF</button>
-            <button id="exportar-json" class="boton-exportar">Exportar datos</button>
-            <label for="importar-json" class="boton-exportar" style="display: inline-block;">
-                Importar datos
-                <input type="file" id="importar-json" style="display: none;" accept=".json">
-            </label>
         </section>
         <section id="seccion-resumen">
             <h2>Resumen Financiero</h2>
@@ -123,4 +130,3 @@
     </script>
 </body>
 </html>
-
