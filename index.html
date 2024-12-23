@@ -45,26 +45,24 @@
                     <label for="descripcion">Descripción (Opcional)</label>
                     <input type="text" id="descripcion">
                 </div>
-                <div class="grupo-botones grupo-gestion">
+                <div class="grupos-botones">
+                  <div class="grupo-botones grupo-gestion">
                     <button type="submit">Agregar Transacción</button>
-                    <button type="button" id="agregar-categoria" class="boton-secundario">Agregar Nueva Categoría</button>
+                    <button id="agregar-categoria" class="boton-secundario">Agregar Nueva Categoría</button>
                     <button type="button" id="transferir-categoria" class="boton-secundario">Transferir entre Categorías</button>
+                  </div>
+                  <div class="grupo-botones grupo-datos">
+                    <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
+                    <button id="exportar-pdf" class="boton-exportar">Exportar a PDF</button>
+                    <button id="exportar-json" class="boton-exportar">Exportar datos</button>
+                    <label for="importar-json" class="boton-exportar" style="display: inline-block;">
+                      Importar datos
+                      <input type="file" id="importar-json" style="display: none;" accept=".json">
+                    </label>
+                  </div>
                 </div>
             </form>
         </section>
-
-        <section id="seccion-acciones" class="seccion-flotante">
-            <div class="grupo-botones grupo-datos">
-                <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
-                <button id="exportar-pdf" class="boton-exportar">Exportar a PDF</button>
-                <button id="exportar-json" class="boton-exportar">Exportar datos</button>
-                <label for="importar-json" class="boton-exportar">
-                    Importar datos
-                    <input type="file" id="importar-json" accept=".json" style="display: none;">
-                </label>
-            </div>
-        </section>
-
         <section id="seccion-resumen">
             <h2>Resumen Financiero</h2>
             <div class="tarjetas-resumen">
@@ -86,7 +84,6 @@
                 <ul id="lista-categoria"></ul>
             </div>
         </section>
-
         <section id="seccion-historial">
             <h2>Historial de Transacciones</h2>
             <div id="contenedor-filtro">
@@ -133,4 +130,3 @@
     </script>
 </body>
 </html>
-
