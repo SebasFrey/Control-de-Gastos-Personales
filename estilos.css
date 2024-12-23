@@ -449,6 +449,35 @@ button:hover {
   border-color: var(--color-secundario);
 }
 
+.editar-fecha {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    border: 1px solid var(--color-acento);
+    border-radius: var(--radio-borde);
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    width: 130px;
+}
+
+.boton-editar-fecha {
+    background: none;
+    border: none;
+    color: var(--color-secundario);
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: var(--transicion);
+}
+
+.boton-editar-fecha:hover {
+    color: var(--color-primario);
+}
+
+.modo-oscuro .editar-fecha {
+    background-color: #2c2c2c;
+    color: var(--color-texto);
+    border-color: var(--color-secundario);
+}
+
 /* Estilos para el modal de transferencia */
 .modal {
   position: fixed;

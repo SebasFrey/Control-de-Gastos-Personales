@@ -190,13 +190,19 @@ function agregarTransaccionAlDOM(transaccion, indice) {
         </td>
         <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
         <td>${capitalizarPalabras(transaccion.categoria)}</td>
-        <td>${new Date(transaccion.fecha).toLocaleDateString()}</td>
+        <td>
+            <span class="fecha-texto">${new Date(transaccion.fecha).toLocaleDateString()}</span>
+            <input type="date" class="editar-fecha" style="display: none;" value="${new Date(transaccion.fecha).toISOString().split('T')[0]}">
+        </td>
         <td>
             <button class="boton-editar-descripcion" onclick="editarDescripcion(${indice})">
                 <i data-feather="edit-2"></i>
             </button>
             <button class="boton-editar-monto" onclick="editarMonto(${indice})">
                 <i data-feather="dollar-sign"></i>
+            </button>
+            <button class="boton-editar-fecha" onclick="editarFecha(${indice})">
+                <i data-feather="calendar"></i>
             </button>
             <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
                 <i data-feather="trash-2"></i>
@@ -534,6 +540,34 @@ function editarMonto(indice) {
         // Actualizar UI y guardar cambios
         actualizarSaldo();
         actualizarResumenCategoria();
+        guardarTransacciones();
+    }
+    feather.replace();
+}
+
+function editarFecha(indice) {
+    const fila = listaTransacciones.children[indice];
+    const fechaTexto = fila.querySelector('.fecha-texto');
+    const fechaInput = fila.querySelector('.editar-fecha');
+    const botonEditar = fila.querySelector('.boton-editar-fecha');
+
+    if (fechaInput.style.display === 'none') {
+        fechaTexto.style.display = 'none';
+        fechaInput.style.display = 'inline-block';
+        fechaInput.focus();
+        botonEditar.innerHTML = '<i data-feather="check"></i>';
+    } else {
+        const nuevaFecha = fechaInput.value;
+        if (!nuevaFecha) {
+            alert('Por favor, seleccione una fecha válida.');
+            return;
+        }
+
+        transacciones[indice].fecha = new Date(nuevaFecha).toISOString();
+        fechaTexto.textContent = new Date(nuevaFecha).toLocaleDateString();
+        fechaTexto.style.display = 'inline-block';
+        fechaInput.style.display = 'none';
+        botonEditar.innerHTML = '<i data-feather="calendar"></i>';
         guardarTransacciones();
     }
     feather.replace();

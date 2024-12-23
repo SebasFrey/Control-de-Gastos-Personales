@@ -1,13 +1,12 @@
 git add .
-git commit -m "Actualización 1.32 - Restauración del diseño original de botones
+git commit -m "Actualización 1.33.0 - Implementación de edición de fechas
 
-- Revertidos los cambios en la organización de los botones
-- Restaurada la disposición original dentro del formulario
-- Mantenida la agrupación visual de botones por función
-- Conservada la separación entre grupos de gestión y datos
-- Actualizada la documentación en el README
-
-"
+- Añadida la capacidad de editar fechas de transacciones
+- Implementado nuevo botón con icono de calendario para editar fechas
+- Agregada validación para asegurar fechas válidas
+- Actualizado el diseño para mantener consistencia con otros controles de edición
+- Mejorada la experiencia de usuario en la gestión de fechas
+- Mantenida la compatibilidad con todas las funcionalidades existentes"
 
 git push -u origin fuegote
 

@@ -8,21 +8,25 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Características
 
-- Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
-- Transferir fondos entre categorías con validación de saldo disponible.
-- Editar la descripción y el monto de transacciones existentes.
-- Actualización automática de saldos al editar montos de transacciones.
-- Visualizar el saldo total, total de ingresos y total de gastos.
-- Ver un resumen de transacciones por categoría, con saldos actualizados automáticamente.
-- Filtrar transacciones por tipo, categoría y rango de fechas.
-- Eliminar transacciones individuales.
-- Almacenamiento local de datos para persistencia entre sesiones.
-- Personalizar el nombre de la categoría "Otro" al agregar una transacción.
-- Agregar nuevas categorías personalizadas.
-- Exportar todas las transacciones en formato Excel (.xlsx), PDF y JSON.
-- Importar datos desde un archivo JSON previamente exportado.
-- Modo oscuro mejorado para mejor visualización en entornos con poca luz.
-- Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
+- Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría
+- Transferir fondos entre categorías con validación de saldo disponible
+- Editar transacciones existentes:
+  - Modificar descripciones
+  - Actualizar montos con recálculo automático de saldos
+  - Editar fechas de transacciones
+- Visualización financiera:
+  - Saldo total, ingresos y gastos
+  - Resumen por categoría con actualización automática
+  - Historial de transacciones con filtros
+- Gestión de datos:
+  - Almacenamiento local persistente
+  - Exportación a Excel (.xlsx), PDF y JSON
+  - Importación desde JSON
+  - Filtros por tipo, categoría y rango de fechas
+- Personalización:
+  - Categorías personalizables
+  - Modo oscuro/claro
+  - Diseño responsivo para móviles y escritorio
 
 ## Tecnologías utilizadas
 
@@ -37,56 +41,58 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 ## Cómo usar
 
 1. Visita [https://control-de-gastos-personales.vercel.app/](https://control-de-gastos-personales.vercel.app/)
-2. Use el formulario para agregar nuevas transacciones.
-3. Vea el resumen financiero en la sección central, incluyendo los saldos por categoría.
-4. Utilice el botón "Transferir entre Categorías" para mover fondos entre categorías.
-5. Utilice los filtros para ver transacciones específicas.
-6. Haga clic en el icono de edición (lápiz) junto a una transacción para modificar su descripción.
-7. Haga clic en el icono de moneda ($) junto a una transacción para modificar su monto.
-8. Haga clic en el icono de papelera junto a una transacción para eliminarla.
-9. Use los botones de exportación para descargar los datos en Excel, PDF o JSON.
-10. Use el botón de importación para cargar datos desde un archivo JSON.
-11. Cambie entre modo claro y oscuro con el botón en la esquina superior derecha.
+2. Use el formulario para agregar nuevas transacciones
+3. Vea el resumen financiero en la sección central
+4. Gestione sus transacciones:
+   - Icono de lápiz (✏️) para editar descripciones
+   - Icono de moneda (💲) para modificar montos
+   - Icono de calendario (📅) para cambiar fechas
+   - Icono de papelera (🗑️) para eliminar
+5. Utilice "Transferir entre Categorías" para mover fondos
+6. Aplique filtros para visualizar transacciones específicas
+7. Exporte/Importe sus datos según necesite
+8. Alterne entre modo claro/oscuro con el botón superior
 
 ## Estructura del proyecto
 
-- `index.html`: Estructura HTML de la aplicación.
-- `estilos.css`: Estilos CSS para la interfaz de usuario, incluyendo diseño responsivo y modo oscuro mejorado.
-- `script.js`: Lógica de JavaScript para la funcionalidad de la aplicación.
-- `README.md`: Este archivo, que proporciona información sobre el proyecto.
+- `index.html`: Estructura HTML de la aplicación
+- `estilos.css`: Estilos CSS y diseño responsivo
+- `script.js`: Lógica de JavaScript y funcionalidades
+- `README.md`: Documentación del proyecto
 
-## Mejoras recientes
+## Historial de versiones
 
-- Reorganización de la interfaz de botones para mejor usabilidad:
-  - Agrupación intuitiva de botones por función (gestión y datos)
-  - Mejor organización visual con separadores claros
-  - Diseño responsivo mejorado para los controles
-- Implementación de transferencias entre categorías con validación de saldos.
-- Corrección del problema de duplicación del símbolo "$" en el resumen de categorías.
-- Implementación de la edición de montos en transacciones existentes.
-- Actualización automática de saldos financieros y por categoría al editar montos.
-- Implementación de la actualización automática de saldos por categoría.
-- Implementación de la funcionalidad para editar descripciones de transacciones.
-- Mejora en la paleta de colores para el modo oscuro.
-- Optimización del diseño para dispositivos móviles.
-- Implementación de exportación de datos a JSON para respaldo.
-- Adición de funcionalidad para importar datos desde archivos JSON.
-- Corrección de la duplicación del botón "Transferir entre Categorías"
-- Mejora en la organización horizontal de los botones de acción
-- Optimización de la disposición de controles para mejor usabilidad
+### v1.33.0 (Actual)
+- Nueva funcionalidad de edición de fechas:
+  - Editor de fechas integrado en la tabla de transacciones
+  - Interfaz intuitiva con selector de calendario
+  - Validación de fechas y actualización inmediata
+  - Persistencia automática de cambios
+
+### v1.32.0
+- Reorganización de la interfaz de botones:
+  - Agrupación funcional mejorada
+  - Separadores visuales claros
+  - Optimización del diseño responsivo
+
+### v1.31.0
+- Correcciones y mejoras:
+  - Eliminación de duplicación en botones
+  - Mejora en la organización horizontal
+  - Optimización de controles
+
+### Versiones anteriores
+- Implementación de transferencias entre categorías
+- Sistema de edición de montos y descripciones
+- Exportación e importación de datos
+- Modo oscuro y diseño responsivo
+- Gestión de categorías personalizadas
 
 ## Desarrollo futuro
 
-- Implementar un sistema de autenticación de usuarios.
-- Agregar la opción de crear presupuestos y metas de ahorro.
-- Añadir soporte para múltiples cuentas y monedas.
-- Implementar un sistema de respaldo en la nube.
-
-## Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, abra un issue o realice un pull request con sus sugerencias.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulte el archivo `LICENSE` para obtener más detalles.
-
+- Sistema de autenticación de usuarios
+- Presupuestos y metas de ahorro
+- Soporte para múltiples cuentas y monedas
+- Sistema de respaldo en la nube
+- Notificaciones y recordatorios
+- Gráficos y análisis avanzados
