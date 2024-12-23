@@ -1,12 +1,13 @@
 git add .
-git commit -m "Actualización 1.32 - Reorganización de botones de exportación/importación
+git commit -m "Actualización 1.32 - Restauración del diseño original de botones
 
-- Creada nueva sección flotante para los botones de exportación e importación
-- Mejorada la organización visual y espaciado entre secciones
-- Optimizado el diseño responsivo de los botones
-- Implementada mejor separación visual entre grupos funcionales
+- Revertidos los cambios en la organización de los botones
+- Restaurada la disposición original dentro del formulario
+- Mantenida la agrupación visual de botones por función
+- Conservada la separación entre grupos de gestión y datos
 - Actualizada la documentación en el README
-- Mantenida la compatibilidad con todas las funcionalidades existentes"
+
+"
 
 git push -u origin fuegote
 
