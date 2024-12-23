@@ -1,12 +1,12 @@
 git add .
-git commit -m "Actualización 1.31 - Corrección de duplicación y mejora en organización de botones
+git commit -m "Actualización 1.32 - Reorganización de botones de exportación/importación
 
-- Eliminada la duplicación del botón Transferir entre Categoríasa
-- Mejorada la organización horizontal de los botones de acción
-- Optimizada la disposición de controles para mejor usabilidad
+- Creada nueva sección flotante para los botones de exportación e importación
+- Mejorada la organización visual y espaciado entre secciones
+- Optimizado el diseño responsivo de los botones
+- Implementada mejor separación visual entre grupos funcionales
 - Actualizada la documentación en el README
-- Mantenida la compatibilidad con todas las funcionalidades existentes
-- Preparado el terreno para la futura actualización a la versión 2"
+- Mantenida la compatibilidad con todas las funcionalidades existentes"
 
 git push -u origin fuegote
 
