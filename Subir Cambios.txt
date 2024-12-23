@@ -1,12 +1,12 @@
 git add .
-git commit -m "Actualización 1.30 - Reorganización de la interfaz de botones
+git commit -m "Actualización 1.31 - Corrección de duplicación y mejora en organización de botones
 
-- Implementada nueva organización visual de botones por grupos funcionales
-- Agregados contenedores separados para botones de gestión y datos
-- Mejorado el diseño responsivo de los grupos de botones
+- Eliminada la duplicación del botón Transferir entre Categoríasa
+- Mejorada la organización horizontal de los botones de acción
+- Optimizada la disposición de controles para mejor usabilidad
 - Actualizada la documentación en el README
 - Mantenida la compatibilidad con todas las funcionalidades existentes
-- Optimizada la experiencia de usuario con una disposición más intuitiva"
+- Preparado el terreno para la futura actualización a la versión 2"
 
 git push -u origin fuegote
 

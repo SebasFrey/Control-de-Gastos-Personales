@@ -71,6 +71,9 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Optimización del diseño para dispositivos móviles.
 - Implementación de exportación de datos a JSON para respaldo.
 - Adición de funcionalidad para importar datos desde archivos JSON.
+- Corrección de la duplicación del botón "Transferir entre Categorías"
+- Mejora en la organización horizontal de los botones de acción
+- Optimización de la disposición de controles para mejor usabilidad
 
 ## Desarrollo futuro
 
@@ -78,3 +81,12 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Agregar la opción de crear presupuestos y metas de ahorro.
 - Añadir soporte para múltiples cuentas y monedas.
 - Implementar un sistema de respaldo en la nube.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, abra un issue o realice un pull request con sus sugerencias.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulte el archivo `LICENSE` para obtener más detalles.
+

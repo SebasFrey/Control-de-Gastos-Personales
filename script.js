@@ -27,6 +27,8 @@ const botonModoOscuro = document.getElementById('modo-oscuro');
 const botonAgregarCategoria = document.getElementById('agregar-categoria');
 const botonExportarJSON = document.getElementById('exportar-json');
 const botonImportarJSON = document.getElementById('importar-json');
+const botonTransferencia = document.getElementById('transferir-categoria'); // Agregar referencia al botón
+
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
@@ -419,6 +421,8 @@ botonAgregarCategoria.addEventListener('click', () => {
 botonExportarJSON.addEventListener('click', exportarJSON);
 botonImportarJSON.addEventListener('change', importarJSON);
 
+document.getElementById('transferir-categoria').addEventListener('click', mostrarModalTransferencia); // Agregar event listener para el botón de transferencia
+
 function actualizarSelectCategorias() {
     entradaCategoria.innerHTML = '';
     seleccionFiltroCategoria.innerHTML = '<option value="todas">Todas</option>';
@@ -534,14 +538,4 @@ function editarMonto(indice) {
     }
     feather.replace();
 }
-
-// Agregar botón de transferencia al DOM
-const botonTransferencia = document.createElement('button');
-botonTransferencia.id = 'transferir-categoria';
-botonTransferencia.className = 'boton-secundario';
-botonTransferencia.textContent = 'Transferir entre Categorías';
-botonTransferencia.onclick = mostrarModalTransferencia;
-
-// Insertar el botón después del botón de agregar categoría
-document.getElementById('agregar-categoria').insertAdjacentElement('afterend', botonTransferencia);
 
