@@ -528,3 +528,116 @@ button:hover {
   color: var(--color-texto);
 }
 
+/* Nuevos estilos para el historial de transacciones */
+.seccion-fecha {
+    margin-bottom: 1rem;
+    border-radius: var(--radio-borde);
+    background-color: var(--color-blanco);
+    box-shadow: var(--sombra-caja);
+}
+
+.encabezado-fecha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--color-acento);
+    transition: background-color 0.3s ease;
+}
+
+.encabezado-fecha:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.fecha-collapse {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+}
+
+.icono-colapsar {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.resumen-fecha {
+    color: var(--color-secundario);
+    font-size: 0.9rem;
+}
+
+.contenido-fecha {
+    padding: 1rem;
+}
+
+.tabla-transacciones-dia {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.tabla-transacciones-dia th,
+.tabla-transacciones-dia td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-acento);
+}
+
+.tabla-transacciones-dia th {
+    font-weight: bold;
+    color: var(--color-secundario);
+    font-size: 0.9rem;
+}
+
+.acciones-transaccion {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.modo-oscuro .seccion-fecha {
+    background-color: var(--color-blanco);
+}
+
+.modo-oscuro .encabezado-fecha:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.modo-oscuro .tabla-transacciones-dia th {
+    color: var(--color-texto);
+}
+
+@media (max-width: 768px) {
+    .tabla-transacciones-dia {
+        font-size: 0.9rem;
+    }
+
+    .acciones-transaccion {
+        flex-wrap: wrap;
+    }
+
+    .acciones-transaccion button {
+        padding: 0.5rem;
+    }
+
+    .encabezado-fecha {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabla-transacciones-dia {
+        font-size: 0.8rem;
+    }
+
+    .acciones-transaccion {
+        gap: 0.25rem;
+    }
+
+    .encabezado-fecha {
+        padding: 0.5rem;
+    }
+}
+

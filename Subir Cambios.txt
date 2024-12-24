@@ -1,12 +1,14 @@
 git add .
-git commit -m "Actualización 1.33.0 - Implementación de edición de fechas
+git commit -m "Actualización 1.34.1 - Corrección de funcionalidades de edición
 
-- Añadida la capacidad de editar fechas de transacciones
-- Implementado nuevo botón con icono de calendario para editar fechas
-- Agregada validación para asegurar fechas válidas
-- Actualizado el diseño para mantener consistencia con otros controles de edición
-- Mejorada la experiencia de usuario en la gestión de fechas
-- Mantenida la compatibilidad con todas las funcionalidades existentes"
+- Corregido el funcionamiento de edición de transacciones en la nueva estructura
+- Implementada lógica mejorada para localizar elementos en el DOM
+- Actualizado el manejo de cambios de fecha para mantener la organización
+- Optimizado el rendimiento en la actualización de la interfaz
+- Mantenida la consistencia en la experiencia del usuario
+- Asegurada la persistencia correcta de los datos
+
+"
 
 git push -u origin fuegote
 

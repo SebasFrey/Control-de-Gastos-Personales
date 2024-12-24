@@ -216,9 +216,118 @@ function agregarTransaccionAlDOM(transaccion, indice) {
 function actualizarListaTransacciones() {
     listaTransacciones.innerHTML = '';
     const transaccionesFiltradas = filtrarTransacciones();
-    transaccionesFiltradas.forEach((transaccion, indice) => {
-        agregarTransaccionAlDOM(transaccion, indice);
+
+    // Agrupar transacciones por fecha
+    const transaccionesPorFecha = {};
+    transaccionesFiltradas.forEach(transaccion => {
+        const fecha = new Date(transaccion.fecha).toLocaleDateString();
+        if (!transaccionesPorFecha[fecha]) {
+            transaccionesPorFecha[fecha] = [];
+        }
+        transaccionesPorFecha[fecha].push(transaccion);
     });
+
+    // Ordenar fechas de más reciente a más antigua
+    const fechasOrdenadas = Object.keys(transaccionesPorFecha).sort((a, b) => {
+        return new Date(b) - new Date(a);
+    });
+
+    // Crear secciones colapsables por fecha
+    fechasOrdenadas.forEach(fecha => {
+        const seccionFecha = document.createElement('div');
+        seccionFecha.className = 'seccion-fecha';
+
+        const fechaHoy = new Date().toLocaleDateString();
+        const esHoy = fecha === fechaHoy;
+
+        // Crear encabezado de la fecha
+        const encabezadoFecha = document.createElement('div');
+        encabezadoFecha.className = 'encabezado-fecha';
+        encabezadoFecha.innerHTML = `
+            <div class="fecha-collapse">
+                <i data-feather="${esHoy ? 'chevron-down' : 'chevron-right'}" class="icono-colapsar"></i>
+                <span>${esHoy ? 'Hoy' : fecha}</span>
+            </div>
+            <span class="resumen-fecha">
+                ${transaccionesPorFecha[fecha].length} transacción(es)
+            </span>
+        `;
+
+        // Crear contenedor de transacciones
+        const contenidoFecha = document.createElement('div');
+        contenidoFecha.className = 'contenido-fecha';
+        if (!esHoy) {
+            contenidoFecha.style.display = 'none';
+        }
+
+        // Crear tabla para las transacciones del día
+        const tabla = document.createElement('table');
+        tabla.className = 'tabla-transacciones-dia';
+        tabla.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Tipo</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+
+        // Agregar transacciones a la tabla
+        transaccionesPorFecha[fecha].forEach((transaccion, indiceLocal) => {
+            const indiceGlobal = transacciones.indexOf(transaccion);
+            const tr = document.createElement('tr');
+            tr.className = `item-transaccion ${transaccion.tipo}`;
+            tr.innerHTML = `
+                <td>
+                    <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
+                    <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
+                </td>
+                <td>
+                    <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
+                    <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
+                </td>
+                <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
+                <td>${capitalizarPalabras(transaccion.categoria)}</td>
+                <td>
+                    <div class="acciones-transaccion">
+                        <button class="boton-editar-descripcion" onclick="editarDescripcion(${indiceGlobal})">
+                            <i data-feather="edit-2"></i>
+                        </button>
+                        <button class="boton-editar-monto" onclick="editarMonto(${indiceGlobal})">
+                            <i data-feather="dollar-sign"></i>
+                        </button>
+                        <button class="boton-editar-fecha" onclick="editarFecha(${indiceGlobal})">
+                            <i data-feather="calendar"></i>
+                        </button>
+                        <button class="boton-eliminar" onclick="eliminarTransaccion(${indiceGlobal})">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tabla.querySelector('tbody').appendChild(tr);
+        });
+
+        contenidoFecha.appendChild(tabla);
+        seccionFecha.appendChild(encabezadoFecha);
+        seccionFecha.appendChild(contenidoFecha);
+        listaTransacciones.appendChild(seccionFecha);
+
+        // Event listener para colapsar/expandir
+        encabezadoFecha.addEventListener('click', () => {
+            const icono = encabezadoFecha.querySelector('.icono-colapsar');
+            const estaVisible = contenidoFecha.style.display !== 'none';
+            contenidoFecha.style.display = estaVisible ? 'none' : 'block';
+            icono.setAttribute('data-feather', estaVisible ? 'chevron-right' : 'chevron-down');
+            feather.replace();
+        });
+    });
+
+    feather.replace();
 }
 
 function guardarTransacciones() {
