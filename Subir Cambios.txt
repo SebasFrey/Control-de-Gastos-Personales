@@ -1,11 +1,13 @@
 git add .
-git commit -m "Actualización 1.35.0 - Eliminación de la sección de filtros
+git commit -m "Actualización 1.36.0 - Simplificación del esquema de colores y eliminación del modo oscuro
 
-- Eliminada la sección completa de filtros de transacciones
-- Simplificada la interfaz de usuario
-- Mejorada la experiencia de usuario
-- Optimizado el rendimiento de la aplicación
+- Simplificado el esquema de colores a blanco y negro
+- Eliminada la funcionalidad del modo oscuro
+- Mejorada la jerarquía visual
+- Optimizada la consistencia visual
 - Actualizada la documentación del proyecto"
+
+
 
 git push -u origin fuegote
 

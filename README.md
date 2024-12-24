@@ -24,8 +24,8 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
   - Importación desde JSON
 - Personalización:
   - Categorías personalizables
-  - Modo oscuro/claro
   - Diseño responsivo para móviles y escritorio
+  - Interfaz minimalista en blanco y negro
 
 ## Tecnologías utilizadas
 
@@ -49,7 +49,6 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
    - Icono de papelera (🗑️) para eliminar
 5. Utilice "Transferir entre Categorías" para mover fondos
 6. Exporte/Importe sus datos según necesite
-7. Alterne entre modo claro/oscuro con el botón superior
 
 ## Estructura del proyecto
 
@@ -58,9 +57,49 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - `script.js`: Lógica de JavaScript y funcionalidades
 - `README.md`: Documentación del proyecto
 
+## Guía de estilos
+
+### Colores
+- **Principal**: Negro (#000000)
+- **Secundario**: Gris (#666666)
+- **Fondo**: Blanco (#FFFFFF)
+- **Acento**: Gris claro (#E0E0E0)
+- **Texto**: Negro (#000000)
+
+### Tipografía
+- **Familia**: Roboto
+- **Pesos**: 300 (Light), 400 (Regular), 700 (Bold)
+- **Tamaños**:
+  - Títulos principales: 1.5rem
+  - Subtítulos: 1.25rem
+  - Texto general: 1rem
+  - Texto pequeño: 0.9rem
+
+### Espaciado
+- **Márgenes**: 1rem (16px)
+- **Padding**: 0.75rem - 1rem (12px - 16px)
+- **Gap**: 0.5rem - 1rem (8px - 16px)
+
+### Bordes y sombras
+- **Radio de borde**: 4px
+- **Sombras**: 0 2px 4px rgba(0, 0, 0, 0.1)
+
 ## Historial de versiones
 
-### v1.35.0 (Actual)
+### v1.36.0 (Actual)
+- Simplificación visual:
+  - Implementado esquema de colores minimalista (blanco y negro)
+  - Eliminada temporalmente la funcionalidad de modo oscuro
+  - Mejorada la jerarquía visual de elementos
+  - Optimizada la consistencia en la interfaz
+  - Refinada la presentación de transacciones
+- Mejoras en la experiencia de usuario:
+  - Mayor legibilidad del contenido
+  - Mejor contraste visual
+  - Interfaz más limpia y profesional
+  - Optimización del rendimiento general
+
+### v1.35.0
 - Simplificación de la interfaz:
   - Eliminada la sección de filtros de transacciones
   - Mejorada la claridad visual
@@ -102,11 +141,11 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Implementación de transferencias entre categorías
 - Sistema de edición de montos y descripciones
 - Exportación e importación de datos
-- Modo oscuro y diseño responsivo
 - Gestión de categorías personalizadas
 
 ## Desarrollo futuro
 
+### Próximas características
 - Sistema de autenticación de usuarios
 - Presupuestos y metas de ahorro
 - Soporte para múltiples cuentas y monedas
@@ -114,3 +153,10 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Notificaciones y recordatorios
 - Gráficos y análisis avanzados
 
+### Mejoras planificadas
+- Implementación robusta del modo oscuro
+- Temas personalizables
+- Más opciones de exportación
+- Filtros avanzados configurables
+- Categorías con iconos personalizados
+- Estadísticas avanzadas

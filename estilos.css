@@ -1,27 +1,15 @@
 :root {
-  --color-fondo: #f5f5f5;
-  --color-texto: #333;
-  --color-primario: #000;
-  --color-secundario: #666;
-  --color-acento: #ddd;
-  --color-blanco: #fff;
-  --color-ingreso: #4caf50;
-  --color-gasto: #f44336;
+  --color-fondo: #ffffff;
+  --color-texto: #000000;
+  --color-primario: #000000;
+  --color-secundario: #666666;
+  --color-acento: #e0e0e0;
+  --color-blanco: #ffffff;
+  --color-ingreso: #000000;
+  --color-gasto: #666666;
   --radio-borde: 4px;
   --sombra-caja: 0 2px 4px rgba(0, 0, 0, 0.1);
   --transicion: all 0.3s ease;
-}
-
-.modo-oscuro {
-  --color-fondo: #121212;
-  --color-texto: #e0e0e0;
-  --color-primario: #ffffff;
-  --color-secundario: #a0a0a0;
-  --color-acento: #333333;
-  --color-blanco: #1e1e1e;
-  --color-ingreso: #4caf50;
-  --color-gasto: #f44336;
-  --sombra-caja: 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -35,7 +23,6 @@ body {
   line-height: 1.6;
   background-color: var(--color-fondo);
   color: var(--color-texto);
-  transition: var(--transicion);
 }
 
 header {
@@ -142,6 +129,7 @@ button:hover {
 
 .ingreso {
   color: var(--color-ingreso);
+  font-weight: bold;
 }
 
 .gasto {
@@ -162,7 +150,6 @@ button:hover {
 #seccion-historial {
   grid-column: 1 / -1;
 }
-
 
 .tabla-contenedor {
   overflow-x: auto;
@@ -186,7 +173,7 @@ button:hover {
 }
 
 #tabla-transacciones tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .boton-eliminar {
@@ -199,7 +186,7 @@ button:hover {
 }
 
 .boton-eliminar:hover {
-  color: var(--color-gasto);
+  color: var(--color-texto);
 }
 
 #contenedor-otra-categoria {
@@ -266,13 +253,6 @@ button:hover {
   .grupo-botones label {
     width: 100%;
   }
-}
-
-#modo-oscuro {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -373,42 +353,6 @@ button:hover {
   font-size: 0.9rem;
 }
 
-.modo-oscuro #tabla-transacciones th {
-  background-color: var(--color-acento);
-  color: var(--color-primario);
-}
-
-.modo-oscuro #tabla-transacciones tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.modo-oscuro .tarjeta,
-.modo-oscuro .grupo-botones {
-  background-color: var(--color-blanco);
-}
-
-.modo-oscuro input,
-.modo-oscuro select,
-.modo-oscuro .editar-descripcion {
-  background-color: #2c2c2c;
-  color: var(--color-texto);
-  border-color: var(--color-secundario);
-}
-
-.modo-oscuro button {
-  background-color: var(--color-primario);
-  color: var(--color-blanco);
-}
-
-.modo-oscuro button:hover {
-  background-color: var(--color-secundario);
-}
-
-.modo-oscuro #saldo-total {
-  background-color: var(--color-acento);
-  color: var(--color-primario);
-}
-
 .editar-monto {
   background-color: var(--color-fondo);
   color: var(--color-texto);
@@ -434,12 +378,6 @@ button:hover {
   color: var(--color-primario);
 }
 
-.modo-oscuro .editar-monto {
-  background-color: #2c2c2c;
-  color: var(--color-texto);
-  border-color: var(--color-secundario);
-}
-
 .editar-fecha {
     background-color: var(--color-fondo);
     color: var(--color-texto);
@@ -461,12 +399,6 @@ button:hover {
 
 .boton-editar-fecha:hover {
     color: var(--color-primario);
-}
-
-.modo-oscuro .editar-fecha {
-    background-color: #2c2c2c;
-    color: var(--color-texto);
-    border-color: var(--color-secundario);
 }
 
 /* Estilos para el modal de transferencia */
@@ -510,15 +442,6 @@ button:hover {
   color: var(--color-blanco);
 }
 
-.modo-oscuro .modal-contenido {
-  background-color: var(--color-blanco);
-  color: var(--color-texto);
-}
-
-.modo-oscuro .modal-contenido h3 {
-  color: var(--color-texto);
-}
-
 /* Nuevos estilos para el historial de transacciones */
 .seccion-fecha {
     margin-bottom: 1rem;
@@ -538,7 +461,7 @@ button:hover {
 }
 
 .encabezado-fecha:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 .fecha-collapse {
@@ -586,18 +509,6 @@ button:hover {
     display: flex;
     gap: 0.5rem;
     justify-content: flex-end;
-}
-
-.modo-oscuro .seccion-fecha {
-    background-color: var(--color-blanco);
-}
-
-.modo-oscuro .encabezado-fecha:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.modo-oscuro .tabla-transacciones-dia th {
-    color: var(--color-texto);
 }
 
 @media (max-width: 768px) {
