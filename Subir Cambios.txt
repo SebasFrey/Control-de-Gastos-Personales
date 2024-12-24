@@ -1,12 +1,13 @@
 git add .
-git commit -m "Actualización 1.34.1 - Corrección de funcionalidades de edición
+git commit -m "Actualización 1.34.3 - Mejoras en la visualización de fechas
 
-- Corregido el funcionamiento de edición de transacciones en la nueva estructura
-- Implementada lógica mejorada para localizar elementos en el DOM
-- Actualizado el manejo de cambios de fecha para mantener la organización
-- Optimizado el rendimiento en la actualización de la interfaz
-- Mantenida la consistencia en la experiencia del usuario
-- Asegurada la persistencia correcta de los datos
+- Implementado formato de hora en las fechas de transacciones
+- Corregida la persistencia de fechas en las transacciones
+- Mejorado el formato de visualización fecha/hora
+- Optimizado el manejo de zonas horarias
+- Actualizada la documentación del proyecto
+
+
 
 "
 

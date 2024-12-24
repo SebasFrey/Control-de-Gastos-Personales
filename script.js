@@ -3,6 +3,19 @@ function formatearNumero(numero) {
     return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero.toFixed(2));
 }
 
+// Función para formatear fecha y hora
+function formatearFechaHora(fecha) {
+    const fechaObj = new Date(fecha);
+    const opciones = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    return fechaObj.toLocaleString('es-ES', opciones);
+}
+
 // Elementos del DOM
 const formulario = document.getElementById('formulario-transaccion');
 const entradaDescripcion = document.getElementById('descripcion');
@@ -37,6 +50,7 @@ let saldo = 0;
 let ingresos = 0;
 let gastos = 0;
 let resumenCategoria = {};
+let transaccionesPorFecha = {}; // Variable global para transacciones por fecha
 
 // Nueva función para actualizar el saldo de una categoría
 function actualizarSaldoCategoria(categoria, monto, tipo) {
@@ -191,8 +205,8 @@ function agregarTransaccionAlDOM(transaccion, indice) {
         <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
         <td>${capitalizarPalabras(transaccion.categoria)}</td>
         <td>
-            <span class="fecha-texto">${new Date(transaccion.fecha).toLocaleDateString()}</span>
-            <input type="date" class="editar-fecha" style="display: none;" value="${new Date(transaccion.fecha).toISOString().split('T')[0]}">
+            <span class="fecha-texto">${formatearFechaHora(transaccion.fecha)}</span>
+            <input type="datetime-local" class="editar-fecha" style="display: none;" value="${new Date(transaccion.fecha).toISOString().slice(0,16)}">
         </td>
         <td>
             <button class="boton-editar-descripcion" onclick="editarDescripcion(${indice})">
@@ -217,8 +231,8 @@ function actualizarListaTransacciones() {
     listaTransacciones.innerHTML = '';
     const transaccionesFiltradas = filtrarTransacciones();
 
-    // Agrupar transacciones por fecha
-    const transaccionesPorFecha = {};
+    // Limpiar y repoblar transaccionesPorFecha
+    transaccionesPorFecha = {};
     transaccionesFiltradas.forEach(transaccion => {
         const fecha = new Date(transaccion.fecha).toLocaleDateString();
         if (!transaccionesPorFecha[fecha]) {
@@ -585,7 +599,27 @@ function capitalizarPalabras(str) {
 }
 
 function editarDescripcion(indice) {
-    const fila = listaTransacciones.children[indice];
+    const transaccion = transacciones[indice];
+    const fecha = new Date(transaccion.fecha).toLocaleDateString();
+    const seccionFecha = Array.from(document.querySelectorAll('.seccion-fecha')).find(
+        seccion => seccion.querySelector('.fecha-collapse span').textContent === (fecha === new Date().toLocaleDateString() ? 'Hoy' : fecha)
+    );
+
+    if (!seccionFecha) return;
+
+    const filas = seccionFecha.querySelectorAll('.item-transaccion');
+    const filaIndex = Array.from(filas).findIndex(fila => {
+        const montoTexto = fila.querySelector('.monto-texto').textContent.replace('$', '').trim();
+        const categoriaTexto = fila.querySelector('td:nth-child(4)').textContent;
+        const fechaTexto = new Date(transaccion.fecha).toLocaleDateString();
+        return montoTexto === formatearNumero(transaccion.monto) &&
+               categoriaTexto === capitalizarPalabras(transaccion.categoria) &&
+               fechaTexto === fecha;
+    });
+
+    if (filaIndex === -1) return;
+
+    const fila = filas[filaIndex];
     const descripcionTexto = fila.querySelector('.descripcion-texto');
     const descripcionInput = fila.querySelector('.editar-descripcion');
     const botonEditar = fila.querySelector('.boton-editar-descripcion');
@@ -608,7 +642,27 @@ function editarDescripcion(indice) {
 }
 
 function editarMonto(indice) {
-    const fila = listaTransacciones.children[indice];
+    const transaccion = transacciones[indice];
+    const fecha = new Date(transaccion.fecha).toLocaleDateString();
+    const seccionFecha = Array.from(document.querySelectorAll('.seccion-fecha')).find(
+        seccion => seccion.querySelector('.fecha-collapse span').textContent === (fecha === new Date().toLocaleDateString() ? 'Hoy' : fecha)
+    );
+
+    if (!seccionFecha) return;
+
+    const filas = seccionFecha.querySelectorAll('.item-transaccion');
+    const filaIndex = Array.from(filas).findIndex(fila => {
+        const montoTexto = fila.querySelector('.monto-texto').textContent.replace('$', '').trim();
+        const categoriaTexto = fila.querySelector('td:nth-child(4)').textContent;
+        const fechaTexto = new Date(transaccion.fecha).toLocaleDateString();
+        return montoTexto === formatearNumero(transaccion.monto) &&
+               categoriaTexto === capitalizarPalabras(transaccion.categoria) &&
+               fechaTexto === fecha;
+    });
+
+    if (filaIndex === -1) return;
+
+    const fila = filas[filaIndex];
     const montoTexto = fila.querySelector('.monto-texto');
     const montoInput = fila.querySelector('.editar-monto');
     const botonEditar = fila.querySelector('.boton-editar-monto');
@@ -625,7 +679,6 @@ function editarMonto(indice) {
             return;
         }
 
-        const transaccion = transacciones[indice];
         const montoAnterior = transaccion.monto;
 
         // Actualizar saldos globales
@@ -655,7 +708,27 @@ function editarMonto(indice) {
 }
 
 function editarFecha(indice) {
-    const fila = listaTransacciones.children[indice];
+    const transaccion = transacciones[indice];
+    const fecha = new Date(transaccion.fecha).toLocaleDateString();
+    const seccionFecha = Array.from(document.querySelectorAll('.seccion-fecha')).find(
+        seccion => seccion.querySelector('.fecha-collapse span').textContent === (fecha === new Date().toLocaleDateString() ? 'Hoy' : fecha)
+    );
+
+    if (!seccionFecha) return;
+
+    const filas = seccionFecha.querySelectorAll('.item-transaccion');
+    const filaIndex = Array.from(filas).findIndex(fila => {
+        const montoTexto = fila.querySelector('.monto-texto').textContent.replace('$', '').trim();
+        const categoriaTexto = fila.querySelector('td:nth-child(4)').textContent;
+        const fechaTexto = new Date(transaccion.fecha).toLocaleDateString();
+        return montoTexto === formatearNumero(transaccion.monto) &&
+               categoriaTexto === capitalizarPalabras(transaccion.categoria) &&
+               fechaTexto === fecha;
+    });
+
+    if (filaIndex === -1) return;
+
+    const fila = filas[filaIndex];
     const fechaTexto = fila.querySelector('.fecha-texto');
     const fechaInput = fila.querySelector('.editar-fecha');
     const botonEditar = fila.querySelector('.boton-editar-fecha');
@@ -663,20 +736,23 @@ function editarFecha(indice) {
     if (fechaInput.style.display === 'none') {
         fechaTexto.style.display = 'none';
         fechaInput.style.display = 'inline-block';
+        fechaInput.type = 'datetime-local';
+        fechaInput.value = transaccion.fecha.slice(0, 16); // Formato YYYY-MM-DDTHH:mm
         fechaInput.focus();
         botonEditar.innerHTML = '<i data-feather="check"></i>';
     } else {
         const nuevaFecha = fechaInput.value;
         if (!nuevaFecha) {
-            alert('Por favor, seleccione una fecha válida.');
+            alert('Por favor, seleccione una fecha y hora válida.');
             return;
         }
 
         transacciones[indice].fecha = new Date(nuevaFecha).toISOString();
-        fechaTexto.textContent = new Date(nuevaFecha).toLocaleDateString();
+        fechaTexto.textContent = formatearFechaHora(transacciones[indice].fecha);
         fechaTexto.style.display = 'inline-block';
         fechaInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="calendar"></i>';
+        actualizarListaTransacciones();
         guardarTransacciones();
     }
     feather.replace();
