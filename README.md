@@ -13,7 +13,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Editar transacciones existentes:
   - Modificar descripciones
   - Actualizar montos con recálculo automático de saldos
-  - Editar fechas de transacciones
+  - Editar fechas y horas de transacciones
 - Visualización financiera:
   - Saldo total, ingresos y gastos
   - Resumen por categoría con actualización automática
@@ -62,24 +62,36 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Historial de versiones
 
-### v1.33.0 (Actual)
-- Nueva funcionalidad de edición de fechas:
-  - Editor de fechas integrado en la tabla de transacciones
-  - Interfaz intuitiva con selector de calendario
-  - Validación de fechas y actualización inmediata
-  - Persistencia automática de cambios
+### v1.34.3 (Actual)
+- Mejoras en la visualización de fechas:
+  - Agregado formato de hora a las fechas de transacciones
+  - Corrección en la persistencia de fechas y horas
+  - Mejora en la presentación del formato fecha/hora
+  - Optimización del manejo de zonas horarias
 
-### v1.32.0
-- Reorganización de la interfaz de botones:
-  - Agrupación funcional mejorada
-  - Separadores visuales claros
-  - Optimización del diseño responsivo
+### v1.34.2
+- Corrección crítica de funciones de edición:
+  - Reparado completamente el sistema de edición de transacciones
+  - Implementada identificación precisa de elementos en el DOM
+  - Mejorada la lógica de búsqueda de transacciones
+  - Optimizado el proceso de actualización de la interfaz
+  - Corregida la persistencia de cambios
 
-### v1.31.0
-- Correcciones y mejoras:
-  - Eliminación de duplicación en botones
-  - Mejora en la organización horizontal
-  - Optimización de controles
+### v1.34.1
+- Correcciones y optimizaciones:
+  - Reparada la funcionalidad de edición en la vista por fechas
+  - Mejorada la lógica de localización de elementos
+  - Optimizado el manejo de cambios de fecha
+  - Asegurada la persistencia de datos
+  - Mantenida la experiencia de usuario consistente
+
+### v1.34.0
+- Nueva organización del historial de transacciones:
+  - Sistema de listas desplegables agrupadas por fecha
+  - Visualización expandida automática del día actual
+  - Indicadores visuales de expansión/colapso
+  - Contador de transacciones por día
+  - Mejor organización visual de la información
 
 ### Versiones anteriores
 - Implementación de transferencias entre categorías
@@ -96,3 +108,4 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Sistema de respaldo en la nube
 - Notificaciones y recordatorios
 - Gráficos y análisis avanzados
+
