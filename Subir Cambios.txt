@@ -1,12 +1,5 @@
 git add .
-git commit -m "Actualización 1.36.0 - Simplificación del esquema de colores y eliminación del modo oscuro
-
-- Simplificado el esquema de colores a blanco y negro
-- Eliminada la funcionalidad del modo oscuro
-- Mejorada la jerarquía visual
-- Optimizada la consistencia visual
-- Actualizada la documentación del proyecto"
-
+git commit -m "Actualización 1.38.0 - Revertido de Actualizaciones"
 
 
 git push -u origin fuegote
