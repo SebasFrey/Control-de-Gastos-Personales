@@ -86,38 +86,7 @@
         </section>
         <section id="seccion-historial">
             <h2>Historial de Transacciones</h2>
-            <div id="contenedor-filtro">
-                <label for="filtro-tipo">Filtrar por tipo:</label>
-                <select id="filtro-tipo">
-                    <option value="todos">Todos</option>
-                    <option value="ingreso">Ingresos</option>
-                    <option value="gasto">Gastos</option>
-                </select>
-                <label for="filtro-categoria">Filtrar por categoría:</label>
-                <select id="filtro-categoria">
-                    <option value="todas">Todas</option>
-                </select>
-                <label for="filtro-fecha-inicio">Desde:</label>
-                <input type="date" id="filtro-fecha-inicio">
-                <label for="filtro-fecha-fin">Hasta:</label>
-                <input type="date" id="filtro-fecha-fin">
-                <button id="aplicar-filtros">Aplicar Filtros</button>
-            </div>
-            <div class="tabla-contenedor">
-                <table id="tabla-transacciones">
-                    <thead>
-                        <tr>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                            <th>Tipo</th>
-                            <th>Categoría</th>
-                            <th>Fecha</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista-transacciones"></tbody>
-                </table>
-            </div>
+            <div id="lista-transacciones"></div>
         </section>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

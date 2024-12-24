@@ -27,11 +27,6 @@ const elementoIngresos = document.getElementById('ingresos');
 const elementoGastos = document.getElementById('gastos');
 const listaCategoria = document.getElementById('lista-categoria');
 const listaTransacciones = document.getElementById('lista-transacciones');
-const seleccionFiltroTipo = document.getElementById('filtro-tipo');
-const seleccionFiltroCategoria = document.getElementById('filtro-categoria');
-const filtroFechaInicio = document.getElementById('filtro-fecha-inicio');
-const filtroFechaFin = document.getElementById('filtro-fecha-fin');
-const botonAplicarFiltros = document.getElementById('aplicar-filtros');
 const entradaOtraCategoria = document.getElementById('otra-categoria');
 const contenedorOtraCategoria = document.getElementById('contenedor-otra-categoria');
 const botonExportarExcel = document.getElementById('exportar-excel');
@@ -368,13 +363,7 @@ function eliminarTransaccion(indice) {
 }
 
 function filtrarTransacciones() {
-    return transacciones.filter(transaccion => {
-        const cumpleFiltroTipo = seleccionFiltroTipo.value === 'todos' || transaccion.tipo === seleccionFiltroTipo.value;
-        const cumpleFiltroCategoria = seleccionFiltroCategoria.value === 'todas' || transaccion.categoria === seleccionFiltroCategoria.value;
-        const cumpleFiltroFecha = (!filtroFechaInicio.value || new Date(transaccion.fecha) >= new Date(filtroFechaInicio.value)) &&
-                                  (!filtroFechaFin.value || new Date(transaccion.fecha) <= new Date(filtroFechaFin.value));
-        return cumpleFiltroTipo && cumpleFiltroCategoria && cumpleFiltroFecha;
-    });
+    return transacciones;
 }
 
 function exportarExcel() {
@@ -531,7 +520,6 @@ entradaCategoria.addEventListener('change', (e) => {
 botonExportarExcel.addEventListener('click', exportarExcel);
 botonExportarPDF.addEventListener('click', exportarPDF);
 
-botonAplicarFiltros.addEventListener('click', actualizarListaTransacciones);
 
 botonModoOscuro.addEventListener('click', () => {
     document.body.classList.toggle('modo-oscuro');
@@ -554,13 +542,11 @@ document.getElementById('transferir-categoria').addEventListener('click', mostra
 
 function actualizarSelectCategorias() {
     entradaCategoria.innerHTML = '';
-    seleccionFiltroCategoria.innerHTML = '<option value="todas">Todas</option>';
     categorias.forEach(categoria => {
         const option = document.createElement('option');
         option.value = categoria.toLowerCase();
         option.textContent = capitalizarPalabras(categoria);
         entradaCategoria.appendChild(option.cloneNode(true));
-        seleccionFiltroCategoria.appendChild(option);
     });
 }
 

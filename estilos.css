@@ -163,12 +163,6 @@ button:hover {
   grid-column: 1 / -1;
 }
 
-#contenedor-filtro {
-  margin-bottom: 1rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.5rem;
-}
 
 .tabla-contenedor {
   overflow-x: auto;
@@ -309,9 +303,6 @@ button:hover {
     margin-bottom: 0.5rem;
   }
   .tarjetas-resumen {
-    grid-template-columns: 1fr;
-  }
-  #contenedor-filtro {
     grid-template-columns: 1fr;
   }
   .tabla-contenedor {

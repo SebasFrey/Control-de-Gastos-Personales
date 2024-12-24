@@ -17,12 +17,11 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Visualización financiera:
   - Saldo total, ingresos y gastos
   - Resumen por categoría con actualización automática
-  - Historial de transacciones con filtros
+  - Historial de transacciones organizado por fecha
 - Gestión de datos:
   - Almacenamiento local persistente
   - Exportación a Excel (.xlsx), PDF y JSON
   - Importación desde JSON
-  - Filtros por tipo, categoría y rango de fechas
 - Personalización:
   - Categorías personalizables
   - Modo oscuro/claro
@@ -49,9 +48,8 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
    - Icono de calendario (📅) para cambiar fechas
    - Icono de papelera (🗑️) para eliminar
 5. Utilice "Transferir entre Categorías" para mover fondos
-6. Aplique filtros para visualizar transacciones específicas
-7. Exporte/Importe sus datos según necesite
-8. Alterne entre modo claro/oscuro con el botón superior
+6. Exporte/Importe sus datos según necesite
+7. Alterne entre modo claro/oscuro con el botón superior
 
 ## Estructura del proyecto
 
@@ -62,7 +60,14 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Historial de versiones
 
-### v1.34.3 (Actual)
+### v1.35.0 (Actual)
+- Simplificación de la interfaz:
+  - Eliminada la sección de filtros de transacciones
+  - Mejorada la claridad visual
+  - Optimizado el rendimiento
+  - Simplificada la experiencia de usuario
+
+### v1.34.3
 - Mejoras en la visualización de fechas:
   - Agregado formato de hora a las fechas de transacciones
   - Corrección en la persistencia de fechas y horas
