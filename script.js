@@ -380,13 +380,33 @@ function guardarCategorias() {
 
 function eliminarTransaccion(indice) {
     const transaccion = transacciones[indice];
+
+    // Actualizar saldos globales
     if (transaccion.tipo === 'ingreso') {
         ingresos -= transaccion.monto;
     } else {
         gastos -= transaccion.monto;
     }
-    actualizarSaldoCategoria(transaccion.categoria, transaccion.monto, transaccion.tipo === 'ingreso' ? 'gasto' : 'ingreso');
+
+    // Actualizar saldo de categoría directamente
+    if (!resumenCategoria[transaccion.categoria]) {
+        resumenCategoria[transaccion.categoria] = 0;
+    }
+    if (transaccion.tipo === 'ingreso') {
+        resumenCategoria[transaccion.categoria] -= transaccion.monto;
+    } else {
+        resumenCategoria[transaccion.categoria] += transaccion.monto;
+    }
+
+    // Si el saldo de la categoría es 0, eliminarla del resumen
+    if (resumenCategoria[transaccion.categoria] === 0) {
+        delete resumenCategoria[transaccion.categoria];
+    }
+
+    // Eliminar la transacción
     transacciones.splice(indice, 1);
+
+    // Actualizar UI
     actualizarSaldo();
     actualizarResumenCategoria();
     actualizarListaTransacciones();

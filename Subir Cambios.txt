@@ -1,13 +1,12 @@
 git add .
-git commit -m "Actualización 1.41.0 - Mejoras en edición y visualización:
+git commit -m "Actualización 1.41.1 - Mejoras en funcionalidad y documentación:
 
-- Reintegrada funcionalidad de edición en el historial
-- Mejorada presentación del resumen por categorías
-- Añadida confirmación para eliminación
-- Optimizada la interfaz de usuario
-- Mejorada la responsividad
-- Refinada la presentación visual general"
-
+- Implementada eliminación inmediata de transacciones
+- Optimizada la gestión de categorías
+- Mejorada la actualización del resumen financiero
+- Refinada la estructura de commits
+- Actualizada la documentación del proyecto
+- Optimizado el rendimiento general"
 
 git push -u origin fuegote
 
@@ -16,3 +15,4 @@ git pull origin main
 git merge fuegote
 git push origin main
 git checkout fuegote
+
