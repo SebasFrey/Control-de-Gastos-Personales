@@ -1,5 +1,5 @@
 git add .
-git commit -m "Actualización 1.38.0 - Revertido de Actualizaciones"
+git commit -m "Actualización 1.40.0 - Se rompio todo y lo arregle a medias y estoy frustrado como para hacer un mlp commit decente."
 
 
 git push -u origin fuegote

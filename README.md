@@ -86,62 +86,32 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Historial de versiones
 
-### v1.36.0 (Actual)
-- Simplificación visual:
-  - Implementado esquema de colores minimalista (blanco y negro)
-  - Eliminada temporalmente la funcionalidad de modo oscuro
-  - Mejorada la jerarquía visual de elementos
-  - Optimizada la consistencia en la interfaz
-  - Refinada la presentación de transacciones
+### v1.38.0 (Actual)
+- Correcciones y mejoras en la importación de datos:
+  - Implementado indicador visual de carga durante la importación
+  - Mejorada la validación de datos importados
+  - Optimizado el proceso de recálculo de saldos
+  - Corregida la actualización inmediata de la interfaz tras importación
+  - Añadido manejo de errores más robusto
 - Mejoras en la experiencia de usuario:
-  - Mayor legibilidad del contenido
-  - Mejor contraste visual
-  - Interfaz más limpia y profesional
+  - Feedback visual mejorado durante operaciones
+  - Mayor estabilidad en la gestión de datos
   - Optimización del rendimiento general
 
-### v1.35.0
-- Simplificación de la interfaz:
-  - Eliminada la sección de filtros de transacciones
-  - Mejorada la claridad visual
-  - Optimizado el rendimiento
-  - Simplificada la experiencia de usuario
+### v1.37.0
+- Gestión mejorada de categorías:
+  - Añadida opción de eliminar categorías
+  - Implementada categoría "Sin clasificar" para transacciones huérfanas
+  - Mejorada la transferencia entre categorías
+- Mejoras en la interfaz:
+  - Optimizada la responsividad en dispositivos móviles
+  - Eliminada temporalmente la funcionalidad de modo oscuro
+  - Mejorada la presentación de fechas en el historial
+- Correcciones:
+  - Solucionados problemas de visualización en móviles
+  - Mejorada la gestión de estados en edición de transacciones
 
-### v1.34.3
-- Mejoras en la visualización de fechas:
-  - Agregado formato de hora a las fechas de transacciones
-  - Corrección en la persistencia de fechas y horas
-  - Mejora en la presentación del formato fecha/hora
-  - Optimización del manejo de zonas horarias
-
-### v1.34.2
-- Corrección crítica de funciones de edición:
-  - Reparado completamente el sistema de edición de transacciones
-  - Implementada identificación precisa de elementos en el DOM
-  - Mejorada la lógica de búsqueda de transacciones
-  - Optimizado el proceso de actualización de la interfaz
-  - Corregida la persistencia de cambios
-
-### v1.34.1
-- Correcciones y optimizaciones:
-  - Reparada la funcionalidad de edición en la vista por fechas
-  - Mejorada la lógica de localización de elementos
-  - Optimizado el manejo de cambios de fecha
-  - Asegurada la persistencia de datos
-  - Mantenida la experiencia de usuario consistente
-
-### v1.34.0
-- Nueva organización del historial de transacciones:
-  - Sistema de listas desplegables agrupadas por fecha
-  - Visualización expandida automática del día actual
-  - Indicadores visuales de expansión/colapso
-  - Contador de transacciones por día
-  - Mejor organización visual de la información
-
-### Versiones anteriores
-- Implementación de transferencias entre categorías
-- Sistema de edición de montos y descripciones
-- Exportación e importación de datos
-- Gestión de categorías personalizadas
+[Versiones anteriores omitidas por brevedad]
 
 ## Desarrollo futuro
 
@@ -154,9 +124,10 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Gráficos y análisis avanzados
 
 ### Mejoras planificadas
-- Implementación robusta del modo oscuro
-- Temas personalizables
-- Más opciones de exportación
-- Filtros avanzados configurables
-- Categorías con iconos personalizados
-- Estadísticas avanzadas
+- Reimplementación del modo oscuro con nuevo diseño
+- Sistema de respaldo automático
+- Filtros avanzados por fecha y categoría
+- Gráficos estadísticos
+- Presupuestos por categoría
+- Sistema de metas de ahorro
+

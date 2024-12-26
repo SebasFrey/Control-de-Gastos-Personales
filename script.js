@@ -31,21 +31,40 @@ const entradaOtraCategoria = document.getElementById('otra-categoria');
 const contenedorOtraCategoria = document.getElementById('contenedor-otra-categoria');
 const botonExportarExcel = document.getElementById('exportar-excel');
 const botonExportarPDF = document.getElementById('exportar-pdf');
-const botonModoOscuro = document.getElementById('modo-oscuro');
 const botonAgregarCategoria = document.getElementById('agregar-categoria');
 const botonExportarJSON = document.getElementById('exportar-json');
 const botonImportarJSON = document.getElementById('importar-json');
-const botonTransferencia = document.getElementById('transferir-categoria'); // Agregar referencia al botón
-
+const botonTransferencia = document.getElementById('transferir-categoria');
 
 // Estado de la aplicación
 let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
-let categorias = JSON.parse(localStorage.getItem('categorias')) || ['Salario', 'Alimentación', 'Transporte', 'Entretenimiento', 'Otro'];
+let categorias = JSON.parse(localStorage.getItem('categorias')) || ['sin clasificar', 'salario', 'alimentación', 'transporte', 'entretenimiento', 'otro'];
 let saldo = 0;
 let ingresos = 0;
 let gastos = 0;
 let resumenCategoria = {};
-let transaccionesPorFecha = {}; // Variable global para transacciones por fecha
+let transaccionesPorFecha = {};
+
+// Función para mostrar el indicador de carga
+function mostrarCargando() {
+    const cargando = document.createElement('div');
+    cargando.className = 'cargando';
+    cargando.innerHTML = `
+        <div class="cargando-contenido">
+            <div class="cargando-spinner"></div>
+            <p>Procesando datos...</p>
+        </div>
+    `;
+    document.body.appendChild(cargando);
+}
+
+// Función para ocultar el indicador de carga
+function ocultarCargando() {
+    const cargando = document.querySelector('.cargando');
+    if (cargando) {
+        cargando.remove();
+    }
+}
 
 // Nueva función para actualizar el saldo de una categoría
 function actualizarSaldoCategoria(categoria, monto, tipo) {
@@ -99,6 +118,45 @@ function transferirEntreCategorias(categoriaOrigen, categoriaDestino, monto) {
     guardarTransacciones();
 
     return true;
+}
+
+// Función para eliminar una categoría
+function eliminarCategoria(categoria) {
+    // No permitir eliminar la categoría "sin clasificar"
+    if (categoria.toLowerCase() === 'sin clasificar') {
+        alert('No se puede eliminar la categoría "Sin clasificar"');
+        return;
+    }
+
+    // Verificar si la categoría existe
+    const index = categorias.findIndex(cat => cat.toLowerCase() === categoria.toLowerCase());
+    if (index === -1) {
+        alert('Categoría no encontrada');
+        return;
+    }
+
+    // Asegurarse de que existe la categoría "sin clasificar"
+    if (!categorias.includes('sin clasificar')) {
+        categorias.push('sin clasificar');
+    }
+
+    // Mover todas las transacciones de la categoría eliminada a "sin clasificar"
+    transacciones = transacciones.map(trans => {
+        if (trans.categoria.toLowerCase() === categoria.toLowerCase()) {
+            return { ...trans, categoria: 'sin clasificar' };
+        }
+        return trans;
+    });
+
+    // Eliminar la categoría
+    categorias.splice(index, 1);
+
+    // Actualizar UI y guardar cambios
+    actualizarSelectCategorias();
+    actualizarResumenCategoria();
+    actualizarListaTransacciones();
+    guardarTransacciones();
+    guardarCategorias();
 }
 
 // Función para mostrar el modal de transferencia
@@ -166,7 +224,6 @@ function cerrarModal() {
     }
 }
 
-
 // Funciones auxiliares
 function actualizarSaldo() {
     saldo = ingresos - gastos;
@@ -180,45 +237,20 @@ function actualizarResumenCategoria() {
     listaCategoria.innerHTML = '';
     for (const [categoria, monto] of Object.entries(resumenCategoria)) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${capitalizarPalabras(categoria)}</span><span class="${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(Math.abs(monto))}</span>`;
+        li.innerHTML = `
+            <div class="categoria-item">
+                <span>${capitalizarPalabras(categoria)}</span>
+                <div class="categoria-acciones">
+                    <span class="${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(Math.abs(monto))}</span>
+                    ${categoria.toLowerCase() !== 'sin clasificar' ?
+                        `<button class="boton-eliminar-categoria" onclick="eliminarCategoria('${categoria}')">
+                            <i data-feather="trash-2"></i>
+                        </button>` :
+                        ''}
+                </div>
+            </div>`;
         listaCategoria.appendChild(li);
     }
-}
-
-function agregarTransaccionAlDOM(transaccion, indice) {
-    const tr = document.createElement('tr');
-    tr.className = `item-transaccion ${transaccion.tipo}`;
-    tr.innerHTML = `
-        <td>
-            <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
-            <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
-        </td>
-        <td>
-            <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
-            <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
-        </td>
-        <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
-        <td>${capitalizarPalabras(transaccion.categoria)}</td>
-        <td>
-            <span class="fecha-texto">${formatearFechaHora(transaccion.fecha)}</span>
-            <input type="datetime-local" class="editar-fecha" style="display: none;" value="${new Date(transaccion.fecha).toISOString().slice(0,16)}">
-        </td>
-        <td>
-            <button class="boton-editar-descripcion" onclick="editarDescripcion(${indice})">
-                <i data-feather="edit-2"></i>
-            </button>
-            <button class="boton-editar-monto" onclick="editarMonto(${indice})">
-                <i data-feather="dollar-sign"></i>
-            </button>
-            <button class="boton-editar-fecha" onclick="editarFecha(${indice})">
-                <i data-feather="calendar"></i>
-            </button>
-            <button class="boton-eliminar" onclick="eliminarTransaccion(${indice})">
-                <i data-feather="trash-2"></i>
-            </button>
-        </td>
-    `;
-    listaTransacciones.appendChild(tr);
     feather.replace();
 }
 
@@ -432,23 +464,55 @@ function exportarJSON() {
 function importarJSON(evento) {
     const archivo = evento.target.files[0];
     if (archivo) {
+        mostrarCargando();
         const lector = new FileReader();
         lector.onload = function(e) {
             try {
                 const datos = JSON.parse(e.target.result);
+
+                // Validar la estructura de los datos
+                if (!datos.transacciones || !Array.isArray(datos.transacciones) ||
+                    !datos.categorias || !Array.isArray(datos.categorias)) {
+                    throw new Error('Formato de archivo inválido');
+                }
+
+                // Asegurarse de que existe la categoría "sin clasificar"
+                if (!datos.categorias.includes('sin clasificar')) {
+                    datos.categorias.push('sin clasificar');
+                }
+
+                // Reinicializar variables globales
                 transacciones = datos.transacciones;
                 categorias = datos.categorias;
-
-                // Reinicializar la aplicación
                 ingresos = 0;
                 gastos = 0;
-                inicializar();
+                resumenCategoria = {};
+
+                // Recalcular totales
+                transacciones.forEach(transaccion => {
+                    if (transaccion.tipo === 'ingreso') {
+                        ingresos += parseFloat(transaccion.monto);
+                    } else {
+                        gastos += parseFloat(transaccion.monto);
+                    }
+                    actualizarSaldoCategoria(transaccion.categoria, parseFloat(transaccion.monto), transaccion.tipo);
+                });
+
+                // Actualizar la interfaz
+                actualizarSaldo();
+                actualizarResumenCategoria();
+                actualizarListaTransacciones();
+                actualizarSelectCategorias();
+
+                // Guardar en localStorage
                 guardarTransacciones();
                 guardarCategorias();
 
+                ocultarCargando();
                 alert('Datos importados con éxito');
             } catch (error) {
                 console.error('Error al importar datos:', error);
+                ocultarCargando();
                 alert('Error al importar datos. Por favor, asegúrese de que el archivo es válido.');
             }
         };
@@ -519,13 +583,6 @@ entradaCategoria.addEventListener('change', (e) => {
 
 botonExportarExcel.addEventListener('click', exportarExcel);
 botonExportarPDF.addEventListener('click', exportarPDF);
-
-
-botonModoOscuro.addEventListener('click', () => {
-    document.body.classList.toggle('modo-oscuro');
-    botonModoOscuro.textContent = document.body.classList.contains('modo-oscuro') ? '☀️' : '🌙';
-});
-
 botonAgregarCategoria.addEventListener('click', () => {
     const nuevaCategoria = prompt('Ingrese el nombre de la nueva categoría:');
     if (nuevaCategoria && !categorias.includes(nuevaCategoria)) {
@@ -537,8 +594,7 @@ botonAgregarCategoria.addEventListener('click', () => {
 
 botonExportarJSON.addEventListener('click', exportarJSON);
 botonImportarJSON.addEventListener('change', importarJSON);
-
-document.getElementById('transferir-categoria').addEventListener('click', mostrarModalTransferencia); // Agregar event listener para el botón de transferencia
+botonTransferencia.addEventListener('click', mostrarModalTransferencia);
 
 function actualizarSelectCategorias() {
     entradaCategoria.innerHTML = '';
@@ -553,13 +609,16 @@ function actualizarSelectCategorias() {
 // Inicialización
 function inicializar() {
     resumenCategoria = {};
+    ingresos = 0;
+    gastos = 0;
+
     transacciones.forEach(transaccion => {
         if (transaccion.tipo === 'ingreso') {
-            ingresos += transaccion.monto;
+            ingresos += parseFloat(transaccion.monto);
         } else {
-            gastos += transaccion.monto;
+            gastos += parseFloat(transaccion.monto);
         }
-        actualizarSaldoCategoria(transaccion.categoria, transaccion.monto, transaccion.tipo);
+        actualizarSaldoCategoria(transaccion.categoria, parseFloat(transaccion.monto), transaccion.tipo);
     });
 
     actualizarSaldo();
@@ -567,8 +626,6 @@ function inicializar() {
     actualizarListaTransacciones();
     actualizarSelectCategorias();
 }
-
-inicializar();
 
 // Función para capitalizar solo la primera letra de una palabra
 function capitalizarPrimeraLetra(str) {
@@ -743,4 +800,7 @@ function editarFecha(indice) {
     }
     feather.replace();
 }
+
+// Inicializar la aplicación
+inicializar();
 

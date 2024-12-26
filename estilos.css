@@ -12,18 +12,6 @@
   --transicion: all 0.3s ease;
 }
 
-.modo-oscuro {
-  --color-fondo: #121212;
-  --color-texto: #e0e0e0;
-  --color-primario: #ffffff;
-  --color-secundario: #a0a0a0;
-  --color-acento: #333333;
-  --color-blanco: #1e1e1e;
-  --color-ingreso: #4caf50;
-  --color-gasto: #f44336;
-  --sombra-caja: 0 2px 4px rgba(255, 255, 255, 0.1);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -163,7 +151,6 @@ button:hover {
   grid-column: 1 / -1;
 }
 
-
 .tabla-contenedor {
   overflow-x: auto;
 }
@@ -260,19 +247,54 @@ button:hover {
 @media (max-width: 767px) {
   .grupo-botones {
     flex-direction: column;
+    padding: 0.5rem;
   }
 
   .grupo-botones button,
   .grupo-botones label {
     width: 100%;
   }
-}
+  .tarjetas-resumen {
+    grid-template-columns: 1fr;
+  }
+  .categoria-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 
-#modo-oscuro {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
+  .categoria-acciones {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .seccion-fecha {
+    margin-bottom: 0.5rem;
+  }
+
+  .encabezado-fecha {
+    padding: 0.5rem;
+  }
+
+  .contenido-fecha {
+    padding: 0.5rem;
+  }
+
+  .tabla-transacciones-dia {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tabla-transacciones-dia th,
+  .tabla-transacciones-dia td {
+    padding: 0.5rem;
+  }
+
+  .acciones-transaccion {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -302,9 +324,7 @@ button:hover {
   h1 {
     margin-bottom: 0.5rem;
   }
-  .tarjetas-resumen {
-    grid-template-columns: 1fr;
-  }
+
   .tabla-contenedor {
     overflow-x: scroll;
   }
@@ -349,6 +369,17 @@ button:hover {
   body {
     font-size: 12px;
   }
+  .grupo-botones button,
+  .grupo-botones label {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+  .tarjeta {
+    padding: 0.75rem;
+  }
+  .tabla-transacciones-dia {
+    font-size: 0.8rem;
+  }
 }
 
 .boton-editar {
@@ -371,42 +402,6 @@ button:hover {
   border-radius: var(--radio-borde);
   padding: 0.25rem;
   font-size: 0.9rem;
-}
-
-.modo-oscuro #tabla-transacciones th {
-  background-color: var(--color-acento);
-  color: var(--color-primario);
-}
-
-.modo-oscuro #tabla-transacciones tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.modo-oscuro .tarjeta,
-.modo-oscuro .grupo-botones {
-  background-color: var(--color-blanco);
-}
-
-.modo-oscuro input,
-.modo-oscuro select,
-.modo-oscuro .editar-descripcion {
-  background-color: #2c2c2c;
-  color: var(--color-texto);
-  border-color: var(--color-secundario);
-}
-
-.modo-oscuro button {
-  background-color: var(--color-primario);
-  color: var(--color-blanco);
-}
-
-.modo-oscuro button:hover {
-  background-color: var(--color-secundario);
-}
-
-.modo-oscuro #saldo-total {
-  background-color: var(--color-acento);
-  color: var(--color-primario);
 }
 
 .editar-monto {
@@ -434,12 +429,6 @@ button:hover {
   color: var(--color-primario);
 }
 
-.modo-oscuro .editar-monto {
-  background-color: #2c2c2c;
-  color: var(--color-texto);
-  border-color: var(--color-secundario);
-}
-
 .editar-fecha {
     background-color: var(--color-fondo);
     color: var(--color-texto);
@@ -461,12 +450,6 @@ button:hover {
 
 .boton-editar-fecha:hover {
     color: var(--color-primario);
-}
-
-.modo-oscuro .editar-fecha {
-    background-color: #2c2c2c;
-    color: var(--color-texto);
-    border-color: var(--color-secundario);
 }
 
 /* Estilos para el modal de transferencia */
@@ -508,15 +491,6 @@ button:hover {
 .boton-primario {
   background-color: var(--color-primario);
   color: var(--color-blanco);
-}
-
-.modo-oscuro .modal-contenido {
-  background-color: var(--color-blanco);
-  color: var(--color-texto);
-}
-
-.modo-oscuro .modal-contenido h3 {
-  color: var(--color-texto);
 }
 
 /* Nuevos estilos para el historial de transacciones */
@@ -588,18 +562,6 @@ button:hover {
     justify-content: flex-end;
 }
 
-.modo-oscuro .seccion-fecha {
-    background-color: var(--color-blanco);
-}
-
-.modo-oscuro .encabezado-fecha:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.modo-oscuro .tabla-transacciones-dia th {
-    color: var(--color-texto);
-}
-
 @media (max-width: 768px) {
     .tabla-transacciones-dia {
         font-size: 0.9rem;
@@ -632,3 +594,93 @@ button:hover {
     }
 }
 
+.categoria-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.categoria-acciones {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.boton-eliminar-categoria {
+    background: none;
+    border: none;
+    color: var(--color-secundario);
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: var(--transicion);
+}
+
+.boton-eliminar-categoria:hover {
+    color: var(--color-gasto);
+}
+
+/* Mejorar la interacción del botón de importar */
+label[for="importar-json"] {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+label[for="importar-json"]:hover {
+    opacity: 0.9;
+}
+
+label[for="importar-json"]:focus-within {
+    outline: 2px solid var(--color-primario);
+    outline-offset: 2px;
+}
+
+/* Asegurar que el input file está completamente oculto pero accesible */
+input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Estilos para el indicador de carga */
+.cargando {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.cargando-contenido {
+    background-color: var(--color-blanco);
+    padding: 2rem;
+    border-radius: var(--radio-borde);
+    text-align: center;
+}
+
+.cargando-spinner {
+    border: 4px solid var(--color-acento);
+    border-top: 4px solid var(--color-primario);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -10,7 +10,6 @@
 <body>
     <header>
         <h1>Control de Gastos Personales</h1>
-        <button id="modo-oscuro" aria-label="Cambiar modo oscuro">🌙</button>
     </header>
     <main>
         <section id="seccion-formulario">
@@ -30,6 +29,7 @@
                 <div class="grupo-formulario">
                     <label for="categoria">Categoría</label>
                     <select id="categoria" required>
+                        <option value="sin clasificar">Sin clasificar</option>
                         <option value="salario">Salario</option>
                         <option value="alimentacion">Alimentación</option>
                         <option value="transporte">Transporte</option>
@@ -55,7 +55,7 @@
                         <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
                         <button id="exportar-pdf" class="boton-exportar">Exportar a PDF</button>
                         <button id="exportar-json" class="boton-exportar">Exportar datos</button>
-                        <label for="importar-json" class="boton-exportar">
+                        <label for="importar-json" class="boton-exportar" role="button" tabindex="0">
                             Importar datos
                             <input type="file" id="importar-json" accept=".json" style="display: none;">
                         </label>
@@ -99,4 +99,3 @@
     </script>
 </body>
 </html>
-
