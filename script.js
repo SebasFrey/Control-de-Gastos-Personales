@@ -239,9 +239,9 @@ function actualizarResumenCategoria() {
         const li = document.createElement('li');
         li.innerHTML = `
             <div class="categoria-item">
-                <span>${capitalizarPalabras(categoria)}</span>
+                <span class="categoria-nombre">${capitalizarPalabras(categoria)}</span>
                 <div class="categoria-acciones">
-                    <span class="${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(Math.abs(monto))}</span>
+                    <span class="categoria-monto ${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(Math.abs(monto))}</span>
                     ${categoria.toLowerCase() !== 'sin clasificar' ?
                         `<button class="boton-eliminar-categoria" onclick="eliminarCategoria('${categoria}')">
                             <i data-feather="trash-2"></i>
@@ -273,7 +273,6 @@ function actualizarListaTransacciones() {
         return new Date(b) - new Date(a);
     });
 
-    // Crear secciones colapsables por fecha
     fechasOrdenadas.forEach(fecha => {
         const seccionFecha = document.createElement('div');
         seccionFecha.className = 'seccion-fecha';
@@ -281,7 +280,6 @@ function actualizarListaTransacciones() {
         const fechaHoy = new Date().toLocaleDateString();
         const esHoy = fecha === fechaHoy;
 
-        // Crear encabezado de la fecha
         const encabezadoFecha = document.createElement('div');
         encabezadoFecha.className = 'encabezado-fecha';
         encabezadoFecha.innerHTML = `
@@ -294,14 +292,12 @@ function actualizarListaTransacciones() {
             </span>
         `;
 
-        // Crear contenedor de transacciones
         const contenidoFecha = document.createElement('div');
         contenidoFecha.className = 'contenido-fecha';
         if (!esHoy) {
             contenidoFecha.style.display = 'none';
         }
 
-        // Crear tabla para las transacciones del día
         const tabla = document.createElement('table');
         tabla.className = 'tabla-transacciones-dia';
         tabla.innerHTML = `
@@ -311,13 +307,12 @@ function actualizarListaTransacciones() {
                     <th>Monto</th>
                     <th>Tipo</th>
                     <th>Categoría</th>
-                    <th>Acciones</th>
+                    <th>Fecha</th>
                 </tr>
             </thead>
             <tbody></tbody>
         `;
 
-        // Agregar transacciones a la tabla
         transaccionesPorFecha[fecha].forEach((transaccion, indiceLocal) => {
             const indiceGlobal = transacciones.indexOf(transaccion);
             const tr = document.createElement('tr');
@@ -334,20 +329,7 @@ function actualizarListaTransacciones() {
                 <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
                 <td>${capitalizarPalabras(transaccion.categoria)}</td>
                 <td>
-                    <div class="acciones-transaccion">
-                        <button class="boton-editar-descripcion" onclick="editarDescripcion(${indiceGlobal})">
-                            <i data-feather="edit-2"></i>
-                        </button>
-                        <button class="boton-editar-monto" onclick="editarMonto(${indiceGlobal})">
-                            <i data-feather="dollar-sign"></i>
-                        </button>
-                        <button class="boton-editar-fecha" onclick="editarFecha(${indiceGlobal})">
-                            <i data-feather="calendar"></i>
-                        </button>
-                        <button class="boton-eliminar" onclick="eliminarTransaccion(${indiceGlobal})">
-                            <i data-feather="trash-2"></i>
-                        </button>
-                    </div>
+                    <span class="fecha-transaccion">${formatearFechaHora(transaccion.fecha)}</span>
                 </td>
             `;
             tabla.querySelector('tbody').appendChild(tr);
@@ -358,7 +340,6 @@ function actualizarListaTransacciones() {
         seccionFecha.appendChild(contenidoFecha);
         listaTransacciones.appendChild(seccionFecha);
 
-        // Event listener para colapsar/expandir
         encabezadoFecha.addEventListener('click', () => {
             const icono = encabezadoFecha.querySelector('.icono-colapsar');
             const estaVisible = contenidoFecha.style.display !== 'none';

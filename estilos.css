@@ -137,7 +137,9 @@ button:hover {
 }
 
 #lista-categoria {
-  list-style-type: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 #lista-categoria li {
@@ -545,13 +547,19 @@ button:hover {
 
 .tabla-transacciones-dia th,
 .tabla-transacciones-dia td {
-    padding: 0.75rem;
+    padding: 1rem;
     text-align: left;
     border-bottom: 1px solid var(--color-acento);
 }
 
 .tabla-transacciones-dia th {
-    font-weight: bold;
+    font-weight: 600;
+    color: var(--color-secundario);
+    background-color: var(--color-fondo);
+}
+
+.fecha-transaccion {
+    white-space: nowrap;
     color: var(--color-secundario);
     font-size: 0.9rem;
 }
@@ -598,27 +606,57 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 0;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--color-fondo);
+    border-radius: var(--radio-borde);
+    transition: var(--transicion);
+}
+
+.categoria-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.categoria-nombre {
+    font-weight: 500;
+    color: var(--color-texto);
 }
 
 .categoria-acciones {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.categoria-monto {
+    font-weight: 600;
+    font-size: 1.1rem;
+    min-width: 120px;
+    text-align: right;
+}
+
+.categoria-monto.ingreso {
+    color: var(--color-ingreso);
+}
+
+.categoria-monto.gasto {
+    color: var(--color-gasto);
 }
 
 .boton-eliminar-categoria {
-    background: none;
-    border: none;
-    color: var(--color-secundario);
-    cursor: pointer;
-    padding: 0.25rem;
+    opacity: 0.7;
     transition: var(--transicion);
 }
 
 .boton-eliminar-categoria:hover {
-    color: var(--color-gasto);
+    opacity: 1;
 }
+
+/* Mejoras visuales para el resumen por categoría */
+#resumen-categoria {
+    padding: 1.5rem;
+}
+
 
 /* Mejorar la interacción del botón de importar */
 label[for="importar-json"] {
@@ -684,3 +722,4 @@ input[type="file"] {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
