@@ -1,5 +1,12 @@
 git add .
-git commit -m "Actualización 1.40.0 - Se rompio todo y lo arregle a medias y estoy frustrado como para hacer un mlp commit decente."
+git commit -m "Actualización 1.41.0 - Mejoras en edición y visualización:
+
+- Reintegrada funcionalidad de edición en el historial
+- Mejorada presentación del resumen por categorías
+- Añadida confirmación para eliminación
+- Optimizada la interfaz de usuario
+- Mejorada la responsividad
+- Refinada la presentación visual general"
 
 
 git push -u origin fuegote

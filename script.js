@@ -308,6 +308,7 @@ function actualizarListaTransacciones() {
                     <th>Tipo</th>
                     <th>Categoría</th>
                     <th>Fecha</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -329,7 +330,24 @@ function actualizarListaTransacciones() {
                 <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
                 <td>${capitalizarPalabras(transaccion.categoria)}</td>
                 <td>
-                    <span class="fecha-transaccion">${formatearFechaHora(transaccion.fecha)}</span>
+                    <span class="fecha-texto">${formatearFechaHora(transaccion.fecha)}</span>
+                    <input type="datetime-local" class="editar-fecha" style="display: none;" value="${transaccion.fecha.slice(0, 16)}">
+                </td>
+                <td>
+                    <div class="acciones-transaccion">
+                        <button class="boton-editar-descripcion" onclick="editarDescripcion(${indiceGlobal})" title="Editar descripción">
+                            <i data-feather="edit-2"></i>
+                        </button>
+                        <button class="boton-editar-monto" onclick="editarMonto(${indiceGlobal})" title="Editar monto">
+                            <i data-feather="dollar-sign"></i>
+                        </button>
+                        <button class="boton-editar-fecha" onclick="editarFecha(${indiceGlobal})" title="Editar fecha">
+                            <i data-feather="calendar"></i>
+                        </button>
+                        <button class="boton-eliminar" onclick="confirmarEliminarTransaccion(${indiceGlobal})" title="Eliminar transacción">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </div>
                 </td>
             `;
             tabla.querySelector('tbody').appendChild(tr);
@@ -780,6 +798,17 @@ function editarFecha(indice) {
         guardarTransacciones();
     }
     feather.replace();
+}
+
+
+// Función para confirmar eliminación de transacción
+function confirmarEliminarTransaccion(indice) {
+    const transaccion = transacciones[indice];
+    const mensaje = `¿Está seguro que desea eliminar esta transacción?\n\nDescripción: ${transaccion.descripcion || 'Sin descripción'}\nMonto: $${formatearNumero(transaccion.monto)}\nTipo: ${capitalizarPrimeraLetra(transaccion.tipo)}\nCategoría: ${capitalizarPalabras(transaccion.categoria)}`;
+
+    if (confirm(mensaje)) {
+        eliminarTransaccion(indice);
+    }
 }
 
 // Inicializar la aplicación
