@@ -735,4 +735,3 @@ const ocultarCargando = () => {
 
 // Inicialización
 EstadoManager.inicializar();
-

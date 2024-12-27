@@ -1,180 +1,214 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Control de Gastos Personales - Gestiona tus finanzas de manera eficiente">
-    <meta name="theme-color" content="#000000">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta
+      name="description"
+      content="Control de Gastos Personales - Gestiona tus finanzas de manera eficiente"
+    />
+    <meta name="theme-color" content="#000000" />
     <title>Control de Gastos Personales</title>
-    <link rel="stylesheet" href="estilos.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="estilos.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Preload critical resources -->
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"
+      as="script"
+    />
+  </head>
+  <body>
     <header>
-        <h1>Control de Gastos Personales</h1>
+      <h1>Control de Gastos Personales</h1>
     </header>
     <main>
-        <section id="seccion-formulario">
-            <h2>Nueva Transacción</h2>
-            <form id="formulario-transaccion" novalidate>
-                <div class="grupo-formulario">
-                    <label for="monto">Monto <span aria-hidden="true">*</span></label>
-                    <input
-                        type="number"
-                        id="monto"
-                        name="monto"
-                        step="0.01"
-                        min="0.01"
-                        required
-                        aria-required="true"
-                        placeholder="Ingrese el monto"
-                    >
-                    <div class="mensaje-error" id="error-monto"></div>
-                </div>
-                <div class="grupo-formulario">
-                    <label for="tipo">Tipo <span aria-hidden="true">*</span></label>
-                    <select
-                        id="tipo"
-                        name="tipo"
-                        required
-                        aria-required="true"
-                    >
-                        <option value="ingreso">Ingreso</option>
-                        <option value="gasto">Gasto</option>
-                    </select>
-                    <div class="mensaje-error" id="error-tipo"></div>
-                </div>
-                <div class="grupo-formulario">
-                    <label for="categoria">Categoría <span aria-hidden="true">*</span></label>
-                    <select
-                        id="categoria"
-                        name="categoria"
-                        required
-                        aria-required="true"
-                    >
-                        <option value="sin clasificar">Sin clasificar</option>
-                        <option value="otro">Otro</option>
-                    </select>
-                    <div class="mensaje-error" id="error-categoria"></div>
-                </div>
-                <div class="grupo-formulario" id="contenedor-otra-categoria" style="display: none;">
-                    <label for="otra-categoria">Nueva Categoría <span aria-hidden="true">*</span></label>
-                    <input
-                        type="text"
-                        id="otra-categoria"
-                        name="otra-categoria"
-                        placeholder="Nombre de la nueva categoría"
-                        pattern="[A-Za-zÀ-ÿ\s]{2,30}"
-                        minlength="2"
-                        maxlength="30"
-                    >
-                    <div class="mensaje-error" id="error-otra-categoria"></div>
-                </div>
-                <div class="grupo-formulario">
-                    <label for="descripcion">Descripción</label>
-                    <input
-                        type="text"
-                        id="descripcion"
-                        name="descripcion"
-                        placeholder="Descripción opcional"
-                        maxlength="100"
-                    >
-                </div>
-                <div class="grupos-botones">
-                    <div class="grupo-botones grupo-gestion">
-                        <button type="submit">Agregar Transacción</button>
-                        <button
-                            type="button"
-                            id="agregar-categoria"
-                            class="boton-secundario"
-                        >
-                            Agregar Nueva Categoría
-                        </button>
-                        <button
-                            type="button"
-                            id="transferir-categoria"
-                            class="boton-secundario"
-                        >
-                            Transferir entre Categorías
-                        </button>
-                    </div>
-                    <div class="grupo-botones grupo-datos">
-                        <button
-                            type="button"
-                            id="exportar-excel"
-                            class="boton-exportar"
-                        >
-                            Exportar a Excel
-                        </button>
-                        <button
-                            type="button"
-                            id="exportar-pdf"
-                            class="boton-exportar"
-                        >
-                            Exportar a PDF
-                        </button>
-                        <button
-                            type="button"
-                            id="exportar-json"
-                            class="boton-exportar"
-                        >
-                            Exportar datos
-                        </button>
-                        <label
-                            for="importar-json"
-                            class="boton-exportar"
-                            role="button"
-                            tabindex="0"
-                        >
-                            Importar datos
-                            <input
-                                type="file"
-                                id="importar-json"
-                                accept=".json"
-                                aria-label="Importar datos desde archivo JSON"
-                            >
-                        </label>
-                    </div>
-                </div>
-            </form>
-        </section>
-        <section id="seccion-resumen">
-            <h2>Resumen Financiero</h2>
-            <div class="tarjetas-resumen">
-                <div id="saldo-total" class="tarjeta">
-                    <h3>Saldo Total</h3>
-                    <p>$<span id="saldo">0.00</span></p>
-                </div>
-                <div id="total-ingresos" class="tarjeta ingreso">
-                    <h3>Total Ingresos</h3>
-                    <p>$<span id="ingresos">0.00</span></p>
-                </div>
-                <div id="total-gastos" class="tarjeta gasto">
-                    <h3>Total Gastos</h3>
-                    <p>$<span id="gastos">0.00</span></p>
-                </div>
+      <section id="seccion-formulario">
+        <h2>Nueva Transacción</h2>
+        <form id="formulario-transaccion" novalidate>
+          <div class="grupo-formulario">
+            <label for="monto">Monto <span aria-hidden="true">*</span></label>
+            <div class="input-container">
+              <i data-feather="dollar-sign" class="input-icon"></i>
+              <input
+                type="number"
+                id="monto"
+                name="monto"
+                step="0.01"
+                min="0.01"
+                required
+                aria-required="true"
+                placeholder="Ingrese el monto"
+              />
             </div>
-            <div id="resumen-categoria" class="tarjeta">
-                <h3>Resumen por Categoría</h3>
-                <ul id="lista-categoria" role="list"></ul>
+            <div class="mensaje-error" id="error-monto"></div>
+          </div>
+          <div class="grupo-formulario">
+            <label for="tipo">Tipo <span aria-hidden="true">*</span></label>
+            <div class="input-container">
+              <i data-feather="repeat" class="input-icon"></i>
+              <select id="tipo" name="tipo" required aria-required="true">
+                <option value="ingreso">Ingreso</option>
+                <option value="gasto">Gasto</option>
+              </select>
             </div>
-        </section>
-        <section id="seccion-historial">
-            <h2>Historial de Transacciones</h2>
-            <div id="lista-transacciones" role="region" aria-live="polite"></div>
-        </section>
+            <div class="mensaje-error" id="error-tipo"></div>
+          </div>
+          <div class="grupo-formulario">
+            <label for="categoria"
+              >Categoría <span aria-hidden="true">*</span></label
+            >
+            <div class="input-container">
+              <i data-feather="tag" class="input-icon"></i>
+              <select
+                id="categoria"
+                name="categoria"
+                required
+                aria-required="true"
+              >
+                <option value="sin clasificar">Sin clasificar</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div class="mensaje-error" id="error-categoria"></div>
+          </div>
+          <div
+            class="grupo-formulario"
+            id="contenedor-otra-categoria"
+            style="display: none"
+          >
+            <label for="otra-categoria"
+              >Nueva Categoría <span aria-hidden="true">*</span></label
+            >
+            <div class="input-container">
+              <i data-feather="plus-circle" class="input-icon"></i>
+              <input
+                type="text"
+                id="otra-categoria"
+                name="otra-categoria"
+                placeholder="Nombre de la nueva categoría"
+                pattern="[A-Za-zÀ-ÿ\s]{2,30}"
+                minlength="2"
+                maxlength="30"
+              />
+            </div>
+            <div class="mensaje-error" id="error-otra-categoria"></div>
+          </div>
+          <div class="grupo-formulario">
+            <label for="descripcion">Descripción</label>
+            <div class="input-container">
+              <i data-feather="file-text" class="input-icon"></i>
+              <input
+                type="text"
+                id="descripcion"
+                name="descripcion"
+                placeholder="Descripción opcional"
+                maxlength="100"
+              />
+            </div>
+          </div>
+          <div class="grupos-botones">
+            <div class="grupo-botones grupo-gestion">
+              <button type="submit" class="boton-principal">
+                <i data-feather="plus"></i>
+                Agregar Transacción
+              </button>
+              <button
+                type="button"
+                id="agregar-categoria"
+                class="boton-secundario"
+              >
+                <i data-feather="folder-plus"></i>
+                Agregar Nueva Categoría
+              </button>
+            </div>
+            <div class="grupo-botones grupo-datos">
+              <button type="button" id="exportar-excel" class="boton-exportar">
+                <i data-feather="file-text"></i>
+                Exportar a Excel
+              </button>
+              <button type="button" id="exportar-pdf" class="boton-exportar">
+                <i data-feather="file"></i>
+                Exportar a PDF
+              </button>
+              <button type="button" id="exportar-json" class="boton-exportar">
+                <i data-feather="save"></i>
+                Exportar datos
+              </button>
+              <label
+                for="importar-json"
+                class="boton-exportar"
+                role="button"
+                tabindex="0"
+              >
+                <i data-feather="upload"></i>
+                Importar datos
+                <input
+                  type="file"
+                  id="importar-json"
+                  accept=".json"
+                  aria-label="Importar datos desde archivo JSON"
+                  class="hidden"
+                />
+              </label>
+            </div>
+          </div>
+        </form>
+      </section>
+      <section id="seccion-resumen">
+        <h2>Resumen Financiero</h2>
+        <div class="tarjetas-resumen">
+          <div id="saldo-total" class="tarjeta">
+            <h3>Saldo Total</h3>
+            <p>$<span id="saldo">0.00</span></p>
+          </div>
+          <div id="total-ingresos" class="tarjeta ingreso">
+            <h3>Total Ingresos</h3>
+            <p>$<span id="ingresos">0.00</span></p>
+          </div>
+          <div id="total-gastos" class="tarjeta gasto">
+            <h3>Total Gastos</h3>
+            <p>$<span id="gastos">0.00</span></p>
+          </div>
+        </div>
+        <div id="resumen-categoria" class="tarjeta">
+          <h3>Resumen por Categoría</h3>
+          <ul id="lista-categoria" role="list"></ul>
+        </div>
+      </section>
+      <section id="seccion-historial">
+        <h2>Historial de Transacciones</h2>
+        <div id="lista-transacciones" role="region" aria-live="polite"></div>
+      </section>
     </main>
 
     <div id="mensajes" class="mensajes" role="alert" aria-live="polite"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <!-- Load non-critical scripts async -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+      async
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"
+      async
+    ></script>
+    <script
+      src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"
+      async
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
     <script>
-        feather.replace()
+      document.addEventListener("DOMContentLoaded", () => {
+        feather.replace();
+      });
     </script>
-</body>
+  </body>
 </html>
-
