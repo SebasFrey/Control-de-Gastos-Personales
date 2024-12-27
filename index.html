@@ -28,7 +28,6 @@
                         required
                         aria-required="true"
                         placeholder="Ingrese el monto"
-                        pattern="[0-9]*[.,]?[0-9]+"
                     >
                     <div class="mensaje-error" id="error-monto"></div>
                 </div>
@@ -54,21 +53,17 @@
                         aria-required="true"
                     >
                         <option value="sin clasificar">Sin clasificar</option>
-                        <option value="salario">Salario</option>
-                        <option value="alimentacion">Alimentación</option>
-                        <option value="transporte">Transporte</option>
-                        <option value="entretenimiento">Entretenimiento</option>
                         <option value="otro">Otro</option>
                     </select>
                     <div class="mensaje-error" id="error-categoria"></div>
                 </div>
-                <div class="grupo-formulario" id="contenedor-otra-categoria">
-                    <label for="otra-categoria">Nombre para "Otro" <span aria-hidden="true">*</span></label>
+                <div class="grupo-formulario" id="contenedor-otra-categoria" style="display: none;">
+                    <label for="otra-categoria">Nueva Categoría <span aria-hidden="true">*</span></label>
                     <input
                         type="text"
                         id="otra-categoria"
                         name="otra-categoria"
-                        placeholder="Especifique la categoría"
+                        placeholder="Nombre de la nueva categoría"
                         pattern="[A-Za-zÀ-ÿ\s]{2,30}"
                         minlength="2"
                         maxlength="30"
@@ -176,7 +171,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="script.js" type="module"></script>
+    <script src="script.js"></script>
     <script>
         feather.replace()
     </script>

@@ -7,12 +7,13 @@
   --color-blanco: #fff;
   --color-ingreso: #4caf50;
   --color-gasto: #f44336;
-  --radio-borde: 4px;
-  --sombra-caja: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --radio-borde: 6px;
+  --sombra-caja: 0 2px 8px rgba(0, 0, 0, 0.1);
   --transicion: all 0.3s ease;
+  --sombra-boton: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --sombra-boton-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Reset y estilos base */
 * {
   margin: 0;
   padding: 0;
@@ -27,42 +28,46 @@ body {
   transition: var(--transicion);
 }
 
-/* Layout principal */
 header {
   background-color: var(--color-primario);
   color: var(--color-blanco);
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  box-shadow: var(--sombra-caja);
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 main {
   max-width: 1200px;
-  margin: 1rem auto;
-  padding: 0 1rem;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-/* Tipografía */
-h1 { font-size: 1.5rem; }
 h2 {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
   border-bottom: 2px solid var(--color-acento);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  font-weight: 500;
 }
 
-/* Componentes comunes */
 .tarjeta {
   background-color: var(--color-blanco);
   border-radius: var(--radio-borde);
   box-shadow: var(--sombra-caja);
-  padding: 1rem;
-  margin-bottom: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   transition: transform var(--transicion);
 }
 
@@ -70,26 +75,26 @@ h2 {
   transform: translateY(-2px);
 }
 
-/* Formularios */
 .grupo-formulario {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: bold;
+  font-weight: 500;
+  color: var(--color-texto);
 }
 
 input, select {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   border: 1px solid var(--color-acento);
   border-radius: var(--radio-borde);
   font-size: 1rem;
   background-color: var(--color-blanco);
   color: var(--color-texto);
-  transition: border-color var(--transicion), box-shadow var(--transicion);
+  transition: all 0.3s ease;
 }
 
 input:focus, select:focus {
@@ -98,39 +103,65 @@ input:focus, select:focus {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Botones */
 button {
   background-color: var(--color-primario);
   color: var(--color-blanco);
   border: none;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.25rem;
   font-size: 1rem;
   border-radius: var(--radio-borde);
   cursor: pointer;
-  transition: var(--transicion);
+  transition: all 0.3s ease;
+  box-shadow: var(--sombra-boton);
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 button:hover {
   background-color: var(--color-secundario);
   transform: translateY(-1px);
+  box-shadow: var(--sombra-boton-hover);
 }
 
 .boton-exportar, .boton-secundario {
   background-color: var(--color-secundario);
+  border: 1px solid transparent;
 }
 
-/* Secciones principales */
-#seccion-formulario,
-#seccion-resumen,
-#seccion-historial {
-  grid-column: 1 / -1;
+.boton-exportar:hover, .boton-secundario:hover {
+  background-color: var(--color-texto);
+  border-color: var(--color-texto);
 }
 
-/* Resumen financiero */
+.grupos-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.grupo-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-blanco);
+  box-shadow: var(--sombra-caja);
+}
+
+.grupo-gestion {
+  border-left: 4px solid var(--color-primario);
+}
+
+.grupo-datos {
+  border-left: 4px solid var(--color-secundario);
+}
+
 .tarjetas-resumen {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
 #saldo-total {
@@ -141,13 +172,12 @@ button:hover {
 .ingreso { color: var(--color-ingreso); }
 .gasto { color: var(--color-gasto); }
 
-/* Categorías */
 .categoria-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.75rem;
   background-color: var(--color-fondo);
   border-radius: var(--radio-borde);
   transition: var(--transicion);
@@ -178,23 +208,22 @@ button:hover {
   font-variant-numeric: tabular-nums;
 }
 
-/* Tabla de transacciones */
 .tabla-transacciones-dia {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .tabla-transacciones-dia th,
 .tabla-transacciones-dia td {
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   text-align: left;
   border-bottom: 1px solid var(--color-acento);
 }
 
 .tabla-transacciones-dia th {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-secundario);
   background-color: var(--color-fondo);
   position: sticky;
@@ -210,20 +239,6 @@ button:hover {
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-/* Campos de edición */
-.editar-descripcion,
-.editar-monto,
-.editar-fecha {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--color-acento);
-  border-radius: var(--radio-borde);
-  font-size: 0.9rem;
-  background-color: var(--color-blanco);
-  transition: var(--transicion);
-}
-
-/* Botones de acción */
 .acciones-transaccion {
   display: flex;
   gap: 0.75rem;
@@ -235,17 +250,19 @@ button:hover {
   border: none;
   color: var(--color-secundario);
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.5rem;
   transition: var(--transicion);
   opacity: 0.7;
+  border-radius: 50%;
 }
 
 .acciones-transaccion button:hover {
   opacity: 1;
+  background-color: rgba(0, 0, 0, 0.05);
   transform: scale(1.1);
+  box-shadow: none;
 }
 
-/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -280,7 +297,6 @@ button:hover {
   transform: translateY(0);
 }
 
-/* Indicador de carga */
 .cargando {
   position: fixed;
   top: 0;
@@ -308,7 +324,37 @@ button:hover {
   100% { transform: rotate(360deg); }
 }
 
-/* Media Queries */
+.mensaje {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-blanco);
+  box-shadow: var(--sombra-caja);
+  animation: slideIn 0.3s ease;
+  z-index: 1000;
+}
+
+.mensaje-success {
+  border-left: 4px solid var(--color-ingreso);
+}
+
+.mensaje-error {
+  border-left: 4px solid var(--color-gasto);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 @media (min-width: 768px) {
   main {
     grid-template-columns: 1fr 2fr;
@@ -329,78 +375,41 @@ button:hover {
 }
 
 @media (max-width: 767px) {
-  /* Layout */
-  header {
-    flex-direction: column;
-    align-items: center;
-    padding: 0.5rem;
-  }
-
-  main {
-    padding: 0.5rem;
-  }
-
-  /* Tipografía */
   body { font-size: 14px; }
-  h1 { font-size: 1.2rem; }
-  h2 { font-size: 1rem; }
 
-  /* Componentes */
-  .tarjeta {
-    padding: 0.75rem;
+  main { padding: 1rem; }
+
+  .tarjeta { padding: 1rem; }
+
+  .grupo-botones {
+    flex-direction: column;
+    padding: 1rem;
   }
 
-  .tarjeta p {
-    font-size: 1rem;
+  .grupo-botones button,
+  .grupo-botones label {
+    width: 100%;
   }
 
-  /* Tablas */
-  .tabla-transacciones-dia {
-    font-size: 0.9rem;
+  .categoria-item {
+    padding: 0.75rem 1rem;
   }
 
   .tabla-transacciones-dia th,
   .tabla-transacciones-dia td {
-    padding: 0.5rem;
-  }
-
-  /* Categorías */
-  .categoria-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    padding: 0.75rem;
-  }
-
-  .categoria-acciones {
-    width: 100%;
-    justify-content: space-between;
+    padding: 0.75rem 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  /* Tipografía */
-  body { font-size: 12px; }
+  body { font-size: 13px; }
 
-  /* Componentes */
-  .grupo-botones button,
-  .grupo-botones label {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
+  h1 { font-size: 1.5rem; }
 
-  /* Tablas */
-  .tabla-transacciones-dia {
-    font-size: 0.8rem;
-  }
-
-  /* Acciones */
-  .acciones-transaccion {
-    gap: 0.25rem;
-  }
-
-  .acciones-transaccion button {
-    padding: 0.5rem;
+  .mensaje {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
   }
 }
 

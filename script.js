@@ -1,7 +1,7 @@
 // Estado global de la aplicación
 const AppState = {
     transacciones: [],
-    categorias: ['sin clasificar', 'salario', 'alimentación', 'transporte', 'entretenimiento', 'otro'],
+    categorias: ['sin clasificar', 'otro'],
     saldo: 0,
     ingresos: 0,
     gastos: 0,
@@ -20,7 +20,15 @@ class EstadoManager {
                 AppState.transacciones = JSON.parse(transaccionesGuardadas);
             }
             if (categoriasGuardadas) {
-                AppState.categorias = JSON.parse(categoriasGuardadas);
+                const categorias = JSON.parse(categoriasGuardadas);
+                // Asegurar que solo existan las categorías predeterminadas al inicio
+                AppState.categorias = ['sin clasificar', 'otro'];
+                // Agregar cualquier categoría personalizada existente
+                categorias.forEach(cat => {
+                    if (!AppState.categorias.includes(cat.toLowerCase())) {
+                        AppState.categorias.push(cat.toLowerCase());
+                    }
+                });
             }
 
             await this.recalcularTotales();
@@ -179,12 +187,19 @@ const handleSubmitFormulario = async (e) => {
     document.querySelectorAll('.mensaje-error').forEach(el => el.textContent = '');
 
     try {
+        let categoria = formData.get('categoria');
+        if (categoria === 'otro') {
+            categoria = formData.get('otra-categoria').trim().toLowerCase();
+            if (!AppState.categorias.includes(categoria)) {
+                AppState.categorias.push(categoria);
+            }
+        }
+
         const nuevaTransaccion = {
             descripcion: formData.get('descripcion') || null,
             monto: parseFloat(formData.get('monto')),
             tipo: formData.get('tipo'),
-            categoria: formData.get('categoria') === 'otro' ?
-                formData.get('otra-categoria') : formData.get('categoria'),
+            categoria,
             fecha: new Date().toISOString()
         };
 
@@ -226,7 +241,7 @@ const actualizarResumenCategoria = () => {
                     <span class="categoria-monto ${monto >= 0 ? 'ingreso' : 'gasto'}">
                         ${formatearNumero(Math.abs(monto))}
                     </span>
-                    ${categoria.toLowerCase() !== 'sin clasificar' ? `
+                    ${categoria.toLowerCase() !== 'sin clasificar' && categoria.toLowerCase() !== 'otro' ? `
                         <button
                             class="boton-eliminar-categoria"
                             data-categoria="${categoria}"
@@ -520,9 +535,12 @@ const importarJSON = async (evento) => {
             throw new Error('Formato de archivo inválido');
         }
 
-        // Asegurar categoría "sin clasificar"
+        // Asegurar categorías predeterminadas
         if (!datos.categorias.includes('sin clasificar')) {
             datos.categorias.push('sin clasificar');
+        }
+        if (!datos.categorias.includes('otro')) {
+            datos.categorias.push('otro');
         }
 
         // Actualizar estado
@@ -661,8 +679,8 @@ const eliminarTransaccion = async (indice) => {
 
 const eliminarCategoria = async (categoria) => {
     try {
-        if (categoria.toLowerCase() === 'sin clasificar') {
-            mostrarMensaje('No se puede eliminar la categoría "Sin clasificar"', 'error');
+        if (categoria.toLowerCase() === 'sin clasificar' || categoria.toLowerCase() === 'otro') {
+            mostrarMensaje('No se pueden eliminar las categorías predeterminadas', 'error');
             return;
         }
 
@@ -714,4 +732,7 @@ const ocultarCargando = () => {
         cargando.remove();
     }
 };
+
+// Inicialización
+EstadoManager.inicializar();
 
