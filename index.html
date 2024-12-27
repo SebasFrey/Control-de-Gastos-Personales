@@ -2,10 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Control de Gastos Personales - Gestiona tus finanzas de manera eficiente">
+    <meta name="theme-color" content="#000000">
     <title>Control de Gastos Personales</title>
     <link rel="stylesheet" href="estilos.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -14,21 +16,43 @@
     <main>
         <section id="seccion-formulario">
             <h2>Nueva Transacción</h2>
-            <form id="formulario-transaccion">
+            <form id="formulario-transaccion" novalidate>
                 <div class="grupo-formulario">
-                    <label for="monto">Monto</label>
-                    <input type="number" id="monto" step="0.01" required>
+                    <label for="monto">Monto <span aria-hidden="true">*</span></label>
+                    <input
+                        type="number"
+                        id="monto"
+                        name="monto"
+                        step="0.01"
+                        min="0.01"
+                        required
+                        aria-required="true"
+                        placeholder="Ingrese el monto"
+                        pattern="[0-9]*[.,]?[0-9]+"
+                    >
+                    <div class="mensaje-error" id="error-monto"></div>
                 </div>
                 <div class="grupo-formulario">
-                    <label for="tipo">Tipo</label>
-                    <select id="tipo" required>
+                    <label for="tipo">Tipo <span aria-hidden="true">*</span></label>
+                    <select
+                        id="tipo"
+                        name="tipo"
+                        required
+                        aria-required="true"
+                    >
                         <option value="ingreso">Ingreso</option>
                         <option value="gasto">Gasto</option>
                     </select>
+                    <div class="mensaje-error" id="error-tipo"></div>
                 </div>
                 <div class="grupo-formulario">
-                    <label for="categoria">Categoría</label>
-                    <select id="categoria" required>
+                    <label for="categoria">Categoría <span aria-hidden="true">*</span></label>
+                    <select
+                        id="categoria"
+                        name="categoria"
+                        required
+                        aria-required="true"
+                    >
                         <option value="sin clasificar">Sin clasificar</option>
                         <option value="salario">Salario</option>
                         <option value="alimentacion">Alimentación</option>
@@ -36,28 +60,84 @@
                         <option value="entretenimiento">Entretenimiento</option>
                         <option value="otro">Otro</option>
                     </select>
+                    <div class="mensaje-error" id="error-categoria"></div>
                 </div>
-                <div class="grupo-formulario" id="contenedor-otra-categoria" style="display: none;">
-                    <label for="otra-categoria">Nombre para "Otro":</label>
-                    <input type="text" id="otra-categoria" placeholder="Especifique la categoría">
+                <div class="grupo-formulario" id="contenedor-otra-categoria">
+                    <label for="otra-categoria">Nombre para "Otro" <span aria-hidden="true">*</span></label>
+                    <input
+                        type="text"
+                        id="otra-categoria"
+                        name="otra-categoria"
+                        placeholder="Especifique la categoría"
+                        pattern="[A-Za-zÀ-ÿ\s]{2,30}"
+                        minlength="2"
+                        maxlength="30"
+                    >
+                    <div class="mensaje-error" id="error-otra-categoria"></div>
                 </div>
                 <div class="grupo-formulario">
-                    <label for="descripcion">Descripción (Opcional)</label>
-                    <input type="text" id="descripcion">
+                    <label for="descripcion">Descripción</label>
+                    <input
+                        type="text"
+                        id="descripcion"
+                        name="descripcion"
+                        placeholder="Descripción opcional"
+                        maxlength="100"
+                    >
                 </div>
                 <div class="grupos-botones">
                     <div class="grupo-botones grupo-gestion">
                         <button type="submit">Agregar Transacción</button>
-                        <button type="button" id="agregar-categoria" class="boton-secundario">Agregar Nueva Categoría</button>
-                        <button type="button" id="transferir-categoria" class="boton-secundario">Transferir entre Categorías</button>
+                        <button
+                            type="button"
+                            id="agregar-categoria"
+                            class="boton-secundario"
+                        >
+                            Agregar Nueva Categoría
+                        </button>
+                        <button
+                            type="button"
+                            id="transferir-categoria"
+                            class="boton-secundario"
+                        >
+                            Transferir entre Categorías
+                        </button>
                     </div>
                     <div class="grupo-botones grupo-datos">
-                        <button id="exportar-excel" class="boton-exportar">Exportar a Excel</button>
-                        <button id="exportar-pdf" class="boton-exportar">Exportar a PDF</button>
-                        <button id="exportar-json" class="boton-exportar">Exportar datos</button>
-                        <label for="importar-json" class="boton-exportar" role="button" tabindex="0">
+                        <button
+                            type="button"
+                            id="exportar-excel"
+                            class="boton-exportar"
+                        >
+                            Exportar a Excel
+                        </button>
+                        <button
+                            type="button"
+                            id="exportar-pdf"
+                            class="boton-exportar"
+                        >
+                            Exportar a PDF
+                        </button>
+                        <button
+                            type="button"
+                            id="exportar-json"
+                            class="boton-exportar"
+                        >
+                            Exportar datos
+                        </button>
+                        <label
+                            for="importar-json"
+                            class="boton-exportar"
+                            role="button"
+                            tabindex="0"
+                        >
                             Importar datos
-                            <input type="file" id="importar-json" accept=".json" style="display: none;">
+                            <input
+                                type="file"
+                                id="importar-json"
+                                accept=".json"
+                                aria-label="Importar datos desde archivo JSON"
+                            >
                         </label>
                     </div>
                 </div>
@@ -81,21 +161,25 @@
             </div>
             <div id="resumen-categoria" class="tarjeta">
                 <h3>Resumen por Categoría</h3>
-                <ul id="lista-categoria"></ul>
+                <ul id="lista-categoria" role="list"></ul>
             </div>
         </section>
         <section id="seccion-historial">
             <h2>Historial de Transacciones</h2>
-            <div id="lista-transacciones"></div>
+            <div id="lista-transacciones" role="region" aria-live="polite"></div>
         </section>
     </main>
+
+    <div id="mensajes" class="mensajes" role="alert" aria-live="polite"></div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
     <script>
         feather.replace()
     </script>
 </body>
 </html>
+

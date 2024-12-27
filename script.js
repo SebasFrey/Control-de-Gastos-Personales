@@ -1,690 +1,554 @@
-// Función para formatear números a formato de moneda
-function formatearNumero(numero) {
-    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numero.toFixed(2));
+// Estado global de la aplicación
+const AppState = {
+    transacciones: [],
+    categorias: ['sin clasificar', 'salario', 'alimentación', 'transporte', 'entretenimiento', 'otro'],
+    saldo: 0,
+    ingresos: 0,
+    gastos: 0,
+    resumenCategoria: {},
+    transaccionesPorFecha: {}
+};
+
+// Clase para manejar el estado y la persistencia
+class EstadoManager {
+    static async inicializar() {
+        try {
+            const transaccionesGuardadas = localStorage.getItem('transacciones');
+            const categoriasGuardadas = localStorage.getItem('categorias');
+
+            if (transaccionesGuardadas) {
+                AppState.transacciones = JSON.parse(transaccionesGuardadas);
+            }
+            if (categoriasGuardadas) {
+                AppState.categorias = JSON.parse(categoriasGuardadas);
+            }
+
+            await this.recalcularTotales();
+            this.actualizarUI();
+        } catch (error) {
+            mostrarMensaje('Error al cargar los datos guardados', 'error');
+            console.error('Error en inicialización:', error);
+        }
+    }
+
+    static async recalcularTotales() {
+        AppState.ingresos = 0;
+        AppState.gastos = 0;
+        AppState.resumenCategoria = {};
+
+        AppState.transacciones.forEach(transaccion => {
+            const monto = parseFloat(transaccion.monto);
+            if (transaccion.tipo === 'ingreso') {
+                AppState.ingresos += monto;
+            } else {
+                AppState.gastos += monto;
+            }
+            this.actualizarSaldoCategoria(transaccion.categoria, monto, transaccion.tipo);
+        });
+
+        AppState.saldo = AppState.ingresos - AppState.gastos;
+    }
+
+    static actualizarSaldoCategoria(categoria, monto, tipo) {
+        if (!AppState.resumenCategoria[categoria]) {
+            AppState.resumenCategoria[categoria] = 0;
+        }
+        if (tipo === 'ingreso') {
+            AppState.resumenCategoria[categoria] += monto;
+        } else {
+            AppState.resumenCategoria[categoria] -= monto;
+        }
+    }
+
+    static async guardarCambios() {
+        try {
+            localStorage.setItem('transacciones', JSON.stringify(AppState.transacciones));
+            localStorage.setItem('categorias', JSON.stringify(AppState.categorias));
+            this.actualizarUI();
+        } catch (error) {
+            mostrarMensaje('Error al guardar los cambios', 'error');
+            console.error('Error al guardar:', error);
+        }
+    }
+
+    static actualizarUI() {
+        actualizarSaldo();
+        actualizarResumenCategoria();
+        actualizarListaTransacciones();
+        actualizarSelectCategorias();
+    }
 }
 
-// Función para formatear fecha y hora
-function formatearFechaHora(fecha) {
+// Utilidades
+const formatearNumero = (numero) => {
+    return new Intl.NumberFormat('es-ES', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(numero.toFixed(2));
+};
+
+const formatearFechaHora = (fecha) => {
     const fechaObj = new Date(fecha);
-    const opciones = {
+    return fechaObj.toLocaleString('es-ES', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
-    };
-    return fechaObj.toLocaleString('es-ES', opciones);
-}
+    });
+};
 
-// Elementos del DOM
-const formulario = document.getElementById('formulario-transaccion');
-const entradaDescripcion = document.getElementById('descripcion');
-const entradaMonto = document.getElementById('monto');
-const entradaTipo = document.getElementById('tipo');
-const entradaCategoria = document.getElementById('categoria');
-const elementoSaldo = document.getElementById('saldo');
-const elementoIngresos = document.getElementById('ingresos');
-const elementoGastos = document.getElementById('gastos');
-const listaCategoria = document.getElementById('lista-categoria');
-const listaTransacciones = document.getElementById('lista-transacciones');
-const entradaOtraCategoria = document.getElementById('otra-categoria');
-const contenedorOtraCategoria = document.getElementById('contenedor-otra-categoria');
-const botonExportarExcel = document.getElementById('exportar-excel');
-const botonExportarPDF = document.getElementById('exportar-pdf');
-const botonAgregarCategoria = document.getElementById('agregar-categoria');
-const botonExportarJSON = document.getElementById('exportar-json');
-const botonImportarJSON = document.getElementById('importar-json');
-const botonTransferencia = document.getElementById('transferir-categoria');
+const capitalizarPrimeraLetra = (str) => {
+    if (!str) return '';
+    return str.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+};
 
-// Estado de la aplicación
-let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
-let categorias = JSON.parse(localStorage.getItem('categorias')) || ['sin clasificar', 'salario', 'alimentación', 'transporte', 'entretenimiento', 'otro'];
-let saldo = 0;
-let ingresos = 0;
-let gastos = 0;
-let resumenCategoria = {};
-let transaccionesPorFecha = {};
+const capitalizarPalabras = (str) => {
+    if (!str) return '';
+    return str.toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+};
 
-// Función para mostrar el indicador de carga
-function mostrarCargando() {
-    const cargando = document.createElement('div');
-    cargando.className = 'cargando';
-    cargando.innerHTML = `
-        <div class="cargando-contenido">
-            <div class="cargando-spinner"></div>
-            <p>Procesando datos...</p>
-        </div>
-    `;
-    document.body.appendChild(cargando);
-}
+// Validación de formularios
+const validarFormulario = (formData) => {
+    const errores = {};
 
-// Función para ocultar el indicador de carga
-function ocultarCargando() {
-    const cargando = document.querySelector('.cargando');
-    if (cargando) {
-        cargando.remove();
-    }
-}
-
-// Nueva función para actualizar el saldo de una categoría
-function actualizarSaldoCategoria(categoria, monto, tipo) {
-    if (!resumenCategoria[categoria]) {
-        resumenCategoria[categoria] = 0;
-    }
-    if (tipo === 'ingreso') {
-        resumenCategoria[categoria] += monto;
-    } else {
-        resumenCategoria[categoria] -= monto;
-    }
-}
-
-// Nueva función para realizar transferencias entre categorías
-function transferirEntreCategorias(categoriaOrigen, categoriaDestino, monto) {
-    if (!resumenCategoria[categoriaOrigen] || resumenCategoria[categoriaOrigen] < monto) {
-        alert('Saldo insuficiente en la categoría de origen.');
-        return false;
+    // Validar monto
+    const monto = parseFloat(formData.get('monto'));
+    if (!monto || isNaN(monto) || monto <= 0) {
+        errores.monto = 'Ingrese un monto válido mayor que 0';
     }
 
-    const fechaActual = new Date().toISOString();
+    // Validar tipo
+    const tipo = formData.get('tipo');
+    if (!['ingreso', 'gasto'].includes(tipo)) {
+        errores.tipo = 'Seleccione un tipo válido';
+    }
 
-    // Crear transacción de salida
-    const transaccionSalida = {
-        descripcion: `Transferencia a ${capitalizarPalabras(categoriaDestino)}`,
-        monto: monto,
-        tipo: 'gasto',
-        categoria: categoriaOrigen,
-        fecha: fechaActual
-    };
+    // Validar categoría
+    const categoria = formData.get('categoria');
+    if (!categoria) {
+        errores.categoria = 'Seleccione una categoría';
+    }
 
-    // Crear transacción de entrada
-    const transaccionEntrada = {
-        descripcion: `Transferencia desde ${capitalizarPalabras(categoriaOrigen)}`,
-        monto: monto,
-        tipo: 'ingreso',
-        categoria: categoriaDestino,
-        fecha: fechaActual
-    };
+    // Validar otra categoría si es necesario
+    if (categoria === 'otro') {
+        const otraCategoria = formData.get('otra-categoria');
+        if (!otraCategoria || otraCategoria.length < 2) {
+            errores.otraCategoria = 'Ingrese un nombre válido para la categoría (mínimo 2 caracteres)';
+        }
+    }
 
-    // Agregar las transacciones
-    transacciones.push(transaccionSalida, transaccionEntrada);
+    return errores;
+};
 
-    // Actualizar saldos de categorías
-    actualizarSaldoCategoria(categoriaOrigen, monto, 'gasto');
-    actualizarSaldoCategoria(categoriaDestino, monto, 'ingreso');
+// Gestión de mensajes
+const mostrarMensaje = (mensaje, tipo = 'info') => {
+    const contenedor = document.getElementById('mensajes');
+    const mensajeElement = document.createElement('div');
+    mensajeElement.className = `mensaje mensaje-${tipo}`;
+    mensajeElement.textContent = mensaje;
 
-    // Actualizar UI y guardar cambios
-    actualizarListaTransacciones();
-    actualizarResumenCategoria();
-    guardarTransacciones();
+    contenedor.appendChild(mensajeElement);
 
-    return true;
-}
+    setTimeout(() => {
+        mensajeElement.remove();
+    }, 3000);
+};
 
-// Función para eliminar una categoría
-function eliminarCategoria(categoria) {
-    // No permitir eliminar la categoría "sin clasificar"
-    if (categoria.toLowerCase() === 'sin clasificar') {
-        alert('No se puede eliminar la categoría "Sin clasificar"');
+// Manejadores de eventos
+const handleSubmitFormulario = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const errores = validarFormulario(formData);
+
+    if (Object.keys(errores).length > 0) {
+        Object.entries(errores).forEach(([campo, mensaje]) => {
+            const elementoError = document.getElementById(`error-${campo}`);
+            if (elementoError) {
+                elementoError.textContent = mensaje;
+            }
+        });
         return;
     }
 
-    // Verificar si la categoría existe
-    const index = categorias.findIndex(cat => cat.toLowerCase() === categoria.toLowerCase());
-    if (index === -1) {
-        alert('Categoría no encontrada');
-        return;
+    // Limpiar mensajes de error previos
+    document.querySelectorAll('.mensaje-error').forEach(el => el.textContent = '');
+
+    try {
+        const nuevaTransaccion = {
+            descripcion: formData.get('descripcion') || null,
+            monto: parseFloat(formData.get('monto')),
+            tipo: formData.get('tipo'),
+            categoria: formData.get('categoria') === 'otro' ?
+                formData.get('otra-categoria') : formData.get('categoria'),
+            fecha: new Date().toISOString()
+        };
+
+        AppState.transacciones.push(nuevaTransaccion);
+        await EstadoManager.recalcularTotales();
+        await EstadoManager.guardarCambios();
+
+        e.target.reset();
+        document.getElementById('contenedor-otra-categoria').style.display = 'none';
+        mostrarMensaje('Transacción agregada con éxito', 'success');
+    } catch (error) {
+        mostrarMensaje('Error al agregar la transacción', 'error');
+        console.error('Error en submit:', error);
     }
+};
 
-    // Asegurarse de que existe la categoría "sin clasificar"
-    if (!categorias.includes('sin clasificar')) {
-        categorias.push('sin clasificar');
-    }
+const handleCategoriaChange = (e) => {
+    const contenedorOtraCategoria = document.getElementById('contenedor-otra-categoria');
+    contenedorOtraCategoria.style.display = e.target.value === 'otro' ? 'block' : 'none';
+};
 
-    // Mover todas las transacciones de la categoría eliminada a "sin clasificar"
-    transacciones = transacciones.map(trans => {
-        if (trans.categoria.toLowerCase() === categoria.toLowerCase()) {
-            return { ...trans, categoria: 'sin clasificar' };
-        }
-        return trans;
-    });
+// Funciones de actualización de UI
+const actualizarSaldo = () => {
+    document.getElementById('saldo').textContent = formatearNumero(AppState.saldo);
+    document.getElementById('ingresos').textContent = formatearNumero(AppState.ingresos);
+    document.getElementById('gastos').textContent = formatearNumero(AppState.gastos);
+};
 
-    // Eliminar la categoría
-    categorias.splice(index, 1);
-
-    // Actualizar UI y guardar cambios
-    actualizarSelectCategorias();
-    actualizarResumenCategoria();
-    actualizarListaTransacciones();
-    guardarTransacciones();
-    guardarCategorias();
-}
-
-// Función para mostrar el modal de transferencia
-function mostrarModalTransferencia() {
-    const modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.innerHTML = `
-        <div class="modal-contenido">
-            <h3>Transferir entre Categorías</h3>
-            <form id="formulario-transferencia">
-                <div class="grupo-formulario">
-                    <label for="categoria-origen">Categoría Origen:</label>
-                    <select id="categoria-origen" required>
-                        ${categorias.map(cat => `<option value="${cat.toLowerCase()}">${capitalizarPalabras(cat)}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="grupo-formulario">
-                    <label for="categoria-destino">Categoría Destino:</label>
-                    <select id="categoria-destino" required>
-                        ${categorias.map(cat => `<option value="${cat.toLowerCase()}">${capitalizarPalabras(cat)}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="grupo-formulario">
-                    <label for="monto-transferencia">Monto:</label>
-                    <input type="number" id="monto-transferencia" step="0.01" min="0.01" required>
-                </div>
-                <div class="botones-modal">
-                    <button type="submit" class="boton-primario">Transferir</button>
-                    <button type="button" class="boton-secundario" onclick="cerrarModal()">Cancelar</button>
-                </div>
-            </form>
-        </div>
-    `;
-    document.body.appendChild(modal);
-
-    // Event listener para el formulario de transferencia
-    document.getElementById('formulario-transferencia').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const categoriaOrigen = document.getElementById('categoria-origen').value;
-        const categoriaDestino = document.getElementById('categoria-destino').value;
-        const monto = parseFloat(document.getElementById('monto-transferencia').value);
-
-        if (categoriaOrigen === categoriaDestino) {
-            alert('Las categorías de origen y destino deben ser diferentes.');
-            return;
-        }
-
-        if (isNaN(monto) || monto <= 0) {
-            alert('Por favor, ingrese un monto válido mayor que 0.');
-            return;
-        }
-
-        if (transferirEntreCategorias(categoriaOrigen, categoriaDestino, monto)) {
-            cerrarModal();
-            alert('Transferencia realizada con éxito.');
-        }
-    });
-}
-
-// Función para cerrar el modal
-function cerrarModal() {
-    const modal = document.querySelector('.modal');
-    if (modal) {
-        modal.remove();
-    }
-}
-
-// Funciones auxiliares
-function actualizarSaldo() {
-    saldo = ingresos - gastos;
-    elementoSaldo.textContent = formatearNumero(saldo);
-    elementoIngresos.textContent = formatearNumero(ingresos);
-    elementoGastos.textContent = formatearNumero(gastos);
-}
-
-// Modificar la función actualizarResumenCategoria para evitar la duplicación del símbolo $
-function actualizarResumenCategoria() {
+const actualizarResumenCategoria = () => {
+    const listaCategoria = document.getElementById('lista-categoria');
     listaCategoria.innerHTML = '';
-    for (const [categoria, monto] of Object.entries(resumenCategoria)) {
+
+    Object.entries(AppState.resumenCategoria).forEach(([categoria, monto]) => {
         const li = document.createElement('li');
         li.innerHTML = `
             <div class="categoria-item">
                 <span class="categoria-nombre">${capitalizarPalabras(categoria)}</span>
                 <div class="categoria-acciones">
-                    <span class="categoria-monto ${monto >= 0 ? 'ingreso' : 'gasto'}">${formatearNumero(Math.abs(monto))}</span>
-                    ${categoria.toLowerCase() !== 'sin clasificar' ?
-                        `<button class="boton-eliminar-categoria" onclick="eliminarCategoria('${categoria}')">
+                    <span class="categoria-monto ${monto >= 0 ? 'ingreso' : 'gasto'}">
+                        ${formatearNumero(Math.abs(monto))}
+                    </span>
+                    ${categoria.toLowerCase() !== 'sin clasificar' ? `
+                        <button
+                            class="boton-eliminar-categoria"
+                            data-categoria="${categoria}"
+                            aria-label="Eliminar categoría ${categoria}"
+                        >
                             <i data-feather="trash-2"></i>
-                        </button>` :
-                        ''}
+                        </button>
+                    ` : ''}
                 </div>
             </div>`;
         listaCategoria.appendChild(li);
-    }
-    feather.replace();
-}
-
-function actualizarListaTransacciones() {
-    listaTransacciones.innerHTML = '';
-    const transaccionesFiltradas = filtrarTransacciones();
-
-    // Limpiar y repoblar transaccionesPorFecha
-    transaccionesPorFecha = {};
-    transaccionesFiltradas.forEach(transaccion => {
-        const fecha = new Date(transaccion.fecha).toLocaleDateString();
-        if (!transaccionesPorFecha[fecha]) {
-            transaccionesPorFecha[fecha] = [];
-        }
-        transaccionesPorFecha[fecha].push(transaccion);
     });
+
+    feather.replace();
+};
+
+const actualizarListaTransacciones = () => {
+    const listaTransacciones = document.getElementById('lista-transacciones');
+    listaTransacciones.innerHTML = '';
+
+    // Agrupar transacciones por fecha
+    const transaccionesPorFecha = AppState.transacciones.reduce((acc, trans) => {
+        const fecha = new Date(trans.fecha).toLocaleDateString();
+        if (!acc[fecha]) {
+            acc[fecha] = [];
+        }
+        acc[fecha].push(trans);
+        return acc;
+    }, {});
 
     // Ordenar fechas de más reciente a más antigua
-    const fechasOrdenadas = Object.keys(transaccionesPorFecha).sort((a, b) => {
-        return new Date(b) - new Date(a);
-    });
-
-    fechasOrdenadas.forEach(fecha => {
-        const seccionFecha = document.createElement('div');
-        seccionFecha.className = 'seccion-fecha';
-
-        const fechaHoy = new Date().toLocaleDateString();
-        const esHoy = fecha === fechaHoy;
-
-        const encabezadoFecha = document.createElement('div');
-        encabezadoFecha.className = 'encabezado-fecha';
-        encabezadoFecha.innerHTML = `
-            <div class="fecha-collapse">
-                <i data-feather="${esHoy ? 'chevron-down' : 'chevron-right'}" class="icono-colapsar"></i>
-                <span>${esHoy ? 'Hoy' : fecha}</span>
-            </div>
-            <span class="resumen-fecha">
-                ${transaccionesPorFecha[fecha].length} transacción(es)
-            </span>
-        `;
-
-        const contenidoFecha = document.createElement('div');
-        contenidoFecha.className = 'contenido-fecha';
-        if (!esHoy) {
-            contenidoFecha.style.display = 'none';
-        }
-
-        const tabla = document.createElement('table');
-        tabla.className = 'tabla-transacciones-dia';
-        tabla.innerHTML = `
-            <thead>
-                <tr>
-                    <th>Descripción</th>
-                    <th>Monto</th>
-                    <th>Tipo</th>
-                    <th>Categoría</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        `;
-
-        transaccionesPorFecha[fecha].forEach((transaccion, indiceLocal) => {
-            const indiceGlobal = transacciones.indexOf(transaccion);
-            const tr = document.createElement('tr');
-            tr.className = `item-transaccion ${transaccion.tipo}`;
-            tr.innerHTML = `
-                <td>
-                    <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
-                    <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
-                </td>
-                <td>
-                    <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
-                    <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
-                </td>
-                <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
-                <td>${capitalizarPalabras(transaccion.categoria)}</td>
-                <td>
-                    <span class="fecha-texto">${formatearFechaHora(transaccion.fecha)}</span>
-                    <input type="datetime-local" class="editar-fecha" style="display: none;" value="${transaccion.fecha.slice(0, 16)}">
-                </td>
-                <td>
-                    <div class="acciones-transaccion">
-                        <button class="boton-editar-descripcion" onclick="editarDescripcion(${indiceGlobal})" title="Editar descripción">
-                            <i data-feather="edit-2"></i>
-                        </button>
-                        <button class="boton-editar-monto" onclick="editarMonto(${indiceGlobal})" title="Editar monto">
-                            <i data-feather="dollar-sign"></i>
-                        </button>
-                        <button class="boton-editar-fecha" onclick="editarFecha(${indiceGlobal})" title="Editar fecha">
-                            <i data-feather="calendar"></i>
-                        </button>
-                        <button class="boton-eliminar" onclick="confirmarEliminarTransaccion(${indiceGlobal})" title="Eliminar transacción">
-                            <i data-feather="trash-2"></i>
-                        </button>
-                    </div>
-                </td>
-            `;
-            tabla.querySelector('tbody').appendChild(tr);
+    Object.entries(transaccionesPorFecha)
+        .sort(([fechaA], [fechaB]) => new Date(fechaB) - new Date(fechaA))
+        .forEach(([fecha, transacciones]) => {
+            const seccionFecha = crearSeccionFecha(fecha, transacciones);
+            listaTransacciones.appendChild(seccionFecha);
         });
-
-        contenidoFecha.appendChild(tabla);
-        seccionFecha.appendChild(encabezadoFecha);
-        seccionFecha.appendChild(contenidoFecha);
-        listaTransacciones.appendChild(seccionFecha);
-
-        encabezadoFecha.addEventListener('click', () => {
-            const icono = encabezadoFecha.querySelector('.icono-colapsar');
-            const estaVisible = contenidoFecha.style.display !== 'none';
-            contenidoFecha.style.display = estaVisible ? 'none' : 'block';
-            icono.setAttribute('data-feather', estaVisible ? 'chevron-right' : 'chevron-down');
-            feather.replace();
-        });
-    });
 
     feather.replace();
-}
+};
 
-function guardarTransacciones() {
-    localStorage.setItem('transacciones', JSON.stringify(transacciones));
-}
+const crearSeccionFecha = (fecha, transacciones) => {
+    const seccion = document.createElement('div');
+    seccion.className = 'seccion-fecha';
 
-function guardarCategorias() {
-    localStorage.setItem('categorias', JSON.stringify(categorias));
-}
+    const esHoy = fecha === new Date().toLocaleDateString();
+    const encabezado = document.createElement('div');
+    encabezado.className = 'encabezado-fecha';
+    encabezado.innerHTML = `
+        <div class="fecha-collapse">
+            <i data-feather="${esHoy ? 'chevron-down' : 'chevron-right'}" class="icono-colapsar"></i>
+            <span>${esHoy ? 'Hoy' : fecha}</span>
+        </div>
+        <span class="resumen-fecha">${transacciones.length} transacción(es)</span>
+    `;
 
-function eliminarTransaccion(indice) {
-    const transaccion = transacciones[indice];
-
-    // Actualizar saldos globales
-    if (transaccion.tipo === 'ingreso') {
-        ingresos -= transaccion.monto;
-    } else {
-        gastos -= transaccion.monto;
+    const contenido = document.createElement('div');
+    contenido.className = 'contenido-fecha';
+    if (!esHoy) {
+        contenido.style.display = 'none';
     }
 
-    // Actualizar saldo de categoría directamente
-    if (!resumenCategoria[transaccion.categoria]) {
-        resumenCategoria[transaccion.categoria] = 0;
-    }
-    if (transaccion.tipo === 'ingreso') {
-        resumenCategoria[transaccion.categoria] -= transaccion.monto;
-    } else {
-        resumenCategoria[transaccion.categoria] += transaccion.monto;
-    }
+    const tabla = document.createElement('table');
+    tabla.className = 'tabla-transacciones-dia';
+    tabla.innerHTML = `
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Tipo</th>
+                <th>Categoría</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
 
-    // Si el saldo de la categoría es 0, eliminarla del resumen
-    if (resumenCategoria[transaccion.categoria] === 0) {
-        delete resumenCategoria[transaccion.categoria];
-    }
-
-    // Eliminar la transacción
-    transacciones.splice(indice, 1);
-
-    // Actualizar UI
-    actualizarSaldo();
-    actualizarResumenCategoria();
-    actualizarListaTransacciones();
-    guardarTransacciones();
-}
-
-function filtrarTransacciones() {
-    return transacciones;
-}
-
-function exportarExcel() {
-    const ws = XLSX.utils.json_to_sheet(transacciones.map(t => ({
-        Descripción: capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
-        Monto: t.monto,
-        Tipo: capitalizarPrimeraLetra(t.tipo),
-        Categoría: capitalizarPrimeraLetra(t.categoria),
-        Fecha: new Date(t.fecha).toLocaleDateString()
-    })));
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Transacciones");
-
-    XLSX.writeFile(wb, "Control De Gastos Personales.xlsx");
-}
-
-function exportarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.text("Control de Gastos Personales", 14, 15);
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 25);
-    doc.text(`Saldo Total: $${formatearNumero(saldo)}`, 14, 35);
-    doc.text(`Total Ingresos: $${formatearNumero(ingresos)}`, 14, 45);
-    doc.text(`Total Gastos: $${formatearNumero(gastos)}`, 14, 55);
-
-    const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
-    const data = transacciones.map(t => [
-        capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
-        `$${formatearNumero(t.monto)}`,
-        capitalizarPrimeraLetra(t.tipo),
-        capitalizarPrimeraLetra(t.categoria),
-        new Date(t.fecha).toLocaleDateString()
-    ]);
-
-    doc.autoTable({
-        head: [columns],
-        body: data,
-        startY: 65,
+    transacciones.forEach((transaccion, indice) => {
+        const tr = document.createElement('tr');
+        tr.className = `item-transaccion ${transaccion.tipo}`;
+        tr.innerHTML = `
+            <td>
+                <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
+                <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
+            </td>
+            <td>
+                <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
+                <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
+            </td>
+            <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
+            <td>${capitalizarPalabras(transaccion.categoria)}</td>
+            <td>
+                <span class="fecha-texto">${formatearFechaHora(transaccion.fecha)}</span>
+                <input type="datetime-local" class="editar-fecha" style="display: none;" value="${transaccion.fecha.slice(0, 16)}">
+            </td>
+            <td>
+                <div class="acciones-transaccion">
+                    <button class="boton-editar-descripcion" data-indice="${indice}" title="Editar descripción">
+                        <i data-feather="edit-2"></i>
+                    </button>
+                    <button class="boton-editar-monto" data-indice="${indice}" title="Editar monto">
+                        <i data-feather="dollar-sign"></i>
+                    </button>
+                    <button class="boton-editar-fecha" data-indice="${indice}" title="Editar fecha">
+                        <i data-feather="calendar"></i>
+                    </button>
+                    <button class="boton-eliminar" data-indice="${indice}" title="Eliminar transacción">
+                        <i data-feather="trash-2"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        tabla.querySelector('tbody').appendChild(tr);
     });
 
-    doc.save("Control De Gastos Personales.pdf");
-}
+    contenido.appendChild(tabla);
+    seccion.appendChild(encabezado);
+    seccion.appendChild(contenido);
 
-// Función para exportar datos a JSON
-function exportarJSON() {
-    const datos = {
-        transacciones: transacciones,
-        categorias: categorias
-    };
-    const jsonString = JSON.stringify(datos, null, 2);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
+    encabezado.addEventListener('click', () => {
+        const icono = encabezado.querySelector('.icono-colapsar');
+        const estaVisible = contenido.style.display !== 'none';
+        contenido.style.display = estaVisible ? 'none' : 'block';
+        icono.setAttribute('data-feather', estaVisible ? 'chevron-right' : 'chevron-down');
+        feather.replace();
+    });
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Control De Gastos Personales.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
+    return seccion;
+};
 
-// Función para importar datos desde JSON
-function importarJSON(evento) {
-    const archivo = evento.target.files[0];
-    if (archivo) {
-        mostrarCargando();
-        const lector = new FileReader();
-        lector.onload = function(e) {
-            try {
-                const datos = JSON.parse(e.target.result);
-
-                // Validar la estructura de los datos
-                if (!datos.transacciones || !Array.isArray(datos.transacciones) ||
-                    !datos.categorias || !Array.isArray(datos.categorias)) {
-                    throw new Error('Formato de archivo inválido');
-                }
-
-                // Asegurarse de que existe la categoría "sin clasificar"
-                if (!datos.categorias.includes('sin clasificar')) {
-                    datos.categorias.push('sin clasificar');
-                }
-
-                // Reinicializar variables globales
-                transacciones = datos.transacciones;
-                categorias = datos.categorias;
-                ingresos = 0;
-                gastos = 0;
-                resumenCategoria = {};
-
-                // Recalcular totales
-                transacciones.forEach(transaccion => {
-                    if (transaccion.tipo === 'ingreso') {
-                        ingresos += parseFloat(transaccion.monto);
-                    } else {
-                        gastos += parseFloat(transaccion.monto);
-                    }
-                    actualizarSaldoCategoria(transaccion.categoria, parseFloat(transaccion.monto), transaccion.tipo);
-                });
-
-                // Actualizar la interfaz
-                actualizarSaldo();
-                actualizarResumenCategoria();
-                actualizarListaTransacciones();
-                actualizarSelectCategorias();
-
-                // Guardar en localStorage
-                guardarTransacciones();
-                guardarCategorias();
-
-                ocultarCargando();
-                alert('Datos importados con éxito');
-            } catch (error) {
-                console.error('Error al importar datos:', error);
-                ocultarCargando();
-                alert('Error al importar datos. Por favor, asegúrese de que el archivo es válido.');
-            }
-        };
-        lector.readAsText(archivo);
-    }
-}
+const actualizarSelectCategorias = () => {
+    const selectCategoria = document.getElementById('categoria');
+    selectCategoria.innerHTML = AppState.categorias
+        .map(categoria => `
+            <option value="${categoria.toLowerCase()}">
+                ${capitalizarPalabras(categoria)}
+            </option>
+        `).join('');
+};
 
 // Event Listeners
-formulario.addEventListener('submit', e => {
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    EstadoManager.inicializar();
 
-    const descripcion = entradaDescripcion.value.trim();
-    const monto = parseFloat(entradaMonto.value);
-    const tipo = entradaTipo.value;
-    let categoria = entradaCategoria.value;
+    // Formulario principal
+    document.getElementById('formulario-transaccion')
+        .addEventListener('submit', handleSubmitFormulario);
 
-    if (isNaN(monto) || monto <= 0) {
-        alert('Por favor, ingrese un monto válido.');
-        return;
-    }
+    document.getElementById('categoria')
+        .addEventListener('change', handleCategoriaChange);
 
-    if (categoria === 'otro') {
-        const otraCategoria = entradaOtraCategoria.value.trim();
-        if (otraCategoria === '') {
-            alert('Por favor, especifique un nombre para la categoría "Otro".');
-            return;
+    // Botones de exportación
+    document.getElementById('exportar-excel')
+        .addEventListener('click', exportarExcel);
+
+    document.getElementById('exportar-pdf')
+        .addEventListener('click', exportarPDF);
+
+    document.getElementById('exportar-json')
+        .addEventListener('click', exportarJSON);
+
+    document.getElementById('importar-json')
+        .addEventListener('change', importarJSON);
+
+    // Delegación de eventos para acciones dinámicas
+    document.addEventListener('click', async (e) => {
+        const target = e.target.closest('button');
+        if (!target) return;
+
+        if (target.classList.contains('boton-eliminar')) {
+            const indice = target.dataset.indice;
+            await confirmarEliminarTransaccion(indice);
+        } else if (target.classList.contains('boton-editar-descripcion')) {
+            const indice = target.dataset.indice;
+            await editarDescripcion(indice);
+        } else if (target.classList.contains('boton-editar-monto')) {
+            const indice = target.dataset.indice;
+            await editarMonto(indice);
+        } else if (target.classList.contains('boton-editar-fecha')) {
+            const indice = target.dataset.indice;
+            await editarFecha(indice);
+        } else if (target.classList.contains('boton-eliminar-categoria')) {
+            const categoria = target.dataset.categoria;
+            await eliminarCategoria(categoria);
         }
-        categoria = otraCategoria;
-        if (!categorias.includes(categoria)) {
-            categorias.push(categoria);
-            actualizarSelectCategorias();
-            guardarCategorias();
-        }
-    }
-
-    const transaccion = {
-        descripcion: descripcion || null,
-        monto,
-        tipo,
-        categoria,
-        fecha: new Date().toISOString()
-    };
-    transacciones.push(transaccion);
-
-    if (tipo === 'ingreso') {
-        ingresos += monto;
-    } else {
-        gastos += monto;
-    }
-
-    actualizarSaldoCategoria(categoria, monto, tipo);
-    actualizarSaldo();
-    actualizarResumenCategoria();
-    actualizarListaTransacciones();
-    guardarTransacciones();
-
-    formulario.reset();
-    contenedorOtraCategoria.style.display = 'none';
+    });
 });
 
-entradaCategoria.addEventListener('change', (e) => {
-    if (e.target.value === 'otro') {
-        contenedorOtraCategoria.style.display = 'block';
-    } else {
-        contenedorOtraCategoria.style.display = 'none';
+// Exportación e importación
+const exportarExcel = async () => {
+    try {
+        const ws = XLSX.utils.json_to_sheet(AppState.transacciones.map(t => ({
+            Descripción: capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
+            Monto: t.monto,
+            Tipo: capitalizarPrimeraLetra(t.tipo),
+            Categoría: capitalizarPrimeraLetra(t.categoria),
+            Fecha: new Date(t.fecha).toLocaleDateString()
+        })));
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Transacciones");
+        XLSX.writeFile(wb, "Control De Gastos Personales.xlsx");
+
+        mostrarMensaje('Archivo Excel exportado con éxito', 'success');
+    } catch (error) {
+        mostrarMensaje('Error al exportar a Excel', 'error');
+        console.error('Error en exportación Excel:', error);
     }
-});
+};
 
-botonExportarExcel.addEventListener('click', exportarExcel);
-botonExportarPDF.addEventListener('click', exportarPDF);
-botonAgregarCategoria.addEventListener('click', () => {
-    const nuevaCategoria = prompt('Ingrese el nombre de la nueva categoría:');
-    if (nuevaCategoria && !categorias.includes(nuevaCategoria)) {
-        categorias.push(nuevaCategoria);
-        actualizarSelectCategorias();
-        guardarCategorias();
+const exportarPDF = async () => {
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.text("Control de Gastos Personales", 14, 15);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 25);
+        doc.text(`Saldo Total: $${formatearNumero(AppState.saldo)}`, 14, 35);
+        doc.text(`Total Ingresos: $${formatearNumero(AppState.ingresos)}`, 14, 45);
+        doc.text(`Total Gastos: $${formatearNumero(AppState.gastos)}`, 14, 55);
+
+        const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
+        const data = AppState.transacciones.map(t => [
+            capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
+            `$${formatearNumero(t.monto)}`,
+            capitalizarPrimeraLetra(t.tipo),
+            capitalizarPrimeraLetra(t.categoria),
+            new Date(t.fecha).toLocaleDateString()
+        ]);
+
+        doc.autoTable({
+            head: [columns],
+            body: data,
+            startY: 65,
+        });
+
+        doc.save("Control De Gastos Personales.pdf");
+        mostrarMensaje('Archivo PDF exportado con éxito', 'success');
+    } catch (error) {
+        mostrarMensaje('Error al exportar a PDF', 'error');
+        console.error('Error en exportación PDF:', error);
     }
-});
+};
 
-botonExportarJSON.addEventListener('click', exportarJSON);
-botonImportarJSON.addEventListener('change', importarJSON);
-botonTransferencia.addEventListener('click', mostrarModalTransferencia);
+const exportarJSON = async () => {
+    try {
+        const datos = {
+            transacciones: AppState.transacciones,
+            categorias: AppState.categorias
+        };
 
-function actualizarSelectCategorias() {
-    entradaCategoria.innerHTML = '';
-    categorias.forEach(categoria => {
-        const option = document.createElement('option');
-        option.value = categoria.toLowerCase();
-        option.textContent = capitalizarPalabras(categoria);
-        entradaCategoria.appendChild(option.cloneNode(true));
-    });
-}
+        const blob = new Blob([JSON.stringify(datos, null, 2)], {
+            type: "application/json"
+        });
 
-// Inicialización
-function inicializar() {
-    resumenCategoria = {};
-    ingresos = 0;
-    gastos = 0;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Control De Gastos Personales.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
 
-    transacciones.forEach(transaccion => {
-        if (transaccion.tipo === 'ingreso') {
-            ingresos += parseFloat(transaccion.monto);
-        } else {
-            gastos += parseFloat(transaccion.monto);
+        mostrarMensaje('Datos exportados con éxito', 'success');
+    } catch (error) {
+        mostrarMensaje('Error al exportar los datos', 'error');
+        console.error('Error en exportación JSON:', error);
+    }
+};
+
+const importarJSON = async (evento) => {
+    const archivo = evento.target.files[0];
+    if (!archivo) return;
+
+    try {
+        mostrarCargando();
+
+        const contenido = await new Promise((resolve, reject) => {
+            const lector = new FileReader();
+            lector.onload = e => resolve(e.target.result);
+            lector.onerror = () => reject(new Error('Error al leer el archivo'));
+            lector.readAsText(archivo);
+        });
+
+        const datos = JSON.parse(contenido);
+
+        if (!datos.transacciones || !Array.isArray(datos.transacciones) ||
+            !datos.categorias || !Array.isArray(datos.categorias)) {
+            throw new Error('Formato de archivo inválido');
         }
-        actualizarSaldoCategoria(transaccion.categoria, parseFloat(transaccion.monto), transaccion.tipo);
-    });
 
-    actualizarSaldo();
-    actualizarResumenCategoria();
-    actualizarListaTransacciones();
-    actualizarSelectCategorias();
-}
+        // Asegurar categoría "sin clasificar"
+        if (!datos.categorias.includes('sin clasificar')) {
+            datos.categorias.push('sin clasificar');
+        }
 
-// Función para capitalizar solo la primera letra de una palabra
-function capitalizarPrimeraLetra(str) {
-    if (!str) return '';
-    return str.toLowerCase().replace(/^\w/, c => c.toUpperCase());
-}
+        // Actualizar estado
+        AppState.transacciones = datos.transacciones;
+        AppState.categorias = datos.categorias;
 
-// Función para capitalizar la primera letra de cada palabra
-function capitalizarPalabras(str) {
-    if (!str) return '';
-    return str.toLowerCase().split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-}
+        await EstadoManager.recalcularTotales();
+        await EstadoManager.guardarCambios();
 
-function editarDescripcion(indice) {
-    const transaccion = transacciones[indice];
-    const fecha = new Date(transaccion.fecha).toLocaleDateString();
-    const seccionFecha = Array.from(document.querySelectorAll('.seccion-fecha')).find(
-        seccion => seccion.querySelector('.fecha-collapse span').textContent === (fecha === new Date().toLocaleDateString() ? 'Hoy' : fecha)
-    );
+        mostrarMensaje('Datos importados con éxito', 'success');
+    } catch (error) {
+        mostrarMensaje('Error al importar los datos', 'error');
+        console.error('Error en importación:', error);
+    } finally {
+        ocultarCargando();
+    }
+};
 
-    if (!seccionFecha) return;
-
-    const filas = seccionFecha.querySelectorAll('.item-transaccion');
-    const filaIndex = Array.from(filas).findIndex(fila => {
-        const montoTexto = fila.querySelector('.monto-texto').textContent.replace('$', '').trim();
-        const categoriaTexto = fila.querySelector('td:nth-child(4)').textContent;
-        const fechaTexto = new Date(transaccion.fecha).toLocaleDateString();
-        return montoTexto === formatearNumero(transaccion.monto) &&
-               categoriaTexto === capitalizarPalabras(transaccion.categoria) &&
-               fechaTexto === fecha;
-    });
-
-    if (filaIndex === -1) return;
-
-    const fila = filas[filaIndex];
-    const descripcionTexto = fila.querySelector('.descripcion-texto');
-    const descripcionInput = fila.querySelector('.editar-descripcion');
-    const botonEditar = fila.querySelector('.boton-editar-descripcion');
+// Funciones de edición y eliminación
+const editarDescripcion = async (indice) => {
+    const transaccion = AppState.transacciones[indice];
+    const descripcionTexto = document.querySelector(`[data-indice="${indice}"]`)
+        .closest('tr')
+        .querySelector('.descripcion-texto');
+    const descripcionInput = descripcionTexto.nextElementSibling;
+    const botonEditar = document.querySelector(`[data-indice="${indice}"]`);
 
     if (descripcionInput.style.display === 'none') {
         descripcionTexto.style.display = 'none';
@@ -693,41 +557,23 @@ function editarDescripcion(indice) {
         botonEditar.innerHTML = '<i data-feather="check"></i>';
     } else {
         const nuevaDescripcion = descripcionInput.value.trim();
-        transacciones[indice].descripcion = nuevaDescripcion || null;
+        transaccion.descripcion = nuevaDescripcion || null;
         descripcionTexto.textContent = capitalizarPalabras(nuevaDescripcion || 'Sin descripción');
         descripcionTexto.style.display = 'inline-block';
         descripcionInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="edit-2"></i>';
-        guardarTransacciones();
+        await EstadoManager.guardarCambios();
     }
     feather.replace();
-}
+};
 
-function editarMonto(indice) {
-    const transaccion = transacciones[indice];
-    const fecha = new Date(transaccion.fecha).toLocaleDateString();
-    const seccionFecha = Array.from(document.querySelectorAll('.seccion-fecha')).find(
-        seccion => seccion.querySelector('.fecha-collapse span').textContent === (fecha === new Date().toLocaleDateString() ? 'Hoy' : fecha)
-    );
-
-    if (!seccionFecha) return;
-
-    const filas = seccionFecha.querySelectorAll('.item-transaccion');
-    const filaIndex = Array.from(filas).findIndex(fila => {
-        const montoTexto = fila.querySelector('.monto-texto').textContent.replace('$', '').trim();
-        const categoriaTexto = fila.querySelector('td:nth-child(4)').textContent;
-        const fechaTexto = new Date(transaccion.fecha).toLocaleDateString();
-        return montoTexto === formatearNumero(transaccion.monto) &&
-               categoriaTexto === capitalizarPalabras(transaccion.categoria) &&
-               fechaTexto === fecha;
-    });
-
-    if (filaIndex === -1) return;
-
-    const fila = filas[filaIndex];
-    const montoTexto = fila.querySelector('.monto-texto');
-    const montoInput = fila.querySelector('.editar-monto');
-    const botonEditar = fila.querySelector('.boton-editar-monto');
+const editarMonto = async (indice) => {
+    const transaccion = AppState.transacciones[indice];
+    const montoTexto = document.querySelector(`[data-indice="${indice}"]`)
+        .closest('tr')
+        .querySelector('.monto-texto');
+    const montoInput = montoTexto.nextElementSibling;
+    const botonEditar = document.querySelector(`[data-indice="${indice}"]`);
 
     if (montoInput.style.display === 'none') {
         montoTexto.style.display = 'none';
@@ -737,100 +583,135 @@ function editarMonto(indice) {
     } else {
         const nuevoMonto = parseFloat(montoInput.value);
         if (isNaN(nuevoMonto) || nuevoMonto <= 0) {
-            alert('Por favor, ingrese un monto válido mayor que 0.');
+            mostrarMensaje('Por favor, ingrese un monto válido mayor que 0', 'error');
             return;
         }
 
         const montoAnterior = transaccion.monto;
-
-        // Actualizar saldos globales
-        if (transaccion.tipo === 'ingreso') {
-            ingresos = ingresos - montoAnterior + nuevoMonto;
-        } else {
-            gastos = gastos - montoAnterior + nuevoMonto;
-        }
-
-        // Actualizar saldo de categoría
-        actualizarSaldoCategoria(transaccion.categoria, montoAnterior, transaccion.tipo === 'ingreso' ? 'gasto' : 'ingreso');
-        actualizarSaldoCategoria(transaccion.categoria, nuevoMonto, transaccion.tipo);
-
-        // Actualizar transacción
         transaccion.monto = nuevoMonto;
+
+        await EstadoManager.recalcularTotales();
+        await EstadoManager.guardarCambios();
+
         montoTexto.textContent = `$${formatearNumero(nuevoMonto)}`;
         montoTexto.style.display = 'inline-block';
         montoInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="dollar-sign"></i>';
-
-        // Actualizar UI y guardar cambios
-        actualizarSaldo();
-        actualizarResumenCategoria();
-        guardarTransacciones();
     }
     feather.replace();
-}
+};
 
-function editarFecha(indice) {
-    const transaccion = transacciones[indice];
-    const fecha = new Date(transaccion.fecha).toLocaleDateString();
-    const seccionFecha = Array.from(document.querySelectorAll('.seccion-fecha')).find(
-        seccion => seccion.querySelector('.fecha-collapse span').textContent === (fecha === new Date().toLocaleDateString() ? 'Hoy' : fecha)
-    );
-
-    if (!seccionFecha) return;
-
-    const filas = seccionFecha.querySelectorAll('.item-transaccion');
-    const filaIndex = Array.from(filas).findIndex(fila => {
-        const montoTexto = fila.querySelector('.monto-texto').textContent.replace('$', '').trim();
-        const categoriaTexto = fila.querySelector('td:nth-child(4)').textContent;
-        const fechaTexto = new Date(transaccion.fecha).toLocaleDateString();
-        return montoTexto === formatearNumero(transaccion.monto) &&
-               categoriaTexto === capitalizarPalabras(transaccion.categoria) &&
-               fechaTexto === fecha;
-    });
-
-    if (filaIndex === -1) return;
-
-    const fila = filas[filaIndex];
-    const fechaTexto = fila.querySelector('.fecha-texto');
-    const fechaInput = fila.querySelector('.editar-fecha');
-    const botonEditar = fila.querySelector('.boton-editar-fecha');
+const editarFecha = async (indice) => {
+    const transaccion = AppState.transacciones[indice];
+    const fechaTexto = document.querySelector(`[data-indice="${indice}"]`)
+        .closest('tr')
+        .querySelector('.fecha-texto');
+    const fechaInput = fechaTexto.nextElementSibling;
+    const botonEditar = document.querySelector(`[data-indice="${indice}"]`);
 
     if (fechaInput.style.display === 'none') {
         fechaTexto.style.display = 'none';
         fechaInput.style.display = 'inline-block';
         fechaInput.type = 'datetime-local';
-        fechaInput.value = transaccion.fecha.slice(0, 16); // Formato YYYY-MM-DDTHH:mm
+        fechaInput.value = transaccion.fecha.slice(0, 16);
         fechaInput.focus();
         botonEditar.innerHTML = '<i data-feather="check"></i>';
     } else {
         const nuevaFecha = fechaInput.value;
         if (!nuevaFecha) {
-            alert('Por favor, seleccione una fecha y hora válida.');
+            mostrarMensaje('Por favor, seleccione una fecha y hora válida', 'error');
             return;
         }
 
-        transacciones[indice].fecha = new Date(nuevaFecha).toISOString();
-        fechaTexto.textContent = formatearFechaHora(transacciones[indice].fecha);
+        transaccion.fecha = new Date(nuevaFecha).toISOString();
+        fechaTexto.textContent = formatearFechaHora(transaccion.fecha);
         fechaTexto.style.display = 'inline-block';
         fechaInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="calendar"></i>';
-        actualizarListaTransacciones();
-        guardarTransacciones();
+
+        await EstadoManager.guardarCambios();
     }
     feather.replace();
-}
+};
 
-
-// Función para confirmar eliminación de transacción
-function confirmarEliminarTransaccion(indice) {
-    const transaccion = transacciones[indice];
-    const mensaje = `¿Está seguro que desea eliminar esta transacción?\n\nDescripción: ${transaccion.descripcion || 'Sin descripción'}\nMonto: $${formatearNumero(transaccion.monto)}\nTipo: ${capitalizarPrimeraLetra(transaccion.tipo)}\nCategoría: ${capitalizarPalabras(transaccion.categoria)}`;
+const confirmarEliminarTransaccion = async (indice) => {
+    const transaccion = AppState.transacciones[indice];
+    const mensaje = `¿Está seguro que desea eliminar esta transacción?\n\n` +
+        `Descripción: ${transaccion.descripcion || 'Sin descripción'}\n` +
+        `Monto: $${formatearNumero(transaccion.monto)}\n` +
+        `Tipo: ${capitalizarPrimeraLetra(transaccion.tipo)}\n` +
+        `Categoría: ${capitalizarPalabras(transaccion.categoria)}`;
 
     if (confirm(mensaje)) {
-        eliminarTransaccion(indice);
+        await eliminarTransaccion(indice);
     }
-}
+};
 
-// Inicializar la aplicación
-inicializar();
+const eliminarTransaccion = async (indice) => {
+    try {
+        AppState.transacciones.splice(indice, 1);
+        await EstadoManager.recalcularTotales();
+        await EstadoManager.guardarCambios();
+        mostrarMensaje('Transacción eliminada con éxito', 'success');
+    } catch (error) {
+        mostrarMensaje('Error al eliminar la transacción', 'error');
+        console.error('Error al eliminar transacción:', error);
+    }
+};
+
+const eliminarCategoria = async (categoria) => {
+    try {
+        if (categoria.toLowerCase() === 'sin clasificar') {
+            mostrarMensaje('No se puede eliminar la categoría "Sin clasificar"', 'error');
+            return;
+        }
+
+        const index = AppState.categorias.findIndex(
+            cat => cat.toLowerCase() === categoria.toLowerCase()
+        );
+
+        if (index === -1) {
+            mostrarMensaje('Categoría no encontrada', 'error');
+            return;
+        }
+
+        // Mover transacciones a "sin clasificar"
+        AppState.transacciones = AppState.transacciones.map(trans => {
+            if (trans.categoria.toLowerCase() === categoria.toLowerCase()) {
+                return { ...trans, categoria: 'sin clasificar' };
+            }
+            return trans;
+        });
+
+        AppState.categorias.splice(index, 1);
+
+        await EstadoManager.recalcularTotales();
+        await EstadoManager.guardarCambios();
+
+        mostrarMensaje('Categoría eliminada con éxito', 'success');
+    } catch (error) {
+        mostrarMensaje('Error al eliminar la categoría', 'error');
+        console.error('Error al eliminar categoría:', error);
+    }
+};
+
+// Funciones de UI
+const mostrarCargando = () => {
+    const cargando = document.createElement('div');
+    cargando.className = 'cargando';
+    cargando.innerHTML = `
+        <div class="cargando-contenido">
+            <div class="cargando-spinner"></div>
+            <p>Procesando datos...</p>
+        </div>
+    `;
+    document.body.appendChild(cargando);
+};
+
+const ocultarCargando = () => {
+    const cargando = document.querySelector('.cargando');
+    if (cargando) {
+        cargando.remove();
+    }
+};
 

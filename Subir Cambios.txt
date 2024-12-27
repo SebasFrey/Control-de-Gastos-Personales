@@ -1,12 +1,15 @@
 git add .
-git commit -m "Actualización 1.41.1 - Mejoras en funcionalidad y documentación:
+git commit -m "Actualización 1.42.0 - Mejoras significativas en estructura y rendimiento:
 
-- Implementada eliminación inmediata de transacciones
-- Optimizada la gestión de categorías
-- Mejorada la actualización del resumen financiero
-- Refinada la estructura de commits
-- Actualizada la documentación del proyecto
-- Optimizado el rendimiento general"
+- Refactorizado el código JavaScript para mejor gestión del estado
+- Optimizado el CSS eliminando reglas duplicadas
+- Mejorada la validación de formularios
+- Implementado manejo asíncrono de operaciones
+- Añadidas transiciones y efectos visuales
+- Mejorada la accesibilidad y responsividad
+- Optimizado el manejo de errores y mensajes al usuario
+- Implementada gestión centralizada del estado
+- Mejorada la documentación del código"
 
 git push -u origin fuegote
 
