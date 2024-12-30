@@ -1,0 +1,10 @@
+git add .
+git commit -m "Actualización 1.44.8 - De la rabia no hare commit >:v"
+
+git push -u origin fuegote
+
+git checkout main
+git pull origin main
+git merge fuegote
+git push origin main
+git checkout fuegote
