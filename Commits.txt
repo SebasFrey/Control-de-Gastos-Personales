@@ -1,5 +1,5 @@
 git add .
-git commit -m "Actualización 1.46.0 - Mejoras en el diseño del resumen por categorías y correcciones de estilo"
+git commit -m "Actualización 1.46.2 - Actualización del README para reflejar los cambios recientes y mantener la estructura"
 
 git push -u origin fuegote
 
@@ -9,18 +9,3 @@ git merge fuegote
 git push origin main
 git checkout fuegote
 
-
-git add .
-git commit -m "Actualización 1.46.0 - Mejoras en el diseño del resumen por categorías y correcciones de estilo"
-
-git push -u origin main
-
-git checkout fuegote
-
-git pull origin fuegote
-
-git merge main
-
-git push origin fuegote
-
-git checkout main
