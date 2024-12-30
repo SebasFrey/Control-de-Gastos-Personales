@@ -324,21 +324,21 @@ const crearSeccionFecha = (fecha, transacciones) => {
         const tr = document.createElement('tr');
         tr.className = `item-transaccion ${transaccion.tipo}`;
         tr.innerHTML = `
-            <td>
+            <td data-label="Descripción">
                 <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
                 <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
             </td>
-            <td>
+            <td data-label="Monto">
                 <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
                 <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
             </td>
-            <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
-            <td>${capitalizarPalabras(transaccion.categoria)}</td>
-            <td>
+            <td data-label="Tipo">${capitalizarPrimeraLetra(transaccion.tipo)}</td>
+            <td data-label="Categoría">${capitalizarPalabras(transaccion.categoria)}</td>
+            <td data-label="Fecha">
                 <span class="fecha-texto">${formatearFechaHora(transaccion.fecha)}</span>
                 <input type="datetime-local" class="editar-fecha" style="display: none;" value="${transaccion.fecha.slice(0, 16)}">
             </td>
-            <td>
+            <td data-label="Acciones">
                 <div class="acciones-transaccion">
                     <button class="boton-editar-descripcion" data-indice="${indice}" title="Editar descripción">
                         <i data-feather="edit-2"></i>
