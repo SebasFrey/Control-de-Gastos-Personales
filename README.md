@@ -22,6 +22,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Importar datos desde un archivo JSON previamente exportado.
 - Modo oscuro mejorado para mejor visualización en entornos con poca luz.
 - Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
+- Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
 
 ## Tecnologías utilizadas
 
@@ -71,6 +72,8 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Consolidación de variables CSS duplicadas.
 - Implementación de memoización para operaciones de renderizado.
 - Mejora de la accesibilidad mediante la actualización de atributos ARIA y ajuste de colores para mejor contraste.
+- Adaptación del historial de transacciones para dispositivos móviles, simplificando la tabla y optimizando el scroll horizontal.
+- Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
 
 ## Desarrollo futuro
 
@@ -78,4 +81,3 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Agregar la opción de crear presupuestos y metas de ahorro.
 - Añadir soporte para múltiples cuentas y monedas.
 - Implementar un sistema de respaldo en la nube.
-

@@ -535,8 +535,20 @@ const importarJSON = async (evento) => {
     }
 };
 
-// Event Listeners
+// Función para alternar el modo oscuro
+const toggleDarkMode = () => {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+};
+
+// Aplicar el modo oscuro si está habilitado en localStorage
 document.addEventListener('DOMContentLoaded', () => {
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+    }
+
     EstadoManager.inicializar();
 
     // Formulario principal
@@ -558,6 +570,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('importar-json')
         .addEventListener('change', importarJSON);
+
+    // Botón para alternar el modo oscuro
+    document.getElementById('toggle-dark-mode').addEventListener('click', toggleDarkMode);
 
     // Delegación de eventos para acciones dinámicas
     document.addEventListener('click', async (e) => {

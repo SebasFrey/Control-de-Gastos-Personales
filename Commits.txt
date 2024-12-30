@@ -1,5 +1,5 @@
 git add .
-git commit -m "Actualización 1.48.0 - Optimización de recursos, consolidación de variables CSS, memoización de operaciones de renderizado, y mejoras de accesibilidad"
+git commit -m "Actualización 1.49.8 - Mejoras en la consistencia visual, modo oscuro y diseño acordeón para historial de transacciones"
 
 git push -u origin fuegote
 
@@ -8,4 +8,3 @@ git pull origin main
 git merge fuegote
 git push origin main
 git checkout fuegote
-
