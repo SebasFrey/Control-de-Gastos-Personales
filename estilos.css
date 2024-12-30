@@ -1,16 +1,3 @@
-/* Agrupar variables CSS relacionadas */
-:root {
-  --color-principal: #3498db;
-  --color-secundario: #2ecc71;
-  --color-error: #e74c3c;
-  --color-fondo: #ecf0f1;
-  --color-texto: #2c3e50;
-  --fuente-principal: 'Roboto', sans-serif;
-  --tamano-fuente: 16px;
-  --espaciado: 1rem;
-  --transicion: 0.3s ease;
-}
-
 :root {
   /* Colores base */
   --color-fondo: #f8f9fa;
@@ -35,6 +22,11 @@
   --sombra-media: 0 4px 6px rgba(0, 0, 0, 0.1);
   --sombra-fuerte: 0 8px 16px rgba(0, 0, 0, 0.1);
   --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Tipografía */
+  --fuente-principal: 'Roboto', sans-serif;
+  --tamano-fuente: 16px;
+  --espaciado: 1rem;
 }
 
 /* Reset y estilos base */
