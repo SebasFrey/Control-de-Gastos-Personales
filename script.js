@@ -316,7 +316,7 @@ const crearSeccionFecha = (fecha, transacciones) => {
     if (!esHoy) {
         contenido.style.maxHeight = '0';
     } else {
-        contenido.style.maxHeight = '1000px'; // Ajustar según sea necesario
+        contenido.style.maxHeight = `${contenido.scrollHeight}px`; // Ajustar según sea necesario
     }
 
     const tabla = document.createElement('table');
@@ -383,7 +383,7 @@ const crearSeccionFecha = (fecha, transacciones) => {
         encabezado.setAttribute('aria-expanded', !estaExpandido);
         const icono = encabezado.querySelector('.icono-colapsar');
         icono.setAttribute('data-feather', !estaExpandido ? 'chevron-down' : 'chevron-right');
-        contenido.style.maxHeight = !estaExpandido ? '1000px' : '0'; // Ajustar según sea necesario
+        contenido.style.maxHeight = !estaExpandido ? `${contenido.scrollHeight}px` : '0'; // Ajustar según sea necesario
         feather.replace();
     });
 

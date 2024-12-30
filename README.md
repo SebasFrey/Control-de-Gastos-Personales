@@ -76,6 +76,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
 - Eliminación del botón "Agregar Nueva Categoría".
 - Mejora en la transición del modo oscuro.
+- Mejora en la visibilidad de las transacciones en dispositivos móviles.
 
 ## Desarrollo futuro
 

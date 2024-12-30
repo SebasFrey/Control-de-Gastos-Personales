@@ -406,7 +406,7 @@ button:active,
 }
 
 .encabezado-fecha[aria-expanded="true"] + .contenido-fecha {
-  max-height: 1000px; /* Ajustar según sea necesario */
+  max-height: none; /* Ajustar según sea necesario */
   padding: 1rem;
 }
 
