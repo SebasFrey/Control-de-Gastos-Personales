@@ -20,7 +20,6 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Agregar nuevas categorías personalizadas.
 - Exportar todas las transacciones en formato Excel (.xlsx), PDF y JSON con nombres de archivo mejorados ("Control De Gastos Personales").
 - Importar datos desde un archivo JSON previamente exportado.
-- Modo oscuro mejorado para mejor visualización en entornos con poca luz.
 - Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
 - Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
 
@@ -47,13 +46,11 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
     - Utiliza los botones de exportación para guardar tus datos en formato Excel, PDF o JSON.
 5. **Importar Datos**:
     - Haz clic en "Importar datos" y selecciona un archivo JSON con tus datos.
-6. **Modo Oscuro**:
-    - Cambia entre modo claro y oscuro con el botón en la esquina superior derecha.
 
 ## Estructura del proyecto
 
 - `index.html`: Estructura HTML de la aplicación.
-- `estilos.css`: Estilos CSS para la interfaz de usuario, incluyendo diseño responsivo y modo oscuro mejorado.
+- `estilos.css`: Estilos CSS para la interfaz de usuario, incluyendo diseño responsivo.
 - `script.js`: Lógica de JavaScript para la funcionalidad de la aplicación.
 - `README.md`: Este archivo, que proporciona información sobre el proyecto.
 
@@ -63,7 +60,6 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Actualización automática de saldos financieros y por categoría al editar montos.
 - Implementación de la actualización automática de saldos por categoría al agregar o eliminar transacciones.
 - Implementación de la funcionalidad para editar descripciones de transacciones.
-- Mejora en la paleta de colores para el modo oscuro.
 - Optimización del diseño para dispositivos móviles.
 - Implementación de exportación de datos a JSON para respaldo.
 - Adición de funcionalidad para importar datos desde archivos JSON.
@@ -75,10 +71,9 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Adaptación del historial de transacciones para dispositivos móviles, simplificando la tabla y optimizando el scroll horizontal.
 - Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
 - Eliminación del botón "Agregar Nueva Categoría".
-- Mejora en la transición del modo oscuro.
 - Mejora en la visibilidad de las transacciones en dispositivos móviles.
-- Mejora en los colores del modo oscuro para mejor contraste y legibilidad.
 - Mejora en la funcionalidad en dispositivos móviles.
+- Eliminación del modo oscuro.
 
 ## Desarrollo futuro
 

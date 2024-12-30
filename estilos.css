@@ -46,45 +46,6 @@ body {
   padding: 1rem;
 }
 
-/* Modo oscuro */
-body.dark-mode {
-  --color-fondo: #121212;
-  --color-texto: #e0e0e0;
-  --color-primario: #bb86fc;
-  --color-secundario: #03dac6;
-  --color-acento: #1f1f1f;
-  --color-blanco: #121212;
-
-  background-color: var(--color-fondo);
-  color: var(--color-texto);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.dark-mode .tarjeta,
-body.dark-mode .categoria-item,
-body.dark-mode .encabezado-fecha,
-body.dark-mode .contenido-fecha {
-  background-color: var(--color-acento);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.dark-mode .encabezado-fecha:hover {
-  background-color: var(--color-secundario);
-}
-
-body.dark-mode .mensaje {
-  background-color: var(--color-acento);
-  color: var(--color-texto);
-}
-
-body.dark-mode .mensaje-success {
-  border-left-color: var(--color-exito);
-}
-
-body.dark-mode .mensaje-error {
-  border-left-color: var(--color-error);
-}
-
 /* Header y navegación */
 header {
   background-color: var(--color-primario);
@@ -406,7 +367,7 @@ button:active,
 }
 
 .encabezado-fecha[aria-expanded="true"] + .contenido-fecha {
-  max-height: none; /* Ajustar según sea necesario */
+  max-height: 1000px; /* Ajustar según sea necesario */
   padding: 1rem;
 }
 
