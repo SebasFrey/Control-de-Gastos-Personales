@@ -1,5 +1,9 @@
 git add .
+<<<<<<< HEAD
 git commit -m "Actualización 1.44.8 - De la rabia no hare commit >:v"
+=======
+git commit -m "Actualización 1.44.0 - De la pura rabia no hare commit >:v"
+>>>>>>> f262ac296ec1bb8f112c1bc39880effa7f787f45
 
 git push -u origin fuegote
 
