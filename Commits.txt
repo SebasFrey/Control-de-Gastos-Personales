@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 git add .
 git commit -m "Actualización 1.46.0 - Mejoras en el diseño del resumen por categorías y correcciones de estilo"
 
@@ -24,3 +25,15 @@ git merge main
 git push origin fuegote
 
 git checkout main
+=======
+git add .
+git commit -m "Actualización 1.44.8 - De la rabia no hare commit >:v"
+
+git push -u origin fuegote
+
+git checkout main
+git pull origin main
+git merge fuegote
+git push origin main
+git checkout fuegote
+>>>>>>> beb696ba8b606c32920a853fdef0c5034df38ce3
