@@ -78,6 +78,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Mejora en la transición del modo oscuro.
 - Mejora en la visibilidad de las transacciones en dispositivos móviles.
 - Mejora en los colores del modo oscuro para mejor contraste y legibilidad.
+- Mejora en la funcionalidad en dispositivos móviles.
 
 ## Desarrollo futuro
 
