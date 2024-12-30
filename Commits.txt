@@ -1,5 +1,5 @@
 git add .
-git commit -m "Actualización 1.47.0 - Optimización de recursos, consolidación de variables CSS, y memoización de operaciones de renderizado"
+git commit -m "Actualización 1.48.0 - Optimización de recursos, consolidación de variables CSS, memoización de operaciones de renderizado, y mejoras de accesibilidad"
 
 git push -u origin fuegote
 

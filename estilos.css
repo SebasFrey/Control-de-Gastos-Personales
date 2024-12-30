@@ -1,7 +1,7 @@
 :root {
   /* Colores base */
-  --color-fondo: #f8f9fa;
-  --color-texto: #2d3436;
+  --color-fondo: #ffffff; /* Ajustado para mejor contraste */
+  --color-texto: #1a1a1a; /* Ajustado para mejor contraste */
   --color-primario: #000000;
   --color-secundario: #4a4a4a;
   --color-acento: #e0e0e0;

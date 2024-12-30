@@ -158,6 +158,8 @@ const mostrarMensaje = (mensaje, tipo = 'info') => {
     const mensajeElement = document.createElement('div');
     mensajeElement.className = `mensaje mensaje-${tipo}`;
     mensajeElement.textContent = mensaje;
+    mensajeElement.setAttribute('role', 'alert');
+    mensajeElement.setAttribute('aria-live', 'assertive');
 
     contenedor.appendChild(mensajeElement);
 
@@ -178,13 +180,19 @@ const handleSubmitFormulario = async (e) => {
             const elementoError = document.getElementById(`error-${campo}`);
             if (elementoError) {
                 elementoError.textContent = mensaje;
+                elementoError.setAttribute('role', 'alert');
+                elementoError.setAttribute('aria-live', 'assertive');
             }
         });
         return;
     }
 
     // Limpiar mensajes de error previos
-    document.querySelectorAll('.mensaje-error').forEach(el => el.textContent = '');
+    document.querySelectorAll('.mensaje-error').forEach(el => {
+        el.textContent = '';
+        el.removeAttribute('role');
+        el.removeAttribute('aria-live');
+    });
 
     try {
         let categoria = formData.get('categoria');

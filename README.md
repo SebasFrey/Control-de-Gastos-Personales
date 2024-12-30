@@ -70,6 +70,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Optimización de la carga de recursos externos mediante importación dinámica.
 - Consolidación de variables CSS duplicadas.
 - Implementación de memoización para operaciones de renderizado.
+- Mejora de la accesibilidad mediante la actualización de atributos ARIA y ajuste de colores para mejor contraste.
 
 ## Desarrollo futuro
 
