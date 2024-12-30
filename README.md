@@ -58,6 +58,12 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
   - LocalStorage
   - Async/Await
 
+### Instalación
+
+1. Clonar el repositorio
+2. No requiere instalación de dependencias
+3. Abrir `index.html` en el navegador
+
 ### Uso
 
 1. Gestión de Transacciones
@@ -101,4 +107,18 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - [ ] Sincronización en la nube
 - [ ] Múltiples monedas
 
+### Contribución
 
+1. Fork del repositorio
+2. Crear rama (`git checkout -b feature/MiMejora`)
+3. Commit (`git commit -m 'Añadir MiMejora'`)
+4. Push (`git push origin feature/MiMejora`)
+5. Pull Request
+
+### Licencia
+
+MIT License - ver `LICENSE` para detalles
+
+### Soporte
+
+Para bugs o sugerencias, crear un issue en el repositorio.
