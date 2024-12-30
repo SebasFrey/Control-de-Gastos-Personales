@@ -29,8 +29,8 @@
       <h1>Control de Gastos Personales</h1>
     </header>
     <main>
-      <section id="seccion-formulario" role="form">
-        <h2>Nueva Transacción</h2>
+      <section id="seccion-formulario" role="form" aria-labelledby="titulo-formulario">
+        <h2 id="titulo-formulario">Nueva Transacción</h2>
         <form id="formulario-transaccion" novalidate>
           <div class="grupo-formulario">
             <label for="monto">Monto <span aria-hidden="true">*</span></label>
@@ -44,21 +44,22 @@
                 min="0.01"
                 required
                 aria-required="true"
+                aria-describedby="error-monto"
                 placeholder="Ingrese el monto"
               />
             </div>
-            <div class="mensaje-error" id="error-monto"></div>
+            <div class="mensaje-error" id="error-monto" role="alert"></div>
           </div>
           <div class="grupo-formulario">
             <label for="tipo">Tipo <span aria-hidden="true">*</span></label>
             <div class="input-container">
               <i data-feather="repeat" class="input-icon"></i>
-              <select id="tipo" name="tipo" required aria-required="true">
+              <select id="tipo" name="tipo" required aria-required="true" aria-describedby="error-tipo">
                 <option value="ingreso">Ingreso</option>
                 <option value="gasto">Gasto</option>
               </select>
             </div>
-            <div class="mensaje-error" id="error-tipo"></div>
+            <div class="mensaje-error" id="error-tipo" role="alert"></div>
           </div>
           <div class="grupo-formulario">
             <label for="categoria"
@@ -71,12 +72,13 @@
                 name="categoria"
                 required
                 aria-required="true"
+                aria-describedby="error-categoria"
               >
                 <option value="sin clasificar">Sin clasificar</option>
                 <option value="otro">Otro</option>
               </select>
             </div>
-            <div class="mensaje-error" id="error-categoria"></div>
+            <div class="mensaje-error" id="error-categoria" role="alert"></div>
           </div>
           <div
             class="grupo-formulario"
@@ -96,9 +98,10 @@
                 pattern="[A-Za-zÀ-ÿ\s]{2,30}"
                 minlength="2"
                 maxlength="30"
+                aria-describedby="error-otra-categoria"
               />
             </div>
-            <div class="mensaje-error" id="error-otra-categoria"></div>
+            <div class="mensaje-error" id="error-otra-categoria" role="alert"></div>
           </div>
           <div class="grupo-formulario">
             <label for="descripcion">Descripción</label>

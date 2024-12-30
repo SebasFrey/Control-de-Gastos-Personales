@@ -291,6 +291,9 @@ const crearSeccionFecha = (fecha, transacciones) => {
     const encabezado = document.createElement('div');
     encabezado.className = 'encabezado-fecha';
     encabezado.setAttribute('aria-expanded', esHoy);
+    encabezado.setAttribute('role', 'button');
+    encabezado.setAttribute('tabindex', '0');
+    encabezado.setAttribute('aria-controls', `contenido-${fecha}`);
     encabezado.innerHTML = `
         <div class="fecha-collapse">
             <i data-feather="${esHoy ? 'chevron-down' : 'chevron-right'}" class="icono-colapsar"></i>
@@ -301,6 +304,7 @@ const crearSeccionFecha = (fecha, transacciones) => {
 
     const contenido = document.createElement('div');
     contenido.className = 'contenido-fecha';
+    contenido.id = `contenido-${fecha}`;
     if (!esHoy) {
         contenido.style.maxHeight = '0';
     } else {
@@ -309,15 +313,16 @@ const crearSeccionFecha = (fecha, transacciones) => {
 
     const tabla = document.createElement('table');
     tabla.className = 'tabla-transacciones-dia';
+    tabla.setAttribute('role', 'table');
     tabla.innerHTML = `
         <thead>
             <tr>
-                <th>Descripción</th>
-                <th>Monto</th>
-                <th>Tipo</th>
-                <th>Categoría</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -343,16 +348,16 @@ const crearSeccionFecha = (fecha, transacciones) => {
             </td>
             <td data-label="Acciones">
                 <div class="acciones-transaccion">
-                    <button class="boton-editar-descripcion" data-indice="${indice}" title="Editar descripción">
+                    <button class="boton-editar-descripcion" data-indice="${indice}" title="Editar descripción" aria-label="Editar descripción">
                         <i data-feather="edit-2"></i>
                     </button>
-                    <button class="boton-editar-monto" data-indice="${indice}" title="Editar monto">
+                    <button class="boton-editar-monto" data-indice="${indice}" title="Editar monto" aria-label="Editar monto">
                         <i data-feather="dollar-sign"></i>
                     </button>
-                    <button class="boton-editar-fecha" data-indice="${indice}" title="Editar fecha">
+                    <button class="boton-editar-fecha" data-indice="${indice}" title="Editar fecha" aria-label="Editar fecha">
                         <i data-feather="calendar"></i>
                     </button>
-                    <button class="boton-eliminar" data-indice="${indice}" title="Eliminar transacción">
+                    <button class="boton-eliminar" data-indice="${indice}" title="Eliminar transacción" aria-label="Eliminar transacción">
                         <i data-feather="trash-2"></i>
                     </button>
                 </div>
@@ -372,6 +377,13 @@ const crearSeccionFecha = (fecha, transacciones) => {
         icono.setAttribute('data-feather', !estaExpandido ? 'chevron-down' : 'chevron-right');
         contenido.style.maxHeight = !estaExpandido ? '1000px' : '0'; // Ajustar según sea necesario
         feather.replace();
+    });
+
+    encabezado.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            encabezado.click();
+        }
     });
 
     return seccion;
