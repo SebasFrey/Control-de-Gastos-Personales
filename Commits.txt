@@ -1,5 +1,5 @@
 git add .
-git commit -m "Actualización 1.44.8 - De la rabia no hare commit >:v"
+git commit -m "Actualización 1.46.0 - Mejoras en el diseño del resumen por categorías y correcciones de estilo"
 
 git push -u origin fuegote
 

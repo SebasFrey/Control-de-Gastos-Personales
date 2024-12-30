@@ -125,7 +125,7 @@ const validarFormulario = (formData) => {
 
     // Validar monto
     const monto = parseFloat(formData.get('monto'));
-    if (!monto || isNaN(monto) || monto <= 0) {
+    if (!monto || monto <= 0) {
         errores.monto = 'Ingrese un monto válido mayor que 0';
     }
 
@@ -290,6 +290,10 @@ const crearSeccionFecha = (fecha, transacciones) => {
     const esHoy = fecha === new Date().toLocaleDateString();
     const encabezado = document.createElement('div');
     encabezado.className = 'encabezado-fecha';
+    encabezado.setAttribute('aria-expanded', esHoy);
+    encabezado.setAttribute('role', 'button');
+    encabezado.setAttribute('tabindex', '0');
+    encabezado.setAttribute('aria-controls', `contenido-${fecha}`);
     encabezado.innerHTML = `
         <div class="fecha-collapse">
             <i data-feather="${esHoy ? 'chevron-down' : 'chevron-right'}" class="icono-colapsar"></i>
@@ -300,21 +304,25 @@ const crearSeccionFecha = (fecha, transacciones) => {
 
     const contenido = document.createElement('div');
     contenido.className = 'contenido-fecha';
+    contenido.id = `contenido-${fecha}`;
     if (!esHoy) {
-        contenido.style.display = 'none';
+        contenido.style.maxHeight = '0';
+    } else {
+        contenido.style.maxHeight = '1000px'; // Ajustar según sea necesario
     }
 
     const tabla = document.createElement('table');
     tabla.className = 'tabla-transacciones-dia';
+    tabla.setAttribute('role', 'table');
     tabla.innerHTML = `
         <thead>
             <tr>
-                <th>Descripción</th>
-                <th>Monto</th>
-                <th>Tipo</th>
-                <th>Categoría</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -324,32 +332,32 @@ const crearSeccionFecha = (fecha, transacciones) => {
         const tr = document.createElement('tr');
         tr.className = `item-transaccion ${transaccion.tipo}`;
         tr.innerHTML = `
-            <td>
+            <td data-label="Descripción">
                 <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
                 <input type="text" class="editar-descripcion" style="display: none;" value="${transaccion.descripcion || ''}">
             </td>
-            <td>
+            <td data-label="Monto">
                 <span class="monto-texto">$${formatearNumero(transaccion.monto)}</span>
                 <input type="number" step="0.01" min="0.01" class="editar-monto" style="display: none;" value="${transaccion.monto}">
             </td>
-            <td>${capitalizarPrimeraLetra(transaccion.tipo)}</td>
-            <td>${capitalizarPalabras(transaccion.categoria)}</td>
-            <td>
+            <td data-label="Tipo">${capitalizarPrimeraLetra(transaccion.tipo)}</td>
+            <td data-label="Categoría">${capitalizarPalabras(transaccion.categoria)}</td>
+            <td data-label="Fecha">
                 <span class="fecha-texto">${formatearFechaHora(transaccion.fecha)}</span>
                 <input type="datetime-local" class="editar-fecha" style="display: none;" value="${transaccion.fecha.slice(0, 16)}">
             </td>
-            <td>
+            <td data-label="Acciones">
                 <div class="acciones-transaccion">
-                    <button class="boton-editar-descripcion" data-indice="${indice}" title="Editar descripción">
+                    <button class="boton-editar-descripcion" data-indice="${indice}" title="Editar descripción" aria-label="Editar descripción">
                         <i data-feather="edit-2"></i>
                     </button>
-                    <button class="boton-editar-monto" data-indice="${indice}" title="Editar monto">
+                    <button class="boton-editar-monto" data-indice="${indice}" title="Editar monto" aria-label="Editar monto">
                         <i data-feather="dollar-sign"></i>
                     </button>
-                    <button class="boton-editar-fecha" data-indice="${indice}" title="Editar fecha">
+                    <button class="boton-editar-fecha" data-indice="${indice}" title="Editar fecha" aria-label="Editar fecha">
                         <i data-feather="calendar"></i>
                     </button>
-                    <button class="boton-eliminar" data-indice="${indice}" title="Eliminar transacción">
+                    <button class="boton-eliminar" data-indice="${indice}" title="Eliminar transacción" aria-label="Eliminar transacción">
                         <i data-feather="trash-2"></i>
                     </button>
                 </div>
@@ -363,11 +371,19 @@ const crearSeccionFecha = (fecha, transacciones) => {
     seccion.appendChild(contenido);
 
     encabezado.addEventListener('click', () => {
+        const estaExpandido = encabezado.getAttribute('aria-expanded') === 'true';
+        encabezado.setAttribute('aria-expanded', !estaExpandido);
         const icono = encabezado.querySelector('.icono-colapsar');
-        const estaVisible = contenido.style.display !== 'none';
-        contenido.style.display = estaVisible ? 'none' : 'block';
-        icono.setAttribute('data-feather', estaVisible ? 'chevron-right' : 'chevron-down');
+        icono.setAttribute('data-feather', !estaExpandido ? 'chevron-down' : 'chevron-right');
+        contenido.style.maxHeight = !estaExpandido ? '1000px' : '0'; // Ajustar según sea necesario
         feather.replace();
+    });
+
+    encabezado.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            encabezado.click();
+        }
     });
 
     return seccion;
