@@ -1,5 +1,5 @@
 git add .
-git commit -m "Actualización 1.44.0 - De la pura rabia no hare commit >:v"
+git commit -m "Actualización 1.45.0 - De la pura rabia no hare commit >:v"
 
 git push -u origin fuegote
 
