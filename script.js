@@ -125,7 +125,7 @@ const validarFormulario = (formData) => {
 
     // Validar monto
     const monto = parseFloat(formData.get('monto'));
-    if (!monto || isNaN(monto) || monto <= 0) {
+    if (!monto || monto <= 0) {
         errores.monto = 'Ingrese un monto válido mayor que 0';
     }
 

@@ -1,3 +1,16 @@
+/* Agrupar variables CSS relacionadas */
+:root {
+  --color-principal: #3498db;
+  --color-secundario: #2ecc71;
+  --color-error: #e74c3c;
+  --color-fondo: #ecf0f1;
+  --color-texto: #2c3e50;
+  --fuente-principal: 'Roboto', sans-serif;
+  --tamano-fuente: 16px;
+  --espaciado: 1rem;
+  --transicion: 0.3s ease;
+}
+
 :root {
   /* Colores base */
   --color-fondo: #f8f9fa;
@@ -327,12 +340,10 @@ button:active,
 /* Animaciones */
 @keyframes slideIn {
   from {
-    transform: translateX(100%);
-    opacity: 0;
+    transform: translateX(-100%);
   }
   to {
     transform: translateX(0);
-    opacity: 1;
   }
 }
 
@@ -392,7 +403,33 @@ button:active,
   display: none !important;
 }
 
-/* Media Queries */
+/* Combinar reglas redundantes de media queries */
+@media (max-width: 768px) {
+  .grupo-formulario,
+  .grupo-botones {
+    flex-direction: column;
+  }
+
+  .tarjeta {
+    margin-bottom: var(--espaciado);
+  }
+
+  /* ...other styles for max-width: 768px... */
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .boton-principal,
+  .boton-secundario {
+    width: 100%;
+  }
+
+  /* ...other styles for max-width: 480px... */
+}
+
 @media (min-width: 768px) {
   main {
     grid-template-columns: 1fr 2fr;
