@@ -67,6 +67,9 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Implementación de exportación de datos a JSON para respaldo.
 - Adición de funcionalidad para importar datos desde archivos JSON.
 - Refinado el formato de los nombres de archivos descargables para una presentación más profesional y consistente.
+- Optimización de la carga de recursos externos mediante importación dinámica.
+- Consolidación de variables CSS duplicadas.
+- Implementación de memoización para operaciones de renderizado.
 
 ## Desarrollo futuro
 
