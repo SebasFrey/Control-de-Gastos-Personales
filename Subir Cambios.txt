@@ -1,16 +1,5 @@
 git add .
-git commit -m "Actualización 1.43.0 - Mejoras significativas en UI/UX:
-
-- Rediseño completo de la interfaz con mejor jerarquía visual
-- Añadidos iconos a botones y campos de formulario
-- Mejorada la paleta de colores y contraste
-- Implementadas nuevas animaciones y transiciones
-- Optimizada la carga de scripts externos
-- Mejorada la responsividad en todos los dispositivos
-- Refinada la gestión de categorías
-- Mejorada la accesibilidad general
-- Añadido feedback visual mejorado para interacciones
-- Optimizado el rendimiento general"
+git commit -m "Actualización 1.43.8 - De la rabia no hare commit >:("
 
 git push -u origin fuegote
 
