@@ -654,7 +654,7 @@ const editarFecha = async (indice) => {
 
 const confirmarEliminarTransaccion = async (indice) => {
     const transaccion = AppState.transacciones[indice];
-    const mensaje = `¿Está seguro que desea eliminar esta transacción?\n\n` +
+    const mensaje = "¿Está seguro que desea eliminar esta transacción?\n\n" +
         `Descripción: ${transaccion.descripcion || 'Sin descripción'}\n` +
         `Monto: $${formatearNumero(transaccion.monto)}\n` +
         `Tipo: ${capitalizarPrimeraLetra(transaccion.tipo)}\n` +
