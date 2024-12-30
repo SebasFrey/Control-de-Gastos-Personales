@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Actualización 2.0.0 - Reorganización de la página, eliminación del modo oscuro, mejora en la visualización de transacciones en dispositivos móviles y corrección de errores"
+git commit -m "Actualización 2.1.3 - Reorganización de la página, eliminación del modo oscuro, mejora en la visualización de transacciones en dispositivos móviles y corrección de errores"
 
 git push origin main
 
