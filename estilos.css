@@ -607,3 +607,18 @@ button:active,
     padding: 0.75rem 1rem;
   }
 }
+
+/* Animaciones y colapsos básicos con CSS */
+.encabezado-fecha {
+  cursor: pointer;
+}
+
+.contenido-fecha {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.encabezado-fecha[aria-expanded="true"] + .contenido-fecha {
+  max-height: 1000px; /* Ajustar según sea necesario */
+}

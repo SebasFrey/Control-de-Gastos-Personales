@@ -290,6 +290,7 @@ const crearSeccionFecha = (fecha, transacciones) => {
     const esHoy = fecha === new Date().toLocaleDateString();
     const encabezado = document.createElement('div');
     encabezado.className = 'encabezado-fecha';
+    encabezado.setAttribute('aria-expanded', esHoy);
     encabezado.innerHTML = `
         <div class="fecha-collapse">
             <i data-feather="${esHoy ? 'chevron-down' : 'chevron-right'}" class="icono-colapsar"></i>
@@ -301,7 +302,9 @@ const crearSeccionFecha = (fecha, transacciones) => {
     const contenido = document.createElement('div');
     contenido.className = 'contenido-fecha';
     if (!esHoy) {
-        contenido.style.display = 'none';
+        contenido.style.maxHeight = '0';
+    } else {
+        contenido.style.maxHeight = '1000px'; // Ajustar según sea necesario
     }
 
     const tabla = document.createElement('table');
@@ -363,10 +366,11 @@ const crearSeccionFecha = (fecha, transacciones) => {
     seccion.appendChild(contenido);
 
     encabezado.addEventListener('click', () => {
+        const estaExpandido = encabezado.getAttribute('aria-expanded') === 'true';
+        encabezado.setAttribute('aria-expanded', !estaExpandido);
         const icono = encabezado.querySelector('.icono-colapsar');
-        const estaVisible = contenido.style.display !== 'none';
-        contenido.style.display = estaVisible ? 'none' : 'block';
-        icono.setAttribute('data-feather', estaVisible ? 'chevron-right' : 'chevron-down');
+        icono.setAttribute('data-feather', !estaExpandido ? 'chevron-down' : 'chevron-right');
+        contenido.style.maxHeight = !estaExpandido ? '1000px' : '0'; // Ajustar según sea necesario
         feather.replace();
     });
 
