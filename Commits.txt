@@ -1,5 +1,6 @@
 git add .
 git commit -m "Actualización 1.49.9 - Mejoras en la consistencia visual, modo oscuro, diseño acordeón para historial de transacciones y eliminación del botón 'Agregar Nueva Categoría'"
+git commit -m "Actualización 1.49.8 - Mejoras en la consistencia visual, modo oscuro y diseño acordeón para historial de transacciones"
 
 git push -u origin fuegote
 

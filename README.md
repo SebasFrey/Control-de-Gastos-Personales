@@ -42,7 +42,11 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
     - Haz clic en "Agregar Transacción".
 3. **Crear Nueva Categoría**:
     - Selecciona "Otro" en el campo de categoría.
+<<<<<<< HEAD
     - Ingresa el nombre de la nueva categoría.
+=======
+    - Ingresa el nombre de la nueva categoría y haz clic en "Agregar Nueva Categoría".
+>>>>>>> 3e5f53495650c4902dfd6923f6206e4e51dbef70
 4. **Exportar Datos**:
     - Utiliza los botones de exportación para guardar tus datos en formato Excel, PDF o JSON.
 5. **Importar Datos**:
@@ -74,7 +78,10 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Mejora de la accesibilidad mediante la actualización de atributos ARIA y ajuste de colores para mejor contraste.
 - Adaptación del historial de transacciones para dispositivos móviles, simplificando la tabla y optimizando el scroll horizontal.
 - Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
+<<<<<<< HEAD
 - Eliminación del botón "Agregar Nueva Categoría".
+=======
+>>>>>>> 3e5f53495650c4902dfd6923f6206e4e51dbef70
 
 ## Desarrollo futuro
 
