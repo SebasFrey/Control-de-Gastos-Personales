@@ -414,7 +414,9 @@ button:active,
     margin-bottom: var(--espaciado);
   }
 
-  /* ...other styles for max-width: 768px... */
+  main {
+    padding: 0 1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -427,7 +429,52 @@ button:active,
     width: 100%;
   }
 
-  /* ...other styles for max-width: 480px... */
+  .grupos-botones {
+    gap: 0.75rem;
+  }
+
+  .grupo-botones {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .tarjetas-resumen {
+    grid-template-columns: 1fr;
+  }
+
+  .categoria-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .categoria-acciones {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mensaje {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .input-container {
+    flex-direction: column;
+  }
+
+  .input-icon {
+    display: none;
+  }
+
+  input,
+  select {
+    padding: 0.75rem 1rem;
+  }
 }
 
 @media (min-width: 768px) {
