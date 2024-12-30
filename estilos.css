@@ -1,20 +1,7 @@
-/* Agrupar variables CSS relacionadas */
-:root {
-  --color-principal: #3498db;
-  --color-secundario: #2ecc71;
-  --color-error: #e74c3c;
-  --color-fondo: #ecf0f1;
-  --color-texto: #2c3e50;
-  --fuente-principal: 'Roboto', sans-serif;
-  --tamano-fuente: 16px;
-  --espaciado: 1rem;
-  --transicion: 0.3s ease;
-}
-
 :root {
   /* Colores base */
-  --color-fondo: #f8f9fa;
-  --color-texto: #2d3436;
+  --color-fondo: #ffffff; /* Ajustado para mejor contraste */
+  --color-texto: #1a1a1a; /* Ajustado para mejor contraste */
   --color-primario: #000000;
   --color-secundario: #4a4a4a;
   --color-acento: #e0e0e0;
@@ -35,6 +22,11 @@
   --sombra-media: 0 4px 6px rgba(0, 0, 0, 0.1);
   --sombra-fuerte: 0 8px 16px rgba(0, 0, 0, 0.1);
   --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Tipografía */
+  --fuente-principal: 'Roboto', sans-serif;
+  --tamano-fuente: 16px;
+  --espaciado: 1rem;
 }
 
 /* Reset y estilos base */
@@ -52,6 +44,45 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 1rem;
+}
+
+/* Modo oscuro */
+body.dark-mode {
+  --color-fondo: #121212;
+  --color-texto: #e0e0e0;
+  --color-primario: #bb86fc;
+  --color-secundario: #03dac6;
+  --color-acento: #1f1f1f;
+  --color-blanco: #121212;
+
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .tarjeta,
+body.dark-mode .categoria-item,
+body.dark-mode .encabezado-fecha,
+body.dark-mode .contenido-fecha {
+  background-color: var(--color-acento);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .encabezado-fecha:hover {
+  background-color: var(--color-secundario);
+}
+
+body.dark-mode .mensaje {
+  background-color: var(--color-acento);
+  color: var(--color-texto);
+}
+
+body.dark-mode .mensaje-success {
+  border-left-color: var(--color-exito);
+}
+
+body.dark-mode .mensaje-error {
+  border-left-color: var(--color-error);
 }
 
 /* Header y navegación */
@@ -491,6 +522,46 @@ button:active,
 
   main {
     padding: 0 1rem;
+  }
+
+  .tabla-transacciones-dia {
+    display: none;
+  }
+
+  .transaccion-tarjeta {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde);
+    box-shadow: var(--sombra-suave);
+    transition: var(--transicion);
+  }
+
+  .transaccion-tarjeta:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
+  }
+
+  .transaccion-tarjeta .transaccion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .transaccion-tarjeta .transaccion-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .transaccion-tarjeta .transaccion-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
   }
 }
 

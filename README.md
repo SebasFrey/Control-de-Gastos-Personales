@@ -1,124 +1,84 @@
 # Control de Gastos Personales
 
-## Versión 1.43.0
+Esta aplicación web permite a los usuarios llevar un registro detallado de sus ingresos y gastos personales, proporcionando una visión general de su situación financiera.
 
-Una aplicación web moderna para gestionar gastos e ingresos personales, con un diseño intuitivo y profesional.
+## Demo en vivo
 
-### Características Principales
+Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gastos Personales](https://control-de-gastos-personales.vercel.app/)
 
-- ✨ Interfaz moderna y responsive
-- 💰 Gestión intuitiva de ingresos y gastos
-- 🏷️ Sistema flexible de categorías personalizadas
-- 📊 Resumen financiero en tiempo real
-- 📱 Diseño adaptativo para todos los dispositivos
-- 💾 Exportación e importación de datos
-- 🎨 Diseño minimalista y profesional
-- ♿ Accesibilidad mejorada
+## Características
 
-### Novedades en la Versión 1.43.0
+- Agregar transacciones (ingresos y gastos) con descripción, monto, tipo y categoría.
+- Editar la descripción y el monto de transacciones existentes.
+- Actualización automática de saldos al editar montos de transacciones.
+- Visualizar el saldo total, total de ingresos y total de gastos.
+- Ver un resumen de transacciones por categoría, con saldos actualizados automáticamente.
+- Filtrar transacciones por tipo, categoría y rango de fechas.
+- Eliminar transacciones individuales.
+- Almacenamiento local de datos para persistencia entre sesiones.
+- Personalizar el nombre de la categoría "Otro" al agregar una transacción.
+- Agregar nuevas categorías personalizadas.
+- Exportar todas las transacciones en formato Excel (.xlsx), PDF y JSON con nombres de archivo mejorados ("Control De Gastos Personales").
+- Importar datos desde un archivo JSON previamente exportado.
+- Modo oscuro mejorado para mejor visualización en entornos con poca luz.
+- Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
+- Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
 
-#### Interfaz de Usuario
+## Tecnologías utilizadas
 
-- Nuevo diseño visual más moderno y profesional
-- Iconografía mejorada en botones y campos
-- Animaciones y transiciones suaves
-- Mejor jerarquía visual y uso del espacio
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- SheetJS para exportación a Excel
+- jsPDF para generación de PDF
+- Feather Icons para iconos de interfaz
+- Vercel para el despliegue
 
-#### Experiencia de Usuario
+## Cómo usar
 
-- Sistema simplificado de categorías
-- Feedback visual mejorado
-- Mensajes de estado más claros
-- Mayor accesibilidad
+1. **Visita**: [Control de Gastos Personales](https://control-de-gastos-personales.vercel.app/)
+2. **Agregar Transacción**:
+    - Completa el formulario de "Nueva Transacción" con el monto, tipo, categoría y descripción opcional.
+    - Haz clic en "Agregar Transacción".
+3. **Crear Nueva Categoría**:
+    - Selecciona "Otro" en el campo de categoría.
+    - Ingresa el nombre de la nueva categoría.
+4. **Exportar Datos**:
+    - Utiliza los botones de exportación para guardar tus datos en formato Excel, PDF o JSON.
+5. **Importar Datos**:
+    - Haz clic en "Importar datos" y selecciona un archivo JSON con tus datos.
+6. **Modo Oscuro**:
+    - Cambia entre modo claro y oscuro con el botón en la esquina superior derecha.
 
-#### Rendimiento
+## Estructura del proyecto
 
-- Carga optimizada de recursos
-- Scripts externos asíncronos
-- Mejoras en la responsividad
-- Optimización general
+- `index.html`: Estructura HTML de la aplicación.
+- `estilos.css`: Estilos CSS para la interfaz de usuario, incluyendo diseño responsivo y modo oscuro mejorado.
+- `script.js`: Lógica de JavaScript para la funcionalidad de la aplicación.
+- `README.md`: Este archivo, que proporciona información sobre el proyecto.
 
-### Tecnologías Utilizadas
+## Mejoras recientes
 
-- HTML5 semántico
-- CSS3 con variables personalizadas
-- JavaScript moderno (ES6+)
-- LocalStorage para persistencia
-- Feather Icons para iconografía
-- Librerías:
-  - XLSX para Excel
-  - jsPDF para PDF
-  - Feather Icons
+- Implementación de la edición de montos en transacciones existentes.
+- Actualización automática de saldos financieros y por categoría al editar montos.
+- Implementación de la actualización automática de saldos por categoría al agregar o eliminar transacciones.
+- Implementación de la funcionalidad para editar descripciones de transacciones.
+- Mejora en la paleta de colores para el modo oscuro.
+- Optimización del diseño para dispositivos móviles.
+- Implementación de exportación de datos a JSON para respaldo.
+- Adición de funcionalidad para importar datos desde archivos JSON.
+- Refinado el formato de los nombres de archivos descargables para una presentación más profesional y consistente.
+- Optimización de la carga de recursos externos mediante importación dinámica.
+- Consolidación de variables CSS duplicadas.
+- Implementación de memoización para operaciones de renderizado.
+- Mejora de la accesibilidad mediante la actualización de atributos ARIA y ajuste de colores para mejor contraste.
+- Adaptación del historial de transacciones para dispositivos móviles, simplificando la tabla y optimizando el scroll horizontal.
+- Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
+- Eliminación del botón "Agregar Nueva Categoría".
 
-### Requisitos del Sistema
+## Desarrollo futuro
 
-- Navegador moderno con soporte para:
-  - JavaScript ES6+
-  - CSS Grid y Flexbox
-  - LocalStorage
-  - Async/Await
-
-### Instalación
-
-1. Clonar el repositorio
-2. No requiere instalación de dependencias
-3. Abrir `index.html` en el navegador
-
-### Uso
-
-1. Gestión de Transacciones
-
-   - Agregar ingresos y gastos
-   - Categorizar transacciones
-   - Editar o eliminar registros
-
-2. Categorías
-
-   - Sistema simplificado con dos categorías predeterminadas
-   - Añadir categorías personalizadas
-   - Gestionar categorías existentes
-
-3. Exportación/Importación
-   - Excel
-   - PDF
-   - JSON
-
-### Accesibilidad
-
-- Navegación completa por teclado
-- Etiquetas ARIA
-- Alto contraste
-- Textos claros y legibles
-- Feedback visual y auditivo
-
-### Responsive Design
-
-- Desktop: Experiencia completa
-- Tablet: Layout adaptativo
-- Mobile: Interfaz optimizada
-- Soporte para diferentes densidades de píxeles
-
-### Próximas Mejoras
-
-- [ ] Modo oscuro
-- [ ] Gráficos estadísticos
-- [ ] Filtros avanzados
-- [ ] Presupuestos mensuales
-- [ ] Sincronización en la nube
-- [ ] Múltiples monedas
-
-### Contribución
-
-1. Fork del repositorio
-2. Crear rama (`git checkout -b feature/MiMejora`)
-3. Commit (`git commit -m 'Añadir MiMejora'`)
-4. Push (`git push origin feature/MiMejora`)
-5. Pull Request
-
-### Licencia
-
-MIT License - ver `LICENSE` para detalles
-
-### Soporte
-
-Para bugs o sugerencias, crear un issue en el repositorio.
+- Implementar un sistema de autenticación de usuarios.
+- Agregar la opción de crear presupuestos y metas de ahorro.
+- Añadir soporte para múltiples cuentas y monedas.
+- Implementar un sistema de respaldo en la nube.

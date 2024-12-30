@@ -158,6 +158,8 @@ const mostrarMensaje = (mensaje, tipo = 'info') => {
     const mensajeElement = document.createElement('div');
     mensajeElement.className = `mensaje mensaje-${tipo}`;
     mensajeElement.textContent = mensaje;
+    mensajeElement.setAttribute('role', 'alert');
+    mensajeElement.setAttribute('aria-live', 'assertive');
 
     contenedor.appendChild(mensajeElement);
 
@@ -178,13 +180,19 @@ const handleSubmitFormulario = async (e) => {
             const elementoError = document.getElementById(`error-${campo}`);
             if (elementoError) {
                 elementoError.textContent = mensaje;
+                elementoError.setAttribute('role', 'alert');
+                elementoError.setAttribute('aria-live', 'assertive');
             }
         });
         return;
     }
 
     // Limpiar mensajes de error previos
-    document.querySelectorAll('.mensaje-error').forEach(el => el.textContent = '');
+    document.querySelectorAll('.mensaje-error').forEach(el => {
+        el.textContent = '';
+        el.removeAttribute('role');
+        el.removeAttribute('aria-live');
+    });
 
     try {
         let categoria = formData.get('categoria');
@@ -399,55 +407,7 @@ const actualizarSelectCategorias = () => {
         `).join('');
 };
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    EstadoManager.inicializar();
-
-    // Formulario principal
-    document.getElementById('formulario-transaccion')
-        .addEventListener('submit', handleSubmitFormulario);
-
-    document.getElementById('categoria')
-        .addEventListener('change', handleCategoriaChange);
-
-    // Botones de exportación
-    document.getElementById('exportar-excel')
-        .addEventListener('click', exportarExcel);
-
-    document.getElementById('exportar-pdf')
-        .addEventListener('click', exportarPDF);
-
-    document.getElementById('exportar-json')
-        .addEventListener('click', exportarJSON);
-
-    document.getElementById('importar-json')
-        .addEventListener('change', importarJSON);
-
-    // Delegación de eventos para acciones dinámicas
-    document.addEventListener('click', async (e) => {
-        const target = e.target.closest('button');
-        if (!target) return;
-
-        if (target.classList.contains('boton-eliminar')) {
-            const indice = target.dataset.indice;
-            await confirmarEliminarTransaccion(indice);
-        } else if (target.classList.contains('boton-editar-descripcion')) {
-            const indice = target.dataset.indice;
-            await editarDescripcion(indice);
-        } else if (target.classList.contains('boton-editar-monto')) {
-            const indice = target.dataset.indice;
-            await editarMonto(indice);
-        } else if (target.classList.contains('boton-editar-fecha')) {
-            const indice = target.dataset.indice;
-            await editarFecha(indice);
-        } else if (target.classList.contains('boton-eliminar-categoria')) {
-            const categoria = target.dataset.categoria;
-            await eliminarCategoria(categoria);
-        }
-    });
-});
-
-// Exportación e importación
+// Funciones de exportación e importación
 const exportarExcel = async () => {
     try {
         const ws = XLSX.utils.json_to_sheet(AppState.transacciones.map(t => ({
@@ -575,7 +535,80 @@ const importarJSON = async (evento) => {
     }
 };
 
+// Función para alternar el modo oscuro
+const toggleDarkMode = () => {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+};
+
+// Aplicar el modo oscuro si está habilitado en localStorage
+document.addEventListener('DOMContentLoaded', () => {
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+    }
+
+    EstadoManager.inicializar();
+
+    // Formulario principal
+    document.getElementById('formulario-transaccion')
+        .addEventListener('submit', handleSubmitFormulario);
+
+    document.getElementById('categoria')
+        .addEventListener('change', handleCategoriaChange);
+
+    // Botones de exportación
+    document.getElementById('exportar-excel')
+        .addEventListener('click', exportarExcel);
+
+    document.getElementById('exportar-pdf')
+        .addEventListener('click', exportarPDF);
+
+    document.getElementById('exportar-json')
+        .addEventListener('click', exportarJSON);
+
+    document.getElementById('importar-json')
+        .addEventListener('change', importarJSON);
+
+    // Botón para alternar el modo oscuro
+    document.getElementById('toggle-dark-mode').addEventListener('click', toggleDarkMode);
+
+    // Delegación de eventos para acciones dinámicas
+    document.addEventListener('click', async (e) => {
+        const target = e.target.closest('button');
+        if (!target) return;
+
+        if (target.classList.contains('boton-eliminar')) {
+            const indice = target.dataset.indice;
+            await confirmarEliminarTransaccion(indice);
+        } else if (target.classList.contains('boton-editar-descripcion')) {
+            const indice = target.dataset.indice;
+            await editarDescripcion(indice);
+        } else if (target.classList.contains('boton-editar-monto')) {
+            const indice = target.dataset.indice;
+            await editarMonto(indice);
+        } else if (target.classList.contains('boton-editar-fecha')) {
+            const indice = target.dataset.indice;
+            await editarFecha(indice);
+        } else if (target.classList.contains('boton-eliminar-categoria')) {
+            const categoria = target.dataset.categoria;
+            await eliminarCategoria(categoria);
+        }
+    });
+});
+
 // Funciones de edición y eliminación
+const memoizedFeatherReplace = (() => {
+    let cache = null;
+    return () => {
+        if (!cache) {
+            feather.replace();
+            cache = true;
+        }
+    };
+})();
+
 const editarDescripcion = async (indice) => {
     const transaccion = AppState.transacciones[indice];
     const descripcionTexto = document.querySelector(`[data-indice="${indice}"]`)
@@ -598,7 +631,7 @@ const editarDescripcion = async (indice) => {
         botonEditar.innerHTML = '<i data-feather="edit-2"></i>';
         await EstadoManager.guardarCambios();
     }
-    feather.replace();
+    memoizedFeatherReplace();
 };
 
 const editarMonto = async (indice) => {
@@ -632,7 +665,7 @@ const editarMonto = async (indice) => {
         montoInput.style.display = 'none';
         botonEditar.innerHTML = '<i data-feather="dollar-sign"></i>';
     }
-    feather.replace();
+    memoizedFeatherReplace();
 };
 
 const editarFecha = async (indice) => {
@@ -665,7 +698,7 @@ const editarFecha = async (indice) => {
 
         await EstadoManager.guardarCambios();
     }
-    feather.replace();
+    memoizedFeatherReplace();
 };
 
 const confirmarEliminarTransaccion = async (indice) => {
