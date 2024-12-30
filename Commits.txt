@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Actualización 1.50.0 - Mejoras en la consistencia visual, modo oscuro, diseño acordeón para historial de transacciones, eliminación del botón 'Agregar Nueva Categoría', mejora en la transición del modo oscuro y visibilidad de transacciones en dispositivos móviles"
+git commit -m "Actualización 1.50.1 - Mejoras en la consistencia visual, modo oscuro, diseño acordeón para historial de transacciones, eliminación del botón 'Agregar Nueva Categoría', mejora en la transición del modo oscuro, visibilidad de transacciones en dispositivos móviles y colores del modo oscuro para mejor contraste y legibilidad"
 
 git push origin main
 
