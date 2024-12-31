@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Actualización 2.1.5 - Se agregó un botón para transferir entre categorías, corrección de problemas de visualización del historial de transacciones en dispositivos móviles, y mejoras en la UI"
+git commit -m "Actualización 2.1.6 - No se que hice, pero me marca una modificacion el git"
 
 git push origin main
 

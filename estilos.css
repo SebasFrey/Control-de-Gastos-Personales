@@ -24,7 +24,7 @@
   --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Tipografía */
-  --fuente-principal: 'Roboto', sans-serif;
+  --fuente-principal: "Roboto", sans-serif;
   --tamano-fuente: 16px;
   --espaciado: 1rem;
 }
@@ -593,7 +593,7 @@ button:active,
   }
 
   .item-transaccion.ingreso::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;
@@ -604,7 +604,7 @@ button:active,
   }
 
   .item-transaccion.gasto::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;
@@ -840,4 +840,3 @@ button:active,
   right: 1rem;
   font-size: 1.5rem;
 }
-
