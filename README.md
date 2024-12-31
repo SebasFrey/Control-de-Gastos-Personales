@@ -74,6 +74,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Mejora en la visibilidad de las transacciones en dispositivos móviles.
 - Mejora en la funcionalidad en dispositivos móviles.
 - Eliminación del modo oscuro.
+- **Actualización 2.1.3**: Reorganización de la página, mejora en la visualización de transacciones en dispositivos móviles, corrección de errores y eliminación del modo oscuro.
 
 ## Desarrollo futuro
 

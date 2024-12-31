@@ -313,10 +313,13 @@ const crearSeccionFecha = (fecha, transacciones) => {
     const contenido = document.createElement('div');
     contenido.className = 'contenido-fecha';
     contenido.id = `contenido-${fecha}`;
+
+    // Set initial state
     if (!esHoy) {
-        contenido.style.maxHeight = '0';
+        contenido.style.height = '0';
     } else {
-        contenido.style.maxHeight = `${contenido.scrollHeight}px`; // Ajustar según sea necesario
+        // For today's transactions, show them expanded
+        contenido.style.height = 'auto';
     }
 
     const tabla = document.createElement('table');
@@ -381,9 +384,24 @@ const crearSeccionFecha = (fecha, transacciones) => {
     encabezado.addEventListener('click', () => {
         const estaExpandido = encabezado.getAttribute('aria-expanded') === 'true';
         encabezado.setAttribute('aria-expanded', !estaExpandido);
+
         const icono = encabezado.querySelector('.icono-colapsar');
         icono.setAttribute('data-feather', !estaExpandido ? 'chevron-down' : 'chevron-right');
-        contenido.style.maxHeight = !estaExpandido ? `${contenido.scrollHeight}px` : '0'; // Ajustar según sea necesario
+
+        // Calculate and set the height
+        if (!estaExpandido) {
+            // First set height to auto to get the natural height
+            contenido.style.height = 'auto';
+            const alturaReal = contenido.scrollHeight;
+            // Then set back to 0 and force a reflow
+            contenido.style.height = '0';
+            contenido.offsetHeight; // Force reflow
+            // Finally set to the calculated height
+            contenido.style.height = alturaReal + 'px';
+        } else {
+            contenido.style.height = '0';
+        }
+
         feather.replace();
     });
 
@@ -769,3 +787,4 @@ const ocultarCargando = () => {
 
 // Inicialización
 EstadoManager.inicializar();
+
