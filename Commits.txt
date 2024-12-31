@@ -1,6 +1,9 @@
 git add .
 
-git commit -m "Actualización 2.1.6 - No se que hice, pero me marca una modificacion el git"
+git commit -m "Actualización 2.1.7 - Eliminar viñetas del resumen por categoría
+
+- Se eliminó el padding y el list-style de #lista-categoria para eliminar las viñetas.
+- Se mejoró la alineación visual y la estética de la sección de resumen por categoría."
 
 git push origin main
 

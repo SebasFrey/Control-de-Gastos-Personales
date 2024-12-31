@@ -267,6 +267,7 @@ button:active,
 /* Categorías */
 #lista-categoria {
   padding-left: 0; /* Eliminar padding para viñetas */
+  list-style: none; /* Eliminar viñetas */
 }
 
 .categoria-item {
