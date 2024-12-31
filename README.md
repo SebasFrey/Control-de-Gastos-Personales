@@ -22,6 +22,7 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Importar datos desde un archivo JSON previamente exportado.
 - Diseño responsivo para una óptima visualización en dispositivos móviles y de escritorio.
 - Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
+- **Nueva funcionalidad**: Transferir dinero entre categorías.
 
 ## Tecnologías utilizadas
 
@@ -42,9 +43,13 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 3. **Crear Nueva Categoría**:
     - Selecciona "Otro" en el campo de categoría.
     - Ingresa el nombre de la nueva categoría.
-4. **Exportar Datos**:
+4. **Transferir entre Categorías**:
+    - Haz clic en "Transferir entre Categorías".
+    - Completa el formulario con el monto, categoría de origen y categoría de destino.
+    - Haz clic en "Realizar Transferencia".
+5. **Exportar Datos**:
     - Utiliza los botones de exportación para guardar tus datos en formato Excel, PDF o JSON.
-5. **Importar Datos**:
+6. **Importar Datos**:
     - Haz clic en "Importar datos" y selecciona un archivo JSON con tus datos.
 
 ## Estructura del proyecto
@@ -56,25 +61,16 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Mejoras recientes
 
-- Implementación de la edición de montos en transacciones existentes.
-- Actualización automática de saldos financieros y por categoría al editar montos.
-- Implementación de la actualización automática de saldos por categoría al agregar o eliminar transacciones.
-- Implementación de la funcionalidad para editar descripciones de transacciones.
-- Optimización del diseño para dispositivos móviles.
-- Implementación de exportación de datos a JSON para respaldo.
-- Adición de funcionalidad para importar datos desde archivos JSON.
-- Refinado el formato de los nombres de archivos descargables para una presentación más profesional y consistente.
-- Optimización de la carga de recursos externos mediante importación dinámica.
-- Consolidación de variables CSS duplicadas.
-- Implementación de memoización para operaciones de renderizado.
-- Mejora de la accesibilidad mediante la actualización de atributos ARIA y ajuste de colores para mejor contraste.
-- Adaptación del historial de transacciones para dispositivos móviles, simplificando la tabla y optimizando el scroll horizontal.
-- Implementación de un diseño "acordeón" en las tablas de historial de transacciones.
-- Eliminación del botón "Agregar Nueva Categoría".
-- Mejora en la visibilidad de las transacciones en dispositivos móviles.
-- Mejora en la funcionalidad en dispositivos móviles.
+### Versión 2.1.4
+- Mejora en la adaptación móvil del historial de transacciones.
+- Optimización de la UI.
+- Corrección de errores.
+- **Nueva funcionalidad**: Transferir dinero entre categorías.
+
+### Versión 2.1.3
+- Reorganización de la página.
+- Mejora en la visualización de transacciones en dispositivos móviles.
 - Eliminación del modo oscuro.
-- **Actualización 2.1.3**: Reorganización de la página, mejora en la visualización de transacciones en dispositivos móviles, corrección de errores y eliminación del modo oscuro.
 
 ## Desarrollo futuro
 

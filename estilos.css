@@ -810,3 +810,34 @@ button:active,
   animation: slideDown 0.3s ease-out;
 }
 
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-contenido {
+  background-color: var(--color-blanco);
+  padding: 2rem;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-fuerte);
+  text-align: center;
+  position: relative;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+}
+

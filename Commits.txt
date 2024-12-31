@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Actualización 2.1.4 - Mejora en la adaptación móvil del historial de transacciones, optimización de la UI y corrección de errores"
+git commit -m "Actualización 2.1.5 - Se agregó un botón para transferir entre categorías, corrección de problemas de visualización del historial de transacciones en dispositivos móviles, y mejoras en la UI"
 
 git push origin main
 
