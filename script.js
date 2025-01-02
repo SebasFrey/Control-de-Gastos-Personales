@@ -914,4 +914,3 @@ const transferirEntreCategorias = async (e) => {
     document.getElementById('formulario-transferencia').reset();
     mostrarMensaje('Transferencia realizada con éxito', 'success');
 };
-
