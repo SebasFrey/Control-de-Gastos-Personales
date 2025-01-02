@@ -1,17 +1,10 @@
 git add .
 
-git commit -m "Actualización 2.1.9 - Mejorar funcionalidad del modal de transferencia
+git commit -m "Actualización 2.1.10 - Fijar el header y manejar el scroll
 
-- He agregado los event listeners necesarios para:
-  1. Abrir el modal y cargar las categorías disponibles.
-  2. Cerrar el modal con el botón de cerrar.
-  3. Cerrar el modal al hacer clic fuera del contenido.
-  4. Limpiar el formulario cuando se cierra el modal.
-- Ahora el botón de transferencia entre categorías debería funcionar correctamente. Al hacer clic en él:
-  - Se abrirá el modal.
-  - Se cargarán las categorías disponibles en ambos selectores.
-  - Podrás realizar la transferencia.
-  - Podrás cerrar el modal tanto con el botón de cerrar como haciendo clic fuera de él."
+- Se ha fijado el header para que permanezca visible al hacer scroll.
+- Se ha agregado una función para manejar el scroll y ocultar/mostrar el header según la dirección del scroll.
+- Se ha ajustado el margen superior del contenido principal para evitar que quede oculto detrás del header fijo."
 
 git push origin main
 

@@ -47,6 +47,12 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Actualizaciones Recientes
 
+### Actualización 2.1.10
+- Fijar el header y manejar el scroll:
+  - Se ha fijado el header para que permanezca visible al hacer scroll.
+  - Se ha agregado una función para manejar el scroll y ocultar/mostrar el header según la dirección del scroll.
+  - Se ha ajustado el margen superior del contenido principal para evitar que quede oculto detrás del header fijo.
+
 ### Actualización 2.1.9
 - Mejorar funcionalidad del modal de transferencia:
   - He agregado los event listeners necesarios para:
@@ -69,17 +75,6 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Eliminar viñetas del resumen por categoría:
   - Se eliminó el padding y el list-style de #lista-categoria para eliminar las viñetas.
   - Se mejoró la alineación visual y la estética de la sección de resumen por categoría.
-
-## Contribución
-Si deseas contribuir a este proyecto, por favor sigue estos pasos:
-1. Haz un fork del repositorio.
-2. Crea una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
-3. Realiza tus cambios y haz commit (`git commit -m 'Agregar nueva funcionalidad'`).
-4. Sube tus cambios (`git push origin feature/nueva-funcionalidad`).
-5. Abre un Pull Request.
-
-## Licencia
-Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
 ## Desarrollo futuro
 

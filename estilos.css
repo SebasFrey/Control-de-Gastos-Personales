@@ -52,9 +52,13 @@ header {
   color: var(--color-blanco);
   padding: var(--padding-contenedor);
   box-shadow: var(--sombra-media);
-  position: sticky;
+  position: fixed;
   top: 0;
+  width: 100%;
   z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
@@ -62,12 +66,13 @@ h1 {
   font-weight: 500;
   text-align: center;
   letter-spacing: 0.5px;
+  margin: 0;
 }
 
 /* Layout principal */
 main {
   max-width: 1200px;
-  margin: 2rem auto;
+  margin: 6rem auto 2rem; /* Ajustar el margen superior según la altura del header */
   padding: 0 var(--padding-contenedor);
   display: grid;
   grid-template-columns: 1fr;
@@ -601,7 +606,7 @@ button:active,
     bottom: 0;
     width: 4px;
     background-color: var(--color-ingreso);
-    border-radius: var(--radio-borde) 0 0 var(--radio-borde);
+    border-radius: var (--radio-borde) 0 0 var(--radio-borde);
   }
 
   .item-transaccion.gasto::before {
@@ -612,7 +617,7 @@ button:active,
     bottom: 0;
     width: 4px;
     background-color: var(--color-gasto);
-    border-radius: var(--radio-borde) 0 0 var(--radio-borde);
+    border-radius: var (--radio-borde) 0 0 var(--radio-borde);
   }
 
   .contenido-fecha {

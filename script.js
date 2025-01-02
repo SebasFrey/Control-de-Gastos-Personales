@@ -9,6 +9,30 @@ const AppState = {
     transaccionesPorFecha: {}
 };
 
+// Variables para el manejo del scroll
+let lastScrollPosition = 0;
+let isScrolling = false;
+
+// Función para manejar el scroll y ocultar/mostrar el header
+function handleScroll() {
+    if (!isScrolling) {
+        window.requestAnimationFrame(() => {
+            const currentScroll = window.pageYOffset;
+            const header = document.querySelector('header');
+
+            if (currentScroll > lastScrollPosition && currentScroll > 50) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+
+            lastScrollPosition = currentScroll;
+            isScrolling = false;
+        });
+    }
+    isScrolling = true;
+}
+
 // Clase para manejar el estado y la persistencia
 class EstadoManager {
     static async inicializar() {
@@ -288,7 +312,9 @@ const actualizarListaTransacciones = () => {
             listaTransacciones.appendChild(seccionFecha);
         });
 
-    feather.replace();
+    requestAnimationFrame(() => {
+        feather.replace();
+    });
 };
 
 const crearSeccionFecha = (fecha, transacciones) => {
@@ -553,101 +579,22 @@ const importarJSON = async (evento) => {
     }
 };
 
-// Aplicar el modo oscuro si está habilitado en localStorage
-document.addEventListener('DOMContentLoaded', () => {
-    EstadoManager.inicializar();
-
-    // Formulario principal
-    document.getElementById('formulario-transaccion')
-        .addEventListener('submit', handleSubmitFormulario);
-
-    document.getElementById('categoria')
-        .addEventListener('change', handleCategoriaChange);
-
-    // Botones de exportación
-    document.getElementById('exportar-excel')
-        .addEventListener('click', exportarExcel);
-
-    document.getElementById('exportar-pdf')
-        .addEventListener('click', exportarPDF);
-
-    document.getElementById('exportar-json')
-        .addEventListener('click', exportarJSON);
-
-    document.getElementById('importar-json')
-        .addEventListener('change', importarJSON);
-
-    // Botones del modal de transferencia
-    document.getElementById('abrir-modal-transferencia')
-        .addEventListener('click', () => {
-            const modal = document.getElementById('modal-transferencia');
-            const selectOrigen = document.getElementById('categoria-origen');
-            const selectDestino = document.getElementById('categoria-destino');
-
-            // Actualizar las opciones de categorías
-            const optionsHTML = AppState.categorias
-                .map(categoria => `<option value="${categoria}">${capitalizarPalabras(categoria)}</option>`)
-                .join('');
-
-            selectOrigen.innerHTML = optionsHTML;
-            selectDestino.innerHTML = optionsHTML;
-
-            modal.classList.remove('hidden');
-        });
-
-    document.getElementById('cerrar-modal-transferencia')
-        .addEventListener('click', () => {
-            document.getElementById('modal-transferencia').classList.add('hidden');
-            document.getElementById('formulario-transferencia').reset();
-        });
-
-    // Cerrar modal al hacer clic fuera del contenido
-    document.getElementById('modal-transferencia').addEventListener('click', (e) => {
-        if (e.target.id === 'modal-transferencia') {
-            e.target.classList.add('hidden');
-            document.getElementById('formulario-transferencia').reset();
-        }
-    });
-
-
-    // Delegación de eventos para acciones dinámicas
-    document.addEventListener('click', async (e) => {
-        const target = e.target.closest('button');
-        if (!target) return;
-
-        if (target.classList.contains('boton-eliminar')) {
-            const indice = target.dataset.indice;
-            await confirmarEliminarTransaccion(indice);
-        } else if (target.classList.contains('boton-editar-descripcion')) {
-            const indice = target.dataset.indice;
-            await editarDescripcion(indice);
-        } else if (target.classList.contains('boton-editar-monto')) {
-            const indice = target.dataset.indice;
-            await editarMonto(indice);
-        } else if (target.classList.contains('boton-editar-fecha')) {
-            const indice = target.dataset.indice;
-            await editarFecha(indice);
-        } else if (target.classList.contains('boton-eliminar-categoria')) {
-            const categoria = target.dataset.categoria;
-            await eliminarCategoria(categoria);
-        }
-    });
-
-    // Agregar evento para la transferencia entre categorías
-    document.getElementById('formulario-transferencia')
-        .addEventListener('submit', transferirEntreCategorias);
-});
-
 // Funciones de edición y eliminación
 const memoizedFeatherReplace = (() => {
     let cache = null;
     return () => {
         if (!cache) {
-            feather.replace();
-            cache = true;
+            requestAnimationFrame(() => {
+                feather.replace();
+                cache = true;
+            });
         }
     };
 })();
+
+const resetFeatherCache = () => {
+    memoizedFeatherReplace.cache = null;
+};
 
 const editarDescripcion = async (indice) => {
     const transaccion = AppState.transacciones[indice];
@@ -823,8 +770,94 @@ const ocultarCargando = () => {
 };
 
 // Inicialización
-EstadoManager.inicializar();
+document.addEventListener('DOMContentLoaded', () => {
+    EstadoManager.inicializar();
+    feather.replace();
+    resetFeatherCache();
 
+    // Agregar evento de scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Formulario principal
+    document.getElementById('formulario-transaccion')
+        .addEventListener('submit', handleSubmitFormulario);
+
+    document.getElementById('categoria')
+        .addEventListener('change', handleCategoriaChange);
+
+    // Botones de exportación
+    document.getElementById('exportar-excel')
+        .addEventListener('click', exportarExcel);
+
+    document.getElementById('exportar-pdf')
+        .addEventListener('click', exportarPDF);
+
+    document.getElementById('exportar-json')
+        .addEventListener('click', exportarJSON);
+
+    document.getElementById('importar-json')
+        .addEventListener('change', importarJSON);
+
+    // Botones del modal de transferencia
+    document.getElementById('abrir-modal-transferencia')
+        .addEventListener('click', () => {
+            const modal = document.getElementById('modal-transferencia');
+            const selectOrigen = document.getElementById('categoria-origen');
+            const selectDestino = document.getElementById('categoria-destino');
+
+            // Actualizar las opciones de categorías
+            const optionsHTML = AppState.categorias
+                .map(categoria => `<option value="${categoria}">${capitalizarPalabras(categoria)}</option>`)
+                .join('');
+
+            selectOrigen.innerHTML = optionsHTML;
+            selectDestino.innerHTML = optionsHTML;
+
+            modal.classList.remove('hidden');
+        });
+
+    document.getElementById('cerrar-modal-transferencia')
+        .addEventListener('click', () => {
+            document.getElementById('modal-transferencia').classList.add('hidden');
+            document.getElementById('formulario-transferencia').reset();
+        });
+
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('modal-transferencia').addEventListener('click', (e) => {
+        if (e.target.id === 'modal-transferencia') {
+            e.target.classList.add('hidden');
+            document.getElementById('formulario-transferencia').reset();
+        }
+    });
+
+    // Delegación de eventos para acciones dinámicas
+    document.addEventListener('click', async (e) => {
+        const target = e.target.closest('button');
+        if (!target) return;
+
+        const indice = target.dataset.indice;
+        if (!indice && !target.classList.contains('boton-eliminar-categoria')) return;
+
+        if (target.classList.contains('boton-eliminar')) {
+            await confirmarEliminarTransaccion(indice);
+        } else if (target.classList.contains('boton-editar-descripcion')) {
+            await editarDescripcion(indice);
+        } else if (target.classList.contains('boton-editar-monto')) {
+            await editarMonto(indice);
+        } else if (target.classList.contains('boton-editar-fecha')) {
+            await editarFecha(indice);
+        } else if (target.classList.contains('boton-eliminar-categoria')) {
+            const categoria = target.dataset.categoria;
+            await eliminarCategoria(categoria);
+        }
+    });
+
+    // Agregar evento para la transferencia entre categorías
+    document.getElementById('formulario-transferencia')
+        .addEventListener('submit', transferirEntreCategorias);
+});
+
+// Transferencia entre categorías
 const transferirEntreCategorias = async (e) => {
     e.preventDefault();
 
