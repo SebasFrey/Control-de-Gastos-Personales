@@ -1,9 +1,17 @@
 git add .
 
-git commit -m "Actualización 2.1.7 - Eliminar viñetas del resumen por categoría
+git commit -m "Actualización 2.1.9 - Mejorar funcionalidad del modal de transferencia
 
-- Se eliminó el padding y el list-style de #lista-categoria para eliminar las viñetas.
-- Se mejoró la alineación visual y la estética de la sección de resumen por categoría."
+- He agregado los event listeners necesarios para:
+  1. Abrir el modal y cargar las categorías disponibles.
+  2. Cerrar el modal con el botón de cerrar.
+  3. Cerrar el modal al hacer clic fuera del contenido.
+  4. Limpiar el formulario cuando se cierra el modal.
+- Ahora el botón de transferencia entre categorías debería funcionar correctamente. Al hacer clic en él:
+  - Se abrirá el modal.
+  - Se cargarán las categorías disponibles en ambos selectores.
+  - Podrás realizar la transferencia.
+  - Podrás cerrar el modal tanto con el botón de cerrar como haciendo clic fuera de él."
 
 git push origin main
 

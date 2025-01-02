@@ -553,69 +553,6 @@ const importarJSON = async (evento) => {
     }
 };
 
-// Función para transferir entre categorías
-const transferirEntreCategorias = async (e) => {
-    e.preventDefault();
-
-    const monto = parseFloat(document.getElementById('monto-transferencia').value);
-    const categoriaOrigen = document.getElementById('categoria-origen').value;
-    const categoriaDestino = document.getElementById('categoria-destino').value;
-
-    if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje('Ingrese un monto válido mayor que 0', 'error');
-        return;
-    }
-
-    if (categoriaOrigen === categoriaDestino) {
-        mostrarMensaje('La categoría de origen y destino no pueden ser iguales', 'error');
-        return;
-    }
-
-    const transaccionOrigen = {
-        descripcion: `Transferencia a ${categoriaDestino}`,
-        monto: -monto,
-        tipo: 'gasto',
-        categoria: categoriaOrigen,
-        fecha: new Date().toISOString()
-    };
-
-    const transaccionDestino = {
-        descripcion: `Transferencia desde ${categoriaOrigen}`,
-        monto: monto,
-        tipo: 'ingreso',
-        categoria: categoriaDestino,
-        fecha: new Date().toISOString()
-    };
-
-    AppState.transacciones.push(transaccionOrigen, transaccionDestino);
-    await EstadoManager.recalcularTotales();
-    await EstadoManager.guardarCambios();
-
-    mostrarMensaje('Transferencia realizada con éxito', 'success');
-    document.getElementById('modal-transferencia').classList.add('hidden');
-};
-
-// Función para abrir el modal de transferencia
-const abrirModalTransferencia = () => {
-    const selectOrigen = document.getElementById('categoria-origen');
-    const selectDestino = document.getElementById('categoria-destino');
-
-    selectOrigen.innerHTML = AppState.categorias.map(categoria => `
-        <option value="${categoria}">${capitalizarPalabras(categoria)}</option>
-    `).join('');
-
-    selectDestino.innerHTML = AppState.categorias.map(categoria => `
-        <option value="${categoria}">${capitalizarPalabras(categoria)}</option>
-    `).join('');
-
-    document.getElementById('modal-transferencia').classList.remove('hidden');
-};
-
-// Función para cerrar el modal de transferencia
-const cerrarModalTransferencia = () => {
-    document.getElementById('modal-transferencia').classList.add('hidden');
-};
-
 // Aplicar el modo oscuro si está habilitado en localStorage
 document.addEventListener('DOMContentLoaded', () => {
     EstadoManager.inicializar();
@@ -640,15 +577,38 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('importar-json')
         .addEventListener('change', importarJSON);
 
-    // Botón de transferencia entre categorías
+    // Botones del modal de transferencia
     document.getElementById('abrir-modal-transferencia')
-        .addEventListener('click', abrirModalTransferencia);
+        .addEventListener('click', () => {
+            const modal = document.getElementById('modal-transferencia');
+            const selectOrigen = document.getElementById('categoria-origen');
+            const selectDestino = document.getElementById('categoria-destino');
+
+            // Actualizar las opciones de categorías
+            const optionsHTML = AppState.categorias
+                .map(categoria => `<option value="${categoria}">${capitalizarPalabras(categoria)}</option>`)
+                .join('');
+
+            selectOrigen.innerHTML = optionsHTML;
+            selectDestino.innerHTML = optionsHTML;
+
+            modal.classList.remove('hidden');
+        });
 
     document.getElementById('cerrar-modal-transferencia')
-        .addEventListener('click', cerrarModalTransferencia);
+        .addEventListener('click', () => {
+            document.getElementById('modal-transferencia').classList.add('hidden');
+            document.getElementById('formulario-transferencia').reset();
+        });
 
-    document.getElementById('formulario-transferencia')
-        .addEventListener('submit', transferirEntreCategorias);
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('modal-transferencia').addEventListener('click', (e) => {
+        if (e.target.id === 'modal-transferencia') {
+            e.target.classList.add('hidden');
+            document.getElementById('formulario-transferencia').reset();
+        }
+    });
+
 
     // Delegación de eventos para acciones dinámicas
     document.addEventListener('click', async (e) => {
@@ -672,6 +632,10 @@ document.addEventListener('DOMContentLoaded', () => {
             await eliminarCategoria(categoria);
         }
     });
+
+    // Agregar evento para la transferencia entre categorías
+    document.getElementById('formulario-transferencia')
+        .addEventListener('submit', transferirEntreCategorias);
 });
 
 // Funciones de edición y eliminación
@@ -860,4 +824,58 @@ const ocultarCargando = () => {
 
 // Inicialización
 EstadoManager.inicializar();
+
+const transferirEntreCategorias = async (e) => {
+    e.preventDefault();
+
+    const monto = parseFloat(document.getElementById('monto-transferencia').value);
+    const categoriaOrigen = document.getElementById('categoria-origen').value;
+    const categoriaDestino = document.getElementById('categoria-destino').value;
+
+    if (isNaN(monto) || monto <= 0) {
+        mostrarMensaje('Ingrese un monto válido mayor que 0', 'error');
+        return;
+    }
+
+    if (categoriaOrigen === categoriaDestino) {
+        mostrarMensaje('La categoría de origen y destino no pueden ser iguales', 'error');
+        return;
+    }
+
+    // Verificar si hay saldo suficiente en la categoría origen
+    if (!AppState.resumenCategoria[categoriaOrigen] || AppState.resumenCategoria[categoriaOrigen] < monto) {
+        mostrarMensaje('Saldo insuficiente en la categoría origen', 'error');
+        return;
+    }
+
+    // Crear transacción de salida (origen)
+    const transaccionOrigen = {
+        descripcion: `Transferencia hacia ${capitalizarPalabras(categoriaDestino)}`,
+        monto: monto,
+        tipo: 'gasto',
+        categoria: categoriaOrigen,
+        fecha: new Date().toISOString()
+    };
+
+    // Crear transacción de entrada (destino)
+    const transaccionDestino = {
+        descripcion: `Transferencia desde ${capitalizarPalabras(categoriaOrigen)}`,
+        monto: monto,
+        tipo: 'ingreso',
+        categoria: categoriaDestino,
+        fecha: new Date().toISOString()
+    };
+
+    // Agregar ambas transacciones
+    AppState.transacciones.push(transaccionOrigen, transaccionDestino);
+
+    // Recalcular totales y actualizar UI
+    await EstadoManager.recalcularTotales();
+    await EstadoManager.guardarCambios();
+
+    // Cerrar modal y mostrar mensaje de éxito
+    document.getElementById('modal-transferencia').classList.add('hidden');
+    document.getElementById('formulario-transferencia').reset();
+    mostrarMensaje('Transferencia realizada con éxito', 'success');
+};
 
