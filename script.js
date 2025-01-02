@@ -885,7 +885,7 @@ const transferirEntreCategorias = async (e) => {
     const transaccionOrigen = {
         descripcion: `Transferencia hacia ${capitalizarPalabras(categoriaDestino)}`,
         monto: monto,
-        tipo: 'gasto',
+        tipo: 'transferencia',
         categoria: categoriaOrigen,
         fecha: new Date().toISOString()
     };
@@ -894,7 +894,7 @@ const transferirEntreCategorias = async (e) => {
     const transaccionDestino = {
         descripcion: `Transferencia desde ${capitalizarPalabras(categoriaOrigen)}`,
         monto: monto,
-        tipo: 'ingreso',
+        tipo: 'transferencia',
         categoria: categoriaDestino,
         fecha: new Date().toISOString()
     };
@@ -902,8 +902,11 @@ const transferirEntreCategorias = async (e) => {
     // Agregar ambas transacciones
     AppState.transacciones.push(transaccionOrigen, transaccionDestino);
 
-    // Recalcular totales y actualizar UI
-    await EstadoManager.recalcularTotales();
+    // Actualizar saldos de categorías sin afectar totales de ingresos y gastos
+    AppState.resumenCategoria[categoriaOrigen] -= monto;
+    AppState.resumenCategoria[categoriaDestino] += monto;
+
+    // Guardar cambios y actualizar UI
     await EstadoManager.guardarCambios();
 
     // Cerrar modal y mostrar mensaje de éxito

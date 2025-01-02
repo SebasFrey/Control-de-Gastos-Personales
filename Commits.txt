@@ -1,10 +1,10 @@
 git add .
 
-git commit -m "Actualización 2.1.10 - Fijar el header y manejar el scroll
+git commit -m "Actualización 2.1.11 - Corrección de la lógica de transferencia entre categorías
 
-- Se ha fijado el header para que permanezca visible al hacer scroll.
-- Se ha agregado una función para manejar el scroll y ocultar/mostrar el header según la dirección del scroll.
-- Se ha ajustado el margen superior del contenido principal para evitar que quede oculto detrás del header fijo."
+- Se corrigió la lógica de transferencia entre categorías para que no afecte los totales de ingresos y gastos.
+- Ahora las transferencias solo afectan el saldo de las categorías, restando de una y sumando a otra.
+- Se actualizó la interfaz de usuario para reflejar correctamente los cambios en las categorías."
 
 git push origin main
 

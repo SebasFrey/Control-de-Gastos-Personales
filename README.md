@@ -47,6 +47,12 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Actualizaciones Recientes
 
+### Actualización 2.1.11
+- Corrección de la lógica de transferencia entre categorías:
+  - Se corrigió la lógica de transferencia entre categorías para que no afecte los totales de ingresos y gastos.
+  - Ahora las transferencias solo afectan el saldo de las categorías, restando de una y sumando a otra.
+  - Se actualizó la interfaz de usuario para reflejar correctamente los cambios en las categorías.
+
 ### Actualización 2.1.10
 - Fijar el header y manejar el scroll:
   - Se ha fijado el header para que permanezca visible al hacer scroll.
