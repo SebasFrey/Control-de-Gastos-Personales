@@ -70,12 +70,24 @@ class EstadoManager {
 
         AppState.transacciones.forEach(transaccion => {
             const monto = parseFloat(transaccion.monto);
+            // Solo contar ingresos y gastos, no transferencias
             if (transaccion.tipo === 'ingreso') {
                 AppState.ingresos += monto;
-            } else {
+            } else if (transaccion.tipo === 'gasto') {
                 AppState.gastos += monto;
             }
-            this.actualizarSaldoCategoria(transaccion.categoria, monto, transaccion.tipo);
+            // Actualizar saldo de categoría
+            if (transaccion.tipo === 'transferencia') {
+                // Para transferencias, el efecto en la categoría depende de si es origen o destino
+                const esOrigen = transaccion.descripcion.startsWith('Transferencia hacia');
+                if (esOrigen) {
+                    this.actualizarSaldoCategoria(transaccion.categoria, monto, 'gasto');
+                } else {
+                    this.actualizarSaldoCategoria(transaccion.categoria, monto, 'ingreso');
+                }
+            } else {
+                this.actualizarSaldoCategoria(transaccion.categoria, monto, transaccion.tipo);
+            }
         });
 
         AppState.saldo = AppState.ingresos - AppState.gastos;
@@ -170,6 +182,8 @@ const validarFormulario = (formData) => {
         const otraCategoria = formData.get('otra-categoria');
         if (!otraCategoria || otraCategoria.length < 2) {
             errores.otraCategoria = 'Ingrese un nombre válido para la categoría (mínimo 2 caracteres)';
+        } else if (AppState.categorias.includes(otraCategoria.toLowerCase())) {
+            errores.otraCategoria = 'La categoría ya existe';
         }
     }
 
@@ -294,7 +308,6 @@ const actualizarListaTransacciones = () => {
     const listaTransacciones = document.getElementById('lista-transacciones');
     listaTransacciones.innerHTML = '';
 
-    // Agrupar transacciones por fecha
     const transaccionesPorFecha = AppState.transacciones.reduce((acc, trans) => {
         const fecha = new Date(trans.fecha).toLocaleDateString();
         if (!acc[fecha]) {
@@ -304,7 +317,6 @@ const actualizarListaTransacciones = () => {
         return acc;
     }, {});
 
-    // Ordenar fechas de más reciente a más antigua
     Object.entries(transaccionesPorFecha)
         .sort(([fechaA], [fechaB]) => new Date(fechaB) - new Date(fechaA))
         .forEach(([fecha, transacciones]) => {
@@ -339,14 +351,7 @@ const crearSeccionFecha = (fecha, transacciones) => {
     const contenido = document.createElement('div');
     contenido.className = 'contenido-fecha';
     contenido.id = `contenido-${fecha}`;
-
-    // Set initial state
-    if (!esHoy) {
-        contenido.style.height = '0';
-    } else {
-        // For today's transactions, show them expanded
-        contenido.style.height = 'auto';
-    }
+    contenido.style.height = esHoy ? 'auto' : '0';
 
     const tabla = document.createElement('table');
     tabla.className = 'tabla-transacciones-dia';
@@ -414,20 +419,7 @@ const crearSeccionFecha = (fecha, transacciones) => {
         const icono = encabezado.querySelector('.icono-colapsar');
         icono.setAttribute('data-feather', !estaExpandido ? 'chevron-down' : 'chevron-right');
 
-        // Calculate and set the height
-        if (!estaExpandido) {
-            // First set height to auto to get the natural height
-            contenido.style.height = 'auto';
-            const alturaReal = contenido.scrollHeight;
-            // Then set back to 0 and force a reflow
-            contenido.style.height = '0';
-            contenido.offsetHeight; // Force reflow
-            // Finally set to the calculated height
-            contenido.style.height = alturaReal + 'px';
-        } else {
-            contenido.style.height = '0';
-        }
-
+        contenido.style.height = !estaExpandido ? 'auto' : '0';
         feather.replace();
     });
 
@@ -534,6 +526,80 @@ const exportarJSON = async () => {
     }
 };
 
+const importarExcel = async (e) => {
+    try {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const transaccionesImportadas = XLSX.utils.sheet_to_json(sheet);
+
+            AppState.transacciones = transaccionesImportadas.map(t => ({
+                descripcion: t.Descripción || null,
+                monto: parseFloat(t.Monto.replace('$', '')),
+                tipo: t.Tipo.toLowerCase(),
+                categoria: t.Categoría.toLowerCase(),
+                fecha: new Date(t.Fecha).toISOString()
+            }));
+
+            await EstadoManager.recalcularTotales();
+            await EstadoManager.guardarCambios();
+
+            mostrarMensaje('Archivo Excel importado con éxito', 'success');
+        };
+        reader.readAsArrayBuffer(file);
+    } catch (error) {
+        mostrarMensaje('Error al importar desde Excel', 'error');
+        console.error('Error en importación Excel:', error);
+    }
+};
+
+const importarPDF = async (e) => {
+    try {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            const pdf = await pdfjsLib.getDocument({ data: event.target.result }).promise;
+            const transaccionesImportadas = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const textItems = textContent.items.map(item => item.str);
+
+                for (let j = 0; j < textItems.length; j += 5) {
+                    const transaccion = {
+                        descripcion: textItems[j] || null,
+                        monto: parseFloat(textItems[j + 1].replace('$', '')),
+                        tipo: textItems[j + 2].toLowerCase(),
+                        categoria: textItems[j + 3].toLowerCase(),
+                        fecha: new Date(textItems[j + 4]).toISOString()
+                    };
+                    transaccionesImportadas.push(transaccion);
+                }
+            }
+
+            AppState.transacciones = transaccionesImportadas;
+
+            await EstadoManager.recalcularTotales();
+            await EstadoManager.guardarCambios();
+
+            mostrarMensaje('Archivo PDF importado con éxito', 'success');
+        };
+        reader.readAsArrayBuffer(file);
+    } catch (error) {
+        mostrarMensaje('Error al importar desde PDF', 'error');
+        console.error('Error en importación PDF:', error);
+    }
+};
+
 const importarJSON = async (evento) => {
     const archivo = evento.target.files[0];
     if (!archivo) return;
@@ -548,12 +614,41 @@ const importarJSON = async (evento) => {
             lector.readAsText(archivo);
         });
 
-        const datos = JSON.parse(contenido);
-
-        if (!datos.transacciones || !Array.isArray(datos.transacciones) ||
-            !datos.categorias || !Array.isArray(datos.categorias)) {
-            throw new Error('Formato de archivo inválido');
+        let datos;
+        try {
+            datos = JSON.parse(contenido);
+        } catch (e) {
+            throw new Error('El archivo no contiene un JSON válido');
         }
+
+        // Validación detallada de la estructura
+        if (!datos || typeof datos !== 'object') {
+            throw new Error('El archivo no contiene un objeto JSON válido');
+        }
+
+        if (!Array.isArray(datos.transacciones)) {
+            throw new Error('El archivo no contiene un array de transacciones válido');
+        }
+
+        if (!Array.isArray(datos.categorias)) {
+            throw new Error('El archivo no contiene un array de categorías válido');
+        }
+
+        // Validar cada transacción
+        datos.transacciones.forEach((trans, index) => {
+            if (!trans.monto || isNaN(parseFloat(trans.monto))) {
+                throw new Error(`Transacción ${index + 1}: monto inválido`);
+            }
+            if (!trans.tipo || !['ingreso', 'gasto', 'transferencia'].includes(trans.tipo)) {
+                throw new Error(`Transacción ${index + 1}: tipo inválido`);
+            }
+            if (!trans.categoria || typeof trans.categoria !== 'string') {
+                throw new Error(`Transacción ${index + 1}: categoría inválida`);
+            }
+            if (!trans.fecha || isNaN(new Date(trans.fecha).getTime())) {
+                throw new Error(`Transacción ${index + 1}: fecha inválida`);
+            }
+        });
 
         // Asegurar categorías predeterminadas
         if (!datos.categorias.includes('sin clasificar')) {
@@ -572,7 +667,7 @@ const importarJSON = async (evento) => {
 
         mostrarMensaje('Datos importados con éxito', 'success');
     } catch (error) {
-        mostrarMensaje('Error al importar los datos', 'error');
+        mostrarMensaje(`Error al importar los datos: ${error.message}`, 'error');
         console.error('Error en importación:', error);
     } finally {
         ocultarCargando();
@@ -598,11 +693,10 @@ const resetFeatherCache = () => {
 
 const editarDescripcion = async (indice) => {
     const transaccion = AppState.transacciones[indice];
-    const descripcionTexto = document.querySelector(`[data-indice="${indice}"]`)
-        .closest('tr')
-        .querySelector('.descripcion-texto');
-    const descripcionInput = descripcionTexto.nextElementSibling;
-    const botonEditar = document.querySelector(`[data-indice="${indice}"]`);
+    const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-descripcion)`);
+    const descripcionTexto = fila.querySelector('.descripcion-texto');
+    const descripcionInput = fila.querySelector('.editar-descripcion');
+    const botonEditar = fila.querySelector('.boton-editar-descripcion');
 
     if (descripcionInput.style.display === 'none') {
         descripcionTexto.style.display = 'none';
@@ -623,11 +717,10 @@ const editarDescripcion = async (indice) => {
 
 const editarMonto = async (indice) => {
     const transaccion = AppState.transacciones[indice];
-    const montoTexto = document.querySelector(`[data-indice="${indice}"]`)
-        .closest('tr')
-        .querySelector('.monto-texto');
-    const montoInput = montoTexto.nextElementSibling;
-    const botonEditar = document.querySelector(`[data-indice="${indice}"]`);
+    const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-monto)`);
+    const montoTexto = fila.querySelector('.monto-texto');
+    const montoInput = fila.querySelector('.editar-monto');
+    const botonEditar = fila.querySelector('.boton-editar-monto');
 
     if (montoInput.style.display === 'none') {
         montoTexto.style.display = 'none';
@@ -641,9 +734,7 @@ const editarMonto = async (indice) => {
             return;
         }
 
-        const montoAnterior = transaccion.monto;
         transaccion.monto = nuevoMonto;
-
         await EstadoManager.recalcularTotales();
         await EstadoManager.guardarCambios();
 
@@ -657,11 +748,10 @@ const editarMonto = async (indice) => {
 
 const editarFecha = async (indice) => {
     const transaccion = AppState.transacciones[indice];
-    const fechaTexto = document.querySelector(`[data-indice="${indice}"]`)
-        .closest('tr')
-        .querySelector('.fecha-texto');
-    const fechaInput = fechaTexto.nextElementSibling;
-    const botonEditar = document.querySelector(`[data-indice="${indice}"]`);
+    const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-fecha)`);
+    const fechaTexto = fila.querySelector('.fecha-texto');
+    const fechaInput = fila.querySelector('.editar-fecha');
+    const botonEditar = fila.querySelector('.boton-editar-fecha');
 
     if (fechaInput.style.display === 'none') {
         fechaTexto.style.display = 'none';
@@ -911,3 +1001,4 @@ const transferirEntreCategorias = async (e) => {
     document.getElementById('formulario-transferencia').reset();
     mostrarMensaje('Transferencia realizada con éxito', 'success');
 };
+

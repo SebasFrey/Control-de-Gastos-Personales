@@ -41,9 +41,11 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Actualizaciones Recientes
 
-### Actualización 3.0.1
+### Actualización 3.0.2
 
-- Actualizaciones revertidas.
+- Corregida la funcionalidad para importar datos desde archivos Excel y PDF.
+- Mejoras en la validación de formularios para evitar duplicados en categorías personalizadas.
+- Corrección de errores menores y mejoras en la interfaz de usuario.
 
 ## Desarrollo futuro
 
