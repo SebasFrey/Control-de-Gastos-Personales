@@ -1,0 +1,13 @@
+git add .
+
+git commit -m "Actualización 2.1.13 - Mejora del mensaje de confirmación al eliminar una transacción
+
+- Se mejoró el mensaje de confirmación para proporcionar más detalles sobre la transacción que se va a eliminar.
+- Ahora el mensaje muestra la descripción, monto, tipo, categoría y fecha de la transacción."
+
+git push origin main
+
+# Esquema de versiones XYZ:
+# X (Major): Cambios importantes.
+# Y (Minor): Nuevas funcionalidades compatibles.
+# Z (Patch): Corrección de errores.
