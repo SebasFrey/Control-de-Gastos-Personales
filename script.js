@@ -241,9 +241,15 @@ const handleSubmitFormulario = async (e) => {
             }
         }
 
+        const monto = parseFloat(formData.get('monto'));
+        if (isNaN(monto) || monto <= 0) {
+            mostrarMensaje('Ingrese un monto válido mayor que 0', 'error');
+            return;
+        }
+
         const nuevaTransaccion = {
             descripcion: formData.get('descripcion') || null,
-            monto: parseFloat(formData.get('monto')),
+            monto: monto,
             tipo: formData.get('tipo'),
             categoria,
             fecha: new Date().toISOString()
@@ -694,6 +700,10 @@ const resetFeatherCache = () => {
 const editarDescripcion = async (indice) => {
     const transaccion = AppState.transacciones[indice];
     const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-descripcion)`);
+    if (!fila) {
+        mostrarMensaje('Elemento no encontrado', 'error');
+        return;
+    }
     const descripcionTexto = fila.querySelector('.descripcion-texto');
     const descripcionInput = fila.querySelector('.editar-descripcion');
     const botonEditar = fila.querySelector('.boton-editar-descripcion');

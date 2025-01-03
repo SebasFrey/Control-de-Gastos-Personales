@@ -41,8 +41,10 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Actualizaciones Recientes
 
-### Actualización 3.0.3
+### Actualización 3.0.4
 
+- Validación de valores de `parseFloat` antes de su uso en funciones como `handleSubmitFormulario`.
+- Verificación de la existencia de elementos del DOM en `editarDescripcion` para evitar errores.
 - Mejorado el manejo de errores al guardar cambios en `localStorage`.
 - Corregida la funcionalidad para importar datos desde archivos Excel y PDF.
 - Mejoras en la validación de formularios para evitar duplicados en categorías personalizadas.
