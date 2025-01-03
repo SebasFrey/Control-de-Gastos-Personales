@@ -216,6 +216,18 @@ const mostrarMensaje = (mensaje, tipo = 'info') => {
     }, 3000);
 };
 
+// Función para mostrar mensajes de error en el formulario
+const mostrarErroresFormulario = (errores) => {
+    Object.entries(errores).forEach(([campo, mensaje]) => {
+        const elementoError = document.getElementById(`error-${campo}`);
+        if (elementoError) {
+            elementoError.textContent = mensaje;
+            elementoError.setAttribute('role', 'alert');
+            elementoError.setAttribute('aria-live', 'assertive');
+        }
+    });
+};
+
 // Manejadores de eventos
 const handleSubmitFormulario = async (e) => {
     e.preventDefault();
@@ -226,14 +238,7 @@ const handleSubmitFormulario = async (e) => {
 
     // Mostrar errores si existen
     if (Object.keys(errores).length > 0) {
-        Object.entries(errores).forEach(([campo, mensaje]) => {
-            const elementoError = document.getElementById(`error-${campo}`);
-            if (elementoError) {
-                elementoError.textContent = mensaje;
-                elementoError.setAttribute('role', 'alert');
-                elementoError.setAttribute('aria-live', 'assertive');
-            }
-        });
+        mostrarErroresFormulario(errores);
         return;
     }
 
@@ -631,7 +636,7 @@ const importarJSON = async (evento) => {
     if (!archivo) return;
 
     try {
-        mostrarCargando();
+        mostrarCargando(); // Mostrar indicador de carga
 
         const contenido = await new Promise((resolve, reject) => {
             const lector = new FileReader();
@@ -696,7 +701,7 @@ const importarJSON = async (evento) => {
         mostrarMensaje(`Error al importar los datos: ${error.message}`, 'error');
         console.error('Error en importación:', error);
     } finally {
-        ocultarCargando();
+        ocultarCargando(); // Ocultar indicador de carga
     }
 };
 

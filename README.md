@@ -44,6 +44,8 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 ### Actualización 3.0.5
 
 - **Nuevos Comentarios**: Se agregaron comentarios descriptivos en funciones complejas para mejorar la comprensión del código.
+- **Indicador de Carga**: Se añadió un indicador visual de carga al procesar los datos JSON en la función `importarJSON`.
+- **Responsividad Mejorada**: Se ajustaron los estilos CSS para asegurar que todos los elementos en el sitio sean completamente responsivos, mejorando la experiencia de usuario en dispositivos con pantallas pequeñas.
 
 ## Desarrollo futuro
 
