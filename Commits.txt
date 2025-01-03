@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Actualización 2.1.16 - Resolución de conflictos y fusión con la rama remota"
+git commit -m "Actualización 3.0.1 - Actualizaciones revertidas."
 
 git push origin main
 
