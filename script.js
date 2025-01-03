@@ -36,6 +36,7 @@ function handleScroll() {
 // Clase para manejar el estado y la persistencia
 class EstadoManager {
     static async inicializar() {
+        // Intentar cargar datos guardados desde localStorage
         try {
             const transaccionesGuardadas = localStorage.getItem('transacciones');
             const categoriasGuardadas = localStorage.getItem('categorias');
@@ -58,16 +59,19 @@ class EstadoManager {
             await this.recalcularTotales();
             this.actualizarUI();
         } catch (error) {
+            // Mostrar mensaje de error si ocurre un problema al cargar los datos
             mostrarMensaje('Error al cargar los datos guardados', 'error');
             console.error('Error en inicialización:', error);
         }
     }
 
     static async recalcularTotales() {
+        // Inicializar totales
         AppState.ingresos = 0;
         AppState.gastos = 0;
         AppState.resumenCategoria = {};
 
+        // Recorrer todas las transacciones para calcular ingresos, gastos y actualizar el saldo por categoría
         AppState.transacciones.forEach(transaccion => {
             const monto = parseFloat(transaccion.monto);
             // Solo contar ingresos y gastos, no transferencias
@@ -90,13 +94,16 @@ class EstadoManager {
             }
         });
 
+        // Calcular el saldo total
         AppState.saldo = AppState.ingresos - AppState.gastos;
     }
 
     static actualizarSaldoCategoria(categoria, monto, tipo) {
+        // Asegurar que la categoría exista en el resumen
         if (!AppState.resumenCategoria[categoria]) {
             AppState.resumenCategoria[categoria] = 0;
         }
+        // Actualizar el saldo de la categoría según el tipo de transacción
         if (tipo === 'ingreso') {
             AppState.resumenCategoria[categoria] += monto;
         } else {
@@ -105,17 +112,20 @@ class EstadoManager {
     }
 
     static async guardarCambios() {
+        // Intentar guardar los cambios en localStorage
         try {
             localStorage.setItem('transacciones', JSON.stringify(AppState.transacciones));
             localStorage.setItem('categorias', JSON.stringify(AppState.categorias));
             this.actualizarUI();
         } catch (error) {
+            // Mostrar mensaje de error si ocurre un problema al guardar los cambios
             mostrarMensaje('Error al guardar los cambios', 'error');
             console.error('Error al guardar:', error);
         }
     }
 
     static actualizarUI() {
+        // Actualizar diferentes partes de la interfaz de usuario
         actualizarSaldo();
         actualizarResumenCategoria();
         actualizarListaTransacciones();
@@ -210,9 +220,11 @@ const mostrarMensaje = (mensaje, tipo = 'info') => {
 const handleSubmitFormulario = async (e) => {
     e.preventDefault();
 
+    // Validar los datos del formulario
     const formData = new FormData(e.target);
     const errores = validarFormulario(formData);
 
+    // Mostrar errores si existen
     if (Object.keys(errores).length > 0) {
         Object.entries(errores).forEach(([campo, mensaje]) => {
             const elementoError = document.getElementById(`error-${campo}`);
@@ -233,6 +245,7 @@ const handleSubmitFormulario = async (e) => {
     });
 
     try {
+        // Procesar la nueva transacción
         let categoria = formData.get('categoria');
         if (categoria === 'otro') {
             categoria = formData.get('otra-categoria').trim().toLowerCase();
@@ -263,6 +276,7 @@ const handleSubmitFormulario = async (e) => {
         document.getElementById('contenedor-otra-categoria').style.display = 'none';
         mostrarMensaje('Transacción agregada con éxito', 'success');
     } catch (error) {
+        // Mostrar mensaje de error si ocurre un problema al agregar la transacción
         mostrarMensaje('Error al agregar la transacción', 'error');
         console.error('Error en submit:', error);
     }
@@ -275,15 +289,18 @@ const handleCategoriaChange = (e) => {
 
 // Funciones de actualización de UI
 const actualizarSaldo = () => {
+    // Actualizar los elementos del DOM con los valores de saldo, ingresos y gastos
     document.getElementById('saldo').textContent = formatearNumero(AppState.saldo);
     document.getElementById('ingresos').textContent = formatearNumero(AppState.ingresos);
     document.getElementById('gastos').textContent = formatearNumero(AppState.gastos);
 };
 
 const actualizarResumenCategoria = () => {
+    // Actualizar la lista de categorías en la interfaz de usuario
     const listaCategoria = document.getElementById('lista-categoria');
     listaCategoria.innerHTML = '';
 
+    // Recorrer el resumen de categorías y crear elementos de lista
     Object.entries(AppState.resumenCategoria).forEach(([categoria, monto]) => {
         const li = document.createElement('li');
         li.innerHTML = `
@@ -311,9 +328,11 @@ const actualizarResumenCategoria = () => {
 };
 
 const actualizarListaTransacciones = () => {
+    // Actualizar la lista de transacciones en la interfaz de usuario
     const listaTransacciones = document.getElementById('lista-transacciones');
     listaTransacciones.innerHTML = '';
 
+    // Agrupar transacciones por fecha
     const transaccionesPorFecha = AppState.transacciones.reduce((acc, trans) => {
         const fecha = new Date(trans.fecha).toLocaleDateString();
         if (!acc[fecha]) {
@@ -323,6 +342,7 @@ const actualizarListaTransacciones = () => {
         return acc;
     }, {});
 
+    // Crear secciones de transacciones por fecha
     Object.entries(transaccionesPorFecha)
         .sort(([fechaA], [fechaB]) => new Date(fechaB) - new Date(fechaA))
         .forEach(([fecha, transacciones]) => {
@@ -871,6 +891,7 @@ const ocultarCargando = () => {
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar el estado de la aplicación y configurar eventos
     EstadoManager.inicializar();
     feather.replace();
     resetFeatherCache();
@@ -878,14 +899,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Agregar evento de scroll
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // Formulario principal
+    // Configurar eventos del formulario principal
     document.getElementById('formulario-transaccion')
         .addEventListener('submit', handleSubmitFormulario);
 
     document.getElementById('categoria')
         .addEventListener('change', handleCategoriaChange);
 
-    // Botones de exportación
+    // Configurar eventos de exportación
     document.getElementById('exportar-excel')
         .addEventListener('click', exportarExcel);
 
@@ -1011,4 +1032,3 @@ const transferirEntreCategorias = async (e) => {
     document.getElementById('formulario-transferencia').reset();
     mostrarMensaje('Transferencia realizada con éxito', 'success');
 };
-
