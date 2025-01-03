@@ -34,7 +34,6 @@ export const exportarPDF = async () => {
         doc.text(`Total Gastos: $${formatearNumero(AppState.gastos)}`, 14, 55);
 
         const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
-        const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
         const data = AppState.transacciones.map(t => [
             capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
             `$${formatearNumero(t.monto)}`,
