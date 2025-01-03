@@ -26,10 +26,6 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Feather Icons para iconos de interfaz
 - Vercel para el despliegue
 
-## Instalación
-1. Clona el repositorio: `git clone https://github.com/tu-usuario/control-de-gastos-personales.git`
-2. Navega al directorio del proyecto: `cd control-de-gastos-personales`
-3. Abre `index.html` en tu navegador.
 
 ## Uso
 1. Agrega una nueva transacción llenando el formulario y haciendo clic en "Agregar Transacción".
