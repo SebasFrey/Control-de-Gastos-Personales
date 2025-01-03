@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Actualización 3.0.2 - Añadida funcionalidad para importar datos desde archivos Excel y PDF. Mejoras en la validación de formularios para evitar duplicados en categorías personalizadas. Corrección de errores menores y mejoras en la interfaz de usuario."
+git commit -m "Actualización 3.0.3 - Mejorado el manejo de errores al guardar cambios en localStorage."
 
 git push origin main
 
