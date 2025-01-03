@@ -1,6 +1,5 @@
 import { AppState, EstadoManager } from './estadoManager.js';
-
-import { formatearNumero, capitalizarPrimeraLetra, capitalizarPalabras, mostrarMensaje } from './utils.js';
+import { formatearNumero, capitalizarPrimeraLetra, capitalizarPalabras, mostrarMensaje, mostrarCargando, ocultarCargando } from './utils.js';
 
 export const exportarExcel = async () => {
     try {
@@ -34,6 +33,7 @@ export const exportarPDF = async () => {
         doc.text(`Total Ingresos: $${formatearNumero(AppState.ingresos)}`, 14, 45);
         doc.text(`Total Gastos: $${formatearNumero(AppState.gastos)}`, 14, 55);
 
+        const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
         const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
         const data = AppState.transacciones.map(t => [
             capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
