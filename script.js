@@ -688,17 +688,43 @@ const editarFecha = async (indice) => {
     memoizedFeatherReplace();
 };
 
+const mostrarModalConfirmacion = (mensaje, onConfirm) => {
+    const modal = document.createElement('div');
+    modal.className = 'modal-confirmacion';
+    modal.innerHTML = `
+        <div class="modal-contenido">
+            <p>${mensaje}</p>
+            <div class="modal-acciones">
+                <button id="confirmar" class="boton-confirmar">Confirmar</button>
+                <button id="cancelar" class="boton-cancelar">Cancelar</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    document.getElementById('confirmar').addEventListener('click', () => {
+        onConfirm();
+        modal.remove();
+    });
+
+    document.getElementById('cancelar').addEventListener('click', () => {
+        modal.remove();
+    });
+};
+
 const confirmarEliminarTransaccion = async (indice) => {
     const transaccion = AppState.transacciones[indice];
-    const mensaje = "¿Está seguro que desea eliminar esta transacción?\n\n" +
+    const mensaje = `¿Está seguro que desea eliminar esta transacción?\n\n` +
         `Descripción: ${transaccion.descripcion || 'Sin descripción'}\n` +
         `Monto: $${formatearNumero(transaccion.monto)}\n` +
         `Tipo: ${capitalizarPrimeraLetra(transaccion.tipo)}\n` +
-        `Categoría: ${capitalizarPalabras(transaccion.categoria)}`;
+        `Categoría: ${capitalizarPalabras(transaccion.categoria)}\n` +
+        `Fecha: ${formatearFechaHora(transaccion.fecha)}\n\n` +
+        `Esta acción no se puede deshacer.`;
 
-    if (confirm(mensaje)) {
+    mostrarModalConfirmacion(mensaje, async () => {
         await eliminarTransaccion(indice);
-    }
+    });
 };
 
 const eliminarTransaccion = async (indice) => {

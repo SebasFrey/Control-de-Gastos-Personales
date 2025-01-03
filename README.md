@@ -47,11 +47,10 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Actualizaciones Recientes
 
-### Actualización 2.1.11
-- Corrección de la lógica de transferencia entre categorías:
-  - Se corrigió la lógica de transferencia entre categorías para que no afecte los totales de ingresos y gastos.
-  - Ahora las transferencias solo afectan el saldo de las categorías, restando de una y sumando a otra.
-  - Se actualizó la interfaz de usuario para reflejar correctamente los cambios en las categorías.
+### Actualización 2.1.13
+- Mejora del mensaje de confirmación al eliminar una transacción:
+  - Se mejoró el mensaje de confirmación para proporcionar más detalles sobre la transacción que se va a eliminar.
+  - Ahora el mensaje muestra la descripción, monto, tipo, categoría y fecha de la transacción.
 
 ### Actualización 2.1.10
 - Fijar el header y manejar el scroll:
