@@ -1,9 +1,9 @@
 git add .
 
-git commit -m "Actualización 2.1.13 - Mejora del mensaje de confirmación al eliminar una transacción
+git commit -m "Actualización 2.1.14 - Modularización del código JavaScript
 
-- Se mejoró el mensaje de confirmación para proporcionar más detalles sobre la transacción que se va a eliminar.
-- Ahora el mensaje muestra la descripción, monto, tipo, categoría y fecha de la transacción."
+- Se crearon archivos separados para manejar las utilidades (utils.js), el estado de la aplicación (estadoManager.js), la actualización de la interfaz de usuario (uiManager.js), los manejadores de eventos (eventHandlers.js) y las funciones de exportación e importación (exportImport.js).
+- Se eliminó el archivo script.js original después de modularizar las funciones."
 
 git push origin main
 
@@ -11,3 +11,5 @@ git push origin main
 # X (Major): Cambios importantes.
 # Y (Minor): Nuevas funcionalidades compatibles.
 # Z (Patch): Corrección de errores.
+
+

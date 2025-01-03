@@ -26,11 +26,6 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Feather Icons para iconos de interfaz
 - Vercel para el despliegue
 
-## Instalación
-1. Clona el repositorio: `git clone https://github.com/tu-usuario/control-de-gastos-personales.git`
-2. Navega al directorio del proyecto: `cd control-de-gastos-personales`
-3. Abre `index.html` en tu navegador.
-
 ## Uso
 1. Agrega una nueva transacción llenando el formulario y haciendo clic en "Agregar Transacción".
 2. Visualiza el resumen financiero y el historial de transacciones.
@@ -42,10 +37,20 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 - `index.html`: Estructura HTML de la aplicación.
 - `estilos.css`: Estilos CSS para la interfaz de usuario, incluyendo diseño responsivo.
-- `script.js`: Lógica de JavaScript para la funcionalidad de la aplicación.
+- `index.js`: Inicialización de la aplicación y manejo de eventos.
+- `utils.js`: Funciones de utilidad.
+- `estadoManager.js`: Manejo del estado y la persistencia.
+- `uiManager.js`: Actualización de la interfaz de usuario.
+- `eventHandlers.js`: Manejadores de eventos.
+- `exportImport.js`: Funciones de exportación e importación.
 - `README.md`: Este archivo, que proporciona información sobre el proyecto.
 
 ## Actualizaciones Recientes
+
+### Actualización 2.1.14
+- Modularización del código JavaScript:
+  - Se crearon archivos separados para manejar las utilidades (`utils.js`), el estado de la aplicación (`estadoManager.js`), la actualización de la interfaz de usuario (`uiManager.js`), los manejadores de eventos (`eventHandlers.js`) y las funciones de exportación e importación (`exportImport.js`).
+  - Se eliminó el archivo `script.js` original después de modularizar las funciones.
 
 ### Actualización 2.1.13
 - Mejora del mensaje de confirmación al eliminar una transacción:
