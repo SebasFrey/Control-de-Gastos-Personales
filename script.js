@@ -1007,6 +1007,13 @@ const transferirEntreCategorias = async (e) => {
         return;
     }
 
+    // Verificar si la categoría de origen tiene transacciones
+    const tieneTransacciones = AppState.transacciones.some(trans => trans.categoria === categoriaOrigen);
+    if (!tieneTransacciones) {
+        mostrarMensaje('La categoría de origen no tiene transacciones', 'error');
+        return;
+    }
+
     // Crear transacción de salida (origen)
     const transaccionOrigen = {
         descripcion: `Transferencia hacia ${capitalizarPalabras(categoriaDestino)}`,

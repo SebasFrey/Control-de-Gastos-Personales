@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Actualización 3.0.6 - Agregados comentarios descriptivos en funciones complejas. Añadido indicador de carga en importarJSON. Mejorada la responsividad del sitio."
+git commit -m "Actualización 3.0.7 - Agregados comentarios descriptivos en funciones complejas. Añadido indicador de carga en importarJSON. Mejorada la responsividad del sitio. Verificación de categoría de origen en transferirEntreCategorias."
 
 git push origin main
 

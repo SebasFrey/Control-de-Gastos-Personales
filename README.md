@@ -41,11 +41,12 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Actualizaciones Recientes
 
-### Actualización 3.0.5
+### Actualización 3.0.7
 
 - **Nuevos Comentarios**: Se agregaron comentarios descriptivos en funciones complejas para mejorar la comprensión del código.
 - **Indicador de Carga**: Se añadió un indicador visual de carga al procesar los datos JSON en la función `importarJSON`.
 - **Responsividad Mejorada**: Se ajustaron los estilos CSS para asegurar que todos los elementos en el sitio sean completamente responsivos, mejorando la experiencia de usuario en dispositivos con pantallas pequeñas.
+- **Verificación de Categoría de Origen**: Se añadió una verificación para comprobar si la categoría de origen tiene transacciones antes de permitir la transferencia, para evitar inconsistencias en los saldos.
 
 ## Desarrollo futuro
 
