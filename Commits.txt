@@ -1,6 +1,12 @@
 git add .
 
-git commit -m "Actualización 3.0.9 - Pequeño Corrección Con El Directorio."
+git commit -m "Versión 3.1.0: Mejoras en Transferencias, Historial y Edición.
+
+- Transferencias: Validaciones estrictas, mensajes de error claros y actualización del estado.
+- Historial: Despliegue dinámico, transiciones suaves y mejor rendimiento.
+- Edición: Validación en tiempo real, actualización de DOM/estado y manejo de errores.
+
+Código modularizado, optimizado y con mejoras de accesibilidad."
 
 git push origin main
 
