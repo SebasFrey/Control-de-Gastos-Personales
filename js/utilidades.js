@@ -34,12 +34,8 @@ export const capitalizarPalabras = (str) => {
 export const debounce = (func, wait) => {
   let timeout;
   return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
     clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+    timeout = setTimeout(() => func(...args), wait);
   };
 };
 
@@ -81,7 +77,15 @@ export const validarFormulario = (formData) => {
     const otraCategoria = formData.get('otra-categoria');
     if (!otraCategoria || otraCategoria.length < 2) {
       errores.otraCategoria = 'Ingrese un nombre válido para la categoría (mínimo 2 caracteres)';
+    } else if (AppState.categorias.includes(otraCategoria.toLowerCase())) {
+      errores.otraCategoria = 'La categoría ya existe';
     }
+  }
+
+  // Additional validation to check for duplicates
+  const descripcion = formData.get('descripcion');
+  if (AppState.transacciones.some(transaccion => transaccion.descripcion === descripcion)) {
+    errores.descripcion = 'Ya existe una transacción con esta descripción';
   }
 
   return errores;
@@ -147,6 +151,25 @@ export const mostrarError = (elemento, mensaje) => {
   contenedorError.className = 'mensaje-error visible';
   contenedorError.textContent = mensaje;
   elemento.parentNode.appendChild(contenedorError);
+
+  // Highlight the input field with an error
+  elemento.classList.add('input-error');
+
+  // Display a modal with the error message
+  const modalError = document.createElement('div');
+  modalError.className = 'modal-error';
+  modalError.innerHTML = `
+    <div class="modal-contenido">
+      <span class="cerrar-modal" aria-label="Cerrar modal de error">&times;</span>
+      <p>${mensaje}</p>
+    </div>
+  `;
+  document.body.appendChild(modalError);
+
+  // Close the modal when the close button is clicked
+  modalError.querySelector('.cerrar-modal').addEventListener('click', () => {
+    modalError.remove();
+  });
 };
 
 export const ocultarError = (elemento) => {
@@ -154,4 +177,7 @@ export const ocultarError = (elemento) => {
   if (contenedorError) {
     contenedorError.remove();
   }
+
+  // Remove the error highlight from the input field
+  elemento.classList.remove('input-error');
 };

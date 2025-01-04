@@ -27,6 +27,16 @@
   <body>
     <header>
       <h1>Control de Gastos Personales</h1>
+      <nav>
+        <button id="menu-toggle" aria-label="Abrir menú de navegación">
+          <i data-feather="menu"></i>
+        </button>
+        <ul id="menu" class="hidden">
+          <li><a href="#seccion-formulario">Nueva Transacción</a></li>
+          <li><a href="#seccion-resumen">Resumen Financiero</a></li>
+          <li><a href="#seccion-historial">Historial de Transacciones</a></li>
+        </ul>
+      </nav>
     </header>
     <main>
       <section
@@ -127,8 +137,10 @@
                 name="descripcion"
                 placeholder="Descripción opcional"
                 maxlength="100"
+                aria-describedby="error-descripcion"
               />
             </div>
+            <div class="mensaje-error" id="error-descripcion" role="alert"></div>
           </div>
           <div class="grupos-botones">
             <div class="grupo-botones grupo-gestion">
@@ -237,13 +249,16 @@
 
     <div id="mensajes" class="mensajes" role="alert" aria-live="polite"></div>
 
+    <!-- Contenedor de notificaciones -->
+    <div id="notificaciones" class="notificaciones" role="alert" aria-live="polite"></div>
+
     <!-- Modal de transferencia -->
-    <div id="modal-transferencia" class="modal hidden">
+    <div id="modal-transferencia" class="modal hidden" role="dialog" aria-labelledby="titulo-modal-transferencia" aria-hidden="true">
       <div class="modal-contenido">
         <span id="cerrar-modal-transferencia" class="cerrar-modal" aria-label="Cerrar modal de transferencia"
           >&times;</span
         >
-        <h2>Transferir entre Categorías</h2>
+        <h2 id="titulo-modal-transferencia">Transferir entre Categorías</h2>
         <form id="formulario-transferencia" novalidate>
           <div class="grupo-formulario">
             <label for="monto-transferencia"
@@ -338,6 +353,14 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         feather.replace();
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('menu');
+
+        menuToggle.addEventListener('click', () => {
+
+          menu.classList.toggle('hidden');
+        });
       });
     </script>
   </body>

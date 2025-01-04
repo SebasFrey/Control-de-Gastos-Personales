@@ -1,7 +1,7 @@
 # Control de Gastos Personales
 
 ## Descripción
-Control de Gastos Personales es una aplicación web diseñada para ayudarte a gestionar tus finanzas de manera eficiente. Permite registrar ingresos y gastos, categorizar transacciones, y generar reportes en diferentes formatos.
+Control de Gastos Personales es una aplicación web diseñada para ayudarte a gestionar tus finanzas de manera eficiente. Permite registrar transacciones, visualizar resúmenes financieros y exportar datos en diferentes formatos.
 
 ## Demo en vivo
 
@@ -9,31 +9,37 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Características
 
-- **Registro de Transacciones**: Añade ingresos y gastos con facilidad.
-- **Categorías Personalizables**: Crea y gestiona tus propias categorías.
-- **Historial de Transacciones**: Visualiza y filtra tu historial de transacciones.
-- **Transferencias entre Categorías**: Realiza transferencias entre diferentes categorías.
-- **Exportación de Datos**: Exporta tus datos en formatos Excel, PDF y JSON.
-- **Modo Oscuro**: Interfaz adaptable a modo oscuro.
-- **Alta Contraste**: Soporte para modo de alto contraste.
-- **Optimización Móvil**: Interfaz optimizada para dispositivos móviles.
+- Registro de transacciones de ingresos y gastos.
+- Visualización de resúmenes financieros por categoría.
+- Exportación de datos a Excel, PDF y JSON.
+- Importación de datos desde archivos JSON.
+- Interfaz optimizada para dispositivos móviles.
+- Menú de navegación tipo "hamburguesa" para facilitar la navegación en móviles.
+
+## Actualización 3.5.6
+### Mejoras y Cambios
+- **Optimización Móvil**: Se mejoró la experiencia móvil ajustando el diseño responsivo y añadiendo un menú de navegación tipo "hamburguesa".
+- **Legibilidad**: Se ajustaron los tamaños de fuente y el contraste de colores para mejorar la legibilidad en pantallas pequeñas.
+- **Navegación**: Se implementó un menú de navegación tipo "hamburguesa" que se expande al hacer clic, ahorrando espacio en la pantalla.
+- **Validaciones**: Se añadieron validaciones en tiempo real para los formularios de transacciones y transferencias.
+- **Errores**: Se mejoró el manejo de errores, mostrando mensajes de error en modales y resaltando los campos con errores.
 
 ## Instalación
 1. Clona el repositorio:
-    ```bash
-    git clone https://github.com/tu-usuario/control-de-gastos-personales.git
-    ```
+   ```bash
+   git clone https://github.com/tu-usuario/control-de-gastos-personales.git
+   ```
 2. Navega al directorio del proyecto:
-    ```bash
-    cd control-de-gastos-personales
-    ```
+   ```bash
+   cd control-de-gastos-personales
+   ```
 3. Abre `index.html` en tu navegador preferido.
 
 ## Uso
-1. **Añadir Transacción**: Completa el formulario de nueva transacción y haz clic en "Agregar Transacción".
-2. **Transferir entre Categorías**: Haz clic en "Transferir entre Categorías", completa el formulario y haz clic en "Realizar Transferencia".
-3. **Exportar Datos**: Utiliza los botones de exportación para guardar tus datos en el formato deseado.
-4. **Importar Datos**: Haz clic en "Importar datos" y selecciona un archivo JSON para cargar tus datos.
+1. Registra una nueva transacción en la sección "Nueva Transacción".
+2. Visualiza el resumen financiero en la sección "Resumen Financiero".
+3. Consulta el historial de transacciones en la sección "Historial de Transacciones".
+4. Utiliza el menú de navegación para moverte entre las secciones.
 
 ## Estructura del proyecto
 

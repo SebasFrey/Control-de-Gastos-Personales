@@ -133,10 +133,10 @@ export class UIManager {
   }
 
   static mostrarMensaje(mensaje, tipo = 'info') {
-    const contenedor = document.getElementById('mensajes');
+    const contenedor = document.getElementById('notificaciones');
     const mensajeElement = document.createElement('div');
 
-    mensajeElement.className = `mensaje mensaje-${tipo}`;
+    mensajeElement.className = `notificacion notificacion-${tipo}`;
     mensajeElement.textContent = mensaje;
     mensajeElement.setAttribute('role', 'alert');
     mensajeElement.setAttribute('aria-live', 'assertive');
