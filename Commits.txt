@@ -1,10 +1,9 @@
 git add .
 
-git commit -m "Versión 3.1.0: Mejoras en Transferencias, Historial y Edición.
+git commit -m "Versión 3.2.0: Actualización del README y mejoras en la documentación.
 
-- Transferencias: Validaciones estrictas, mensajes de error claros y actualización del estado.
-- Historial: Despliegue dinámico, transiciones suaves y mejor rendimiento.
-- Edición: Validación en tiempo real, actualización de DOM/estado y manejo de errores.
+- README: Se añadieron nuevas características, estructura del proyecto, pruebas realizadas, notas de implementación y próximos pasos.
+- Documentación: Se mejoró la claridad y se añadieron enlaces a la demo en vivo.
 
 Código modularizado, optimizado y con mejoras de accesibilidad."
 

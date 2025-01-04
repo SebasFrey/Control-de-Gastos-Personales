@@ -6,9 +6,26 @@ import { EdicionManager } from './edicion.js';
 import { TransferenciasManager } from './transferencias.js';
 import { validarFormulario, throttle } from './utilidades.js';
 import { validarTransferencia } from './validaciones.js';
+import {
+  detectarDispositivo,
+  ajustarAlturaVentana,
+  optimizarRendimiento
+} from './utils/mobile-utils.js';
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
+  // Detect device and optimize accordingly
+  const dispositivo = detectarDispositivo();
+  document.documentElement.setAttribute('data-device', dispositivo);
+
+  // Initialize mobile optimizations if needed
+  if (dispositivo !== 'desktop') {
+    ajustarAlturaVentana();
+    window.addEventListener('resize', ajustarAlturaVentana);
+    await MobileUIManager.inicializar();
+    optimizarRendimiento();
+  }
+
   // Initialize state
   await EstadoManager.inicializar();
 
