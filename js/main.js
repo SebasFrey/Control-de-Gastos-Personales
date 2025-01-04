@@ -11,6 +11,8 @@ import {
   ajustarAlturaVentana,
   optimizarRendimiento
 } from './utils/mobile-utils.js';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -55,6 +57,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize events for editing
   EdicionManager.inicializarEventosEdicion();
+
+  // Set up export buttons
+  document.getElementById('exportar-pdf').addEventListener('click', exportarPDF);
 });
 
 function setupFormHandlers() {
@@ -151,5 +156,23 @@ function updateCategorySelects() {
 
   selectOrigen.innerHTML = options;
   selectDestino.innerHTML = options;
+}
+
+function exportarPDF() {
+  const doc = new jsPDF();
+  const transacciones = AppState.transacciones.map(transaccion => [
+    transaccion.fecha,
+    transaccion.tipo,
+    transaccion.categoria,
+    transaccion.monto,
+    transaccion.descripcion
+  ]);
+
+  doc.autoTable({
+    head: [['Fecha', 'Tipo', 'Categoría', 'Monto', 'Descripción']],
+    body: transacciones
+  });
+
+  doc.save('transacciones.pdf');
 }
 

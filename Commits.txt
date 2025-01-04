@@ -1,12 +1,8 @@
 git add .
 
-git commit -m "Versión 3.5.6: Optimización móvil y mejoras de legibilidad.
+git commit -m "Versión 3.5.7: Corrección de exportación a PDF y mejoras de legibilidad.
 
-- Optimización Móvil: Se mejoró la experiencia móvil ajustando el diseño responsivo y añadiendo un menú de navegación tipo 'hamburguesa'.
-- Legibilidad: Se ajustaron los tamaños de fuente y el contraste de colores para mejorar la legibilidad en pantallas pequeñas.
-- Navegación: Se implementó un menú de navegación tipo 'hamburguesa' que se expande al hacer clic, ahorrando espacio en la pantalla.
-- Validaciones: Se añadieron validaciones en tiempo real para los formularios de transacciones y transferencias.
-- Errores: Se mejoró el manejo de errores, mostrando mensajes de error en modales y resaltando los campos con errores."
+- Exportación a PDF: Se corrigió la funcionalidad de exportación a PDF para asegurar que los datos se exporten correctamente."
 
 git push origin main
 

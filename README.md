@@ -24,17 +24,6 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - **Validaciones**: Se añadieron validaciones en tiempo real para los formularios de transacciones y transferencias.
 - **Errores**: Se mejoró el manejo de errores, mostrando mensajes de error en modales y resaltando los campos con errores.
 
-## Instalación
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/control-de-gastos-personales.git
-   ```
-2. Navega al directorio del proyecto:
-   ```bash
-   cd control-de-gastos-personales
-   ```
-3. Abre `index.html` en tu navegador preferido.
-
 ## Uso
 1. Registra una nueva transacción en la sección "Nueva Transacción".
 2. Visualiza el resumen financiero en la sección "Resumen Financiero".
