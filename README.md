@@ -14,6 +14,7 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - 💾 Exportación e importación de datos
 - 🎨 Diseño minimalista y profesional
 - ♿ Accesibilidad mejorada
+- 🗑️ Eliminación de transacciones por categoría
 
 ### Novedades en la Versión 1.43.0
 
@@ -71,6 +72,7 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
    - Agregar ingresos y gastos
    - Categorizar transacciones
    - Editar o eliminar registros
+   - Eliminar transacciones por categoría
 
 2. Categorías
 
