@@ -1,5 +1,9 @@
 import { AppState, EstadoManager } from './estado.js';
-import { formatearNumero, formatearFechaHora, capitalizarPalabras } from './utilidades.js';
+import {
+  formatearNumero,
+  formatearFechaHora,
+  capitalizarPalabras
+} from '../utils/formatters.js';
 
 export class UIManager {
   static actualizarSaldo() {
@@ -166,4 +170,13 @@ export class UIManager {
     }
   }
 }
+
+function myFunction() {
+  console.log("This is a sample function.");
+  const formattedNumber = formatearNumero(12345.67);
+
+  console.log(formattedNumber); // Example usage of imported function
+}
+
+myFunction();
 

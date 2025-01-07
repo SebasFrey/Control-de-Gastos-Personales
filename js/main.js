@@ -1,18 +1,19 @@
-import { EstadoManager } from './estado.js';
-import { UIManager } from './ui.js';
-import { TransactionManager } from './transacciones.js';
-import { HistorialManager } from './historial.js';
-import { EdicionManager } from './edicion.js';
-import { TransferenciasManager } from './transferencias.js';
-import { validarFormulario, throttle } from './utilidades.js';
-import { validarTransferencia } from './validaciones.js';
-import {
-  detectarDispositivo,
-  ajustarAlturaVentana,
-  optimizarRendimiento
-} from './utils/mobile-utils.js';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import { EstadoManager } from './modules/estado.js';
+import { UIManager } from './modules/ui.js';
+import { MobileUIManager } from './modules/mobile-ui.js';
+import { HistorialManager } from './modules/historial.js';
+import { EdicionManager } from './modules/edicion.js';
+import { TransferenciasManager } from './modules/transferencias.js';
+import {
+  ajustarAlturaVentana,
+  detectarDispositivo,
+  optimizarRendimiento
+} from './utils/mobile-utils.js';
+import { TransactionManager } from './transacciones.js';
+import { throttle, validarFormulario } from './utilidades.js';
+import { validarTransferencia } from './validaciones.js';
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -57,6 +58,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize events for editing
   EdicionManager.inicializarEventosEdicion();
+
+  // Initialize events for transferencias
+  TransferenciasManager.inicializarEventos();
 
   // Set up export buttons
   document.getElementById('exportar-pdf').addEventListener('click', exportarPDF);

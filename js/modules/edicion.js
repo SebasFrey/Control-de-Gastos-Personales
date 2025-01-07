@@ -1,6 +1,6 @@
-import { AppState } from './estado.js';
+import { AppState } from '../estado.js';
+import { validarFecha, validarMonto } from '../validaciones.js';
 import { UIManager } from './ui.js';
-import { validarMonto, validarFecha } from './validaciones.js';
 
 export class EdicionManager {
   static async editarTransaccion(indice, campo, valor) {

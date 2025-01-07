@@ -1,6 +1,6 @@
-import { AppState } from './estado.js';
+import { AppState } from '../estado.js';
+import { formatearNumero } from '../utilidades.js';
 import { UIManager } from './ui.js';
-import { formatearNumero } from './utilidades.js';
 
 export class TransferenciasManager {
   static validarTransferencia(origen, destino, monto) {

@@ -16,13 +16,11 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 - Interfaz optimizada para dispositivos móviles.
 - Menú de navegación tipo "hamburguesa" para facilitar la navegación en móviles.
 
-## Actualización 3.5.6
+## Actualización 3.6.0
 ### Mejoras y Cambios
-- **Optimización Móvil**: Se mejoró la experiencia móvil ajustando el diseño responsivo y añadiendo un menú de navegación tipo "hamburguesa".
-- **Legibilidad**: Se ajustaron los tamaños de fuente y el contraste de colores para mejorar la legibilidad en pantallas pequeñas.
-- **Navegación**: Se implementó un menú de navegación tipo "hamburguesa" que se expande al hacer clic, ahorrando espacio en la pantalla.
-- **Validaciones**: Se añadieron validaciones en tiempo real para los formularios de transacciones y transferencias.
-- **Errores**: Se mejoró el manejo de errores, mostrando mensajes de error en modales y resaltando los campos con errores.
+- **Backend**: Se realizaron cambios importantes en la estructura y lógica del backend para mejorar el rendimiento y la escalabilidad.
+- **Exportación a PDF**: Se corrigió la funcionalidad de exportación a PDF para asegurar que los datos se exporten correctamente.
+- **Mejoras de legibilidad**: Ajustes en los tamaños de fuente y el contraste de colores para mejorar la legibilidad en pantallas pequeñas.
 
 ## Uso
 1. Registra una nueva transacción en la sección "Nueva Transacción".
@@ -32,15 +30,27 @@ Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gasto
 
 ## Estructura del proyecto
 
-- `index.html`: Estructura HTML de la aplicación.
-- `css/variables.css`: Variables CSS globales.
-- `css/estilos.css`: Estilos CSS para la interfaz de usuario.
-- `css/mobile.css`: Estilos CSS específicos para dispositivos móviles.
-- `js/main.js`: Punto de entrada principal de la aplicación.
-- `js/modules/`: Módulos JavaScript para la lógica de la aplicación.
-- `js/utils/`: Utilidades JavaScript.
-- `assets/`: Carpeta para imágenes y otros recursos.
-- `docs/`: Documentación del proyecto.
+```plaintext
+expense-tracker/
+├── index.html
+├── css/
+│   ├── variables.css      # Variables CSS globales
+│   ├── estilos.css        # Estilos base
+│   └── mobile.css         # Optimizaciones móviles
+├── js/
+│   ├── main.js            # Punto de entrada
+│   ├── modules/
+│   │   ├── estado.js      # Gestión del estado
+│   │   ├── ui.js          # UI base
+│   │   ├── mobile-ui.js   # UI móvil
+│   │   ├── historial.js   # Gestión del historial
+│   │   ├── edicion.js     # Gestión de edición
+│   │   └── transferencias.js # Gestión de transferencias
+│   └── utils/
+│       ├── formatters.js  # Utilidades de formato
+│       ├── validators.js  # Validaciones
+│       └── mobile-utils.js # Utilidades móviles
+```
 
 ## Registro de Cambios
 
