@@ -1,10 +1,6 @@
 git add .
 
-git commit -m "Versión 3.6.0: Actualización significativa del backend y mejoras de exportación a PDF.
-
-- Backend: Se realizaron cambios importantes en la estructura y lógica del backend para mejorar el rendimiento y la escalabilidad.
-- Exportación a PDF: Se corrigió la funcionalidad de exportación a PDF para asegurar que los datos se exporten correctamente.
-- Mejoras de legibilidad: Ajustes en los tamaños de fuente y el contraste de colores para mejorar la legibilidad en pantallas pequeñas."
+git commit -m "Versión 4.0.0: Actualización significativa, las cague."
 
 git push origin main
 

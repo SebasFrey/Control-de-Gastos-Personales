@@ -1,95 +1,109 @@
 # Control de Gastos Personales
 
-## Descripción
-Control de Gastos Personales es una aplicación web diseñada para ayudarte a gestionar tus finanzas de manera eficiente. Permite registrar transacciones, visualizar resúmenes financieros y exportar datos en diferentes formatos.
+## Versión 1.43.0
 
-## Demo en vivo
+Una aplicación web moderna para gestionar gastos e ingresos personales, con un diseño intuitivo y profesional.
 
-Puedes acceder a una versión en vivo de la aplicación aquí: [Control de Gastos Personales](https://control-de-gastos-personales.vercel.app/)
+### Características Principales
 
-## Características
+- ✨ Interfaz moderna y responsive
+- 💰 Gestión intuitiva de ingresos y gastos
+- 🏷️ Sistema flexible de categorías personalizadas
+- 📊 Resumen financiero en tiempo real
+- 📱 Diseño adaptativo para todos los dispositivos
+- 💾 Exportación e importación de datos
+- 🎨 Diseño minimalista y profesional
+- ♿ Accesibilidad mejorada
 
-- Registro de transacciones de ingresos y gastos.
-- Visualización de resúmenes financieros por categoría.
-- Exportación de datos a Excel, PDF y JSON.
-- Importación de datos desde archivos JSON.
-- Interfaz optimizada para dispositivos móviles.
-- Menú de navegación tipo "hamburguesa" para facilitar la navegación en móviles.
+### Novedades en la Versión 1.43.0
 
-## Actualización 3.6.0
-### Mejoras y Cambios
-- **Backend**: Se realizaron cambios importantes en la estructura y lógica del backend para mejorar el rendimiento y la escalabilidad.
-- **Exportación a PDF**: Se corrigió la funcionalidad de exportación a PDF para asegurar que los datos se exporten correctamente.
-- **Mejoras de legibilidad**: Ajustes en los tamaños de fuente y el contraste de colores para mejorar la legibilidad en pantallas pequeñas.
+#### Interfaz de Usuario
 
-## Uso
-1. Registra una nueva transacción en la sección "Nueva Transacción".
-2. Visualiza el resumen financiero en la sección "Resumen Financiero".
-3. Consulta el historial de transacciones en la sección "Historial de Transacciones".
-4. Utiliza el menú de navegación para moverte entre las secciones.
+- Nuevo diseño visual más moderno y profesional
+- Iconografía mejorada en botones y campos
+- Animaciones y transiciones suaves
+- Mejor jerarquía visual y uso del espacio
 
-## Estructura del proyecto
+#### Experiencia de Usuario
 
-```plaintext
-expense-tracker/
-├── index.html
-├── css/
-│   ├── variables.css      # Variables CSS globales
-│   ├── estilos.css        # Estilos base
-│   └── mobile.css         # Optimizaciones móviles
-├── js/
-│   ├── main.js            # Punto de entrada
-│   ├── modules/
-│   │   ├── estado.js      # Gestión del estado
-│   │   ├── ui.js          # UI base
-│   │   ├── mobile-ui.js   # UI móvil
-│   │   ├── historial.js   # Gestión del historial
-│   │   ├── edicion.js     # Gestión de edición
-│   │   └── transferencias.js # Gestión de transferencias
-│   └── utils/
-│       ├── formatters.js  # Utilidades de formato
-│       ├── validators.js  # Validaciones
-│       └── mobile-utils.js # Utilidades móviles
-```
+- Sistema simplificado de categorías
+- Feedback visual mejorado
+- Mensajes de estado más claros
+- Mayor accesibilidad
 
-## Registro de Cambios
+#### Rendimiento
 
-Consulta el archivo `README.md` para más detalles sobre las versiones y cambios recientes.
+- Carga optimizada de recursos
+- Scripts externos asíncronos
+- Mejoras en la responsividad
+- Optimización general
 
-### Pruebas Realizadas
+### Tecnologías Utilizadas
 
-#### Transferencias
-- [✓] Validación de categorías diferentes
-- [✓] Validación de saldo suficiente
-- [✓] Mensajes de error claros
-- [✓] Actualización correcta del estado
-- [✓] Persistencia de datos
+- HTML5 semántico
+- CSS3 con variables personalizadas
+- JavaScript moderno (ES6+)
+- LocalStorage para persistencia
+- Feather Icons para iconografía
+- Librerías:
+  - XLSX para Excel
+  - jsPDF para PDF
+  - Feather Icons
 
-#### Historial
-- [✓] Despliegue suave de secciones
-- [✓] Altura calculada correctamente
-- [✓] Rendimiento en múltiples secciones
-- [✓] Comportamiento responsive
-- [✓] Accesibilidad
+### Requisitos del Sistema
 
-#### Edición
-- [✓] Validación en tiempo real
-- [✓] Guardado correcto de cambios
-- [✓] Actualización de UI
-- [✓] Manejo de errores
-- [✓] Experiencia de usuario
+- Navegador moderno con soporte para:
+  - JavaScript ES6+
+  - CSS Grid y Flexbox
+  - LocalStorage
+  - Async/Await
 
-### Notas de Implementación
-1. Se modularizó el código para mejor mantenimiento.
-2. Se implementaron patrones de rendimiento.
-3. Se mejoró la accesibilidad general.
-4. Se agregaron más pruebas automatizadas.
-5. Se optimizó el manejo de estado.
+### Instalación
 
-### Próximos Pasos
-1. Implementar más validaciones.
-2. Mejorar la experiencia móvil.
-3. Agregar más pruebas unitarias.
-4. Optimizar el rendimiento.
-5. Expandir la documentación.
+1. Clonar el repositorio
+2. No requiere instalación de dependencias
+3. Abrir `index.html` en el navegador
+
+### Uso
+
+1. Gestión de Transacciones
+
+   - Agregar ingresos y gastos
+   - Categorizar transacciones
+   - Editar o eliminar registros
+
+2. Categorías
+
+   - Sistema simplificado con dos categorías predeterminadas
+   - Añadir categorías personalizadas
+   - Gestionar categorías existentes
+
+3. Exportación/Importación
+   - Excel
+   - PDF
+   - JSON
+
+### Accesibilidad
+
+- Navegación completa por teclado
+- Etiquetas ARIA
+- Alto contraste
+- Textos claros y legibles
+- Feedback visual y auditivo
+
+### Responsive Design
+
+- Desktop: Experiencia completa
+- Tablet: Layout adaptativo
+- Mobile: Interfaz optimizada
+- Soporte para diferentes densidades de píxeles
+
+### Próximas Mejoras
+
+- [ ] Modo oscuro
+- [ ] Gráficos estadísticos
+- [ ] Filtros avanzados
+- [ ] Presupuestos mensuales
+- [ ] Sincronización en la nube
+- [ ] Múltiples monedas
 
