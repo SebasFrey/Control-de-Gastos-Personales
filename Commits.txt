@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Versión 4.44.0: Mejoras en el manejo de scroll, exportación a PDF y funciones de edición."
+git commit -m "Versión 4.44.5: Correcciones en eventos y estructura de datos."
 
 git push origin main
 
@@ -8,3 +8,4 @@ git push origin main
 # X (Major): Cambios importantes.
 # Y (Minor): Nuevas funcionalidades compatibles.
 # Z (Patch): Corrección de errores.
+

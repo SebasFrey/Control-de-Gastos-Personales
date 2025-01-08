@@ -1,6 +1,6 @@
 # Control de Gastos Personales
 
-## Versión 1.44.0
+## Versión 4.44.5
 
 Una aplicación web moderna para gestionar gastos e ingresos personales, con un diseño intuitivo y profesional.
 
@@ -16,7 +16,7 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - ♿ Accesibilidad mejorada
 - 🗑️ Eliminación de transacciones por categoría
 
-### Novedades en la Versión 1.44.0
+### Novedades en la Versión 4.44.0
 
 #### Interfaz de Usuario
 
@@ -36,6 +36,7 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 
 - Carga optimizada de recursos
 - Scripts externos asíncronos
+
 - Mejoras en la responsividad
 - Optimización general
 
@@ -44,6 +45,9 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - Manejo de scroll mejorado con debouncing y transiciones suaves
 - Exportación a PDF con mejor manejo de errores y validación
 - Funciones de edición mejoradas con validación y manejo de errores
+- Verificación de la estructura de datos importados/exportados
+- Aseguramiento de que todos los elementos del DOM utilizados en JavaScript existen en el HTML
+- Revisión y corrección de eventos para asegurar que estén correctamente enlazados y no haya conflictos
 
 ### Tecnologías Utilizadas
 
@@ -65,12 +69,6 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
   - LocalStorage
   - Async/Await
 
-### Instalación
-
-1. Clonar el repositorio
-2. No requiere instalación de dependencias
-3. Abrir `index.html` en el navegador
-
 ### Uso
 
 1. Gestión de Transacciones
@@ -91,26 +89,10 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
    - PDF
    - JSON
 
-### Accesibilidad
-
-- Navegación completa por teclado
-- Etiquetas ARIA
-- Alto contraste
-- Textos claros y legibles
-- Feedback visual y auditivo
-
-### Responsive Design
-
-- Desktop: Experiencia completa
-- Tablet: Layout adaptativo
-- Mobile: Interfaz optimizada
-- Soporte para diferentes densidades de píxeles
-
 ### Próximas Mejoras
 
 - [ ] Modo oscuro
 - [ ] Gráficos estadísticos
-
 - [ ] Filtros avanzados
 - [ ] Presupuestos mensuales
 - [ ] Sincronización en la nube

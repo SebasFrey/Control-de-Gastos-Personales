@@ -117,6 +117,10 @@ class EstadoManager {
         try {
             localStorage.setItem('transacciones', JSON.stringify(AppState.transacciones));
             localStorage.setItem('categorias', JSON.stringify(AppState.categorias));
+            console.log('Datos guardados:', {
+                transacciones: AppState.transacciones,
+                categorias: AppState.categorias
+            });
             this.actualizarUI();
         } catch (error) {
             // Mostrar mensaje de error si ocurre un problema al guardar los cambios
@@ -409,6 +413,7 @@ const crearSeccionFecha = (fecha, transacciones) => {
     transacciones.forEach((transaccion, indice) => {
         const tr = document.createElement('tr');
         tr.className = `item-transaccion ${transaccion.tipo}`;
+        tr.dataset.indice = indice; // Añade el índice al TR
         tr.innerHTML = `
             <td data-label="Descripción">
                 <span class="descripcion-texto">${capitalizarPalabras(transaccion.descripcion || 'Sin descripción')}</span>
@@ -426,16 +431,16 @@ const crearSeccionFecha = (fecha, transacciones) => {
             </td>
             <td data-label="Acciones">
                 <div class="acciones-transaccion">
-                    <button class="boton-editar-descripcion" data-indice="${indice}" title="Editar descripción" aria-label="Editar descripción">
+                    <button class="boton-editar-descripcion" title="Editar descripción">
                         <i data-feather="edit-2"></i>
                     </button>
-                    <button class="boton-editar-monto" data-indice="${indice}" title="Editar monto" aria-label="Editar monto">
+                    <button class="boton-editar-monto" title="Editar monto">
                         <i data-feather="dollar-sign"></i>
                     </button>
-                    <button class="boton-editar-fecha" data-indice="${indice}" title="Editar fecha" aria-label="Editar fecha">
+                    <button class="boton-editar-fecha" title="Editar fecha">
                         <i data-feather="calendar"></i>
                     </button>
-                    <button class="boton-eliminar" data-indice="${indice}" title="Eliminar transacción" aria-label="Eliminar transacción">
+                    <button class="boton-eliminar" title="Eliminar transacción">
                         <i data-feather="trash-2"></i>
                     </button>
                 </div>
@@ -941,107 +946,184 @@ const ocultarCargando = () => {
     }
 };
 
-// Inicialización
+// Reemplaza la sección de eventos en el DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-    try {
-        // Inicializar el estado de la aplicación y configurar eventos
-        EstadoManager.inicializar();
-        feather.replace();
-        resetFeatherCache();
+    EstadoManager.inicializar();
+    feather.replace();
 
-        // Agregar evento de scroll
-        window.addEventListener('scroll', handleScroll, { passive: true });
+    // Agregar evento de scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-        // Configurar eventos del formulario principal
-        const formulario = document.getElementById('formulario-transaccion');
-        if (formulario) {
-            formulario.addEventListener('submit', async (e) => {
-                try {
-                    await handleSubmitFormulario(e);
-                } catch (error) {
-                    mostrarMensaje('Error al procesar el formulario', 'error');
-                    console.error('Error en submit:', error);
-                }
-            });
-        }
-
-        document.getElementById('categoria')
-            .addEventListener('change', handleCategoriaChange);
-
-        // Configurar eventos de exportación
-        document.getElementById('exportar-excel')
-            .addEventListener('click', exportarExcel);
-
-        document.getElementById('exportar-pdf')
-            .addEventListener('click', exportarPDF);
-
-        document.getElementById('exportar-json')
-            .addEventListener('click', exportarJSON);
-
-        document.getElementById('importar-json')
-            .addEventListener('change', importarJSON);
-
-        // Botones del modal de transferencia
-        document.getElementById('abrir-modal-transferencia')
-            .addEventListener('click', () => {
-                const modal = document.getElementById('modal-transferencia');
-                const selectOrigen = document.getElementById('categoria-origen');
-                const selectDestino = document.getElementById('categoria-destino');
-
-                // Actualizar las opciones de categorías
-                const optionsHTML = AppState.categorias
-                    .map(categoria => `<option value="${categoria}">${capitalizarPalabras(categoria)}</option>`)
-                    .join('');
-
-                selectOrigen.innerHTML = optionsHTML;
-                selectDestino.innerHTML = optionsHTML;
-
-                modal.classList.remove('hidden');
-            });
-
-        document.getElementById('cerrar-modal-transferencia')
-            .addEventListener('click', () => {
-                document.getElementById('modal-transferencia').classList.add('hidden');
-                document.getElementById('formulario-transferencia').reset();
-            });
-
-        // Cerrar modal al hacer clic fuera del contenido
-        document.getElementById('modal-transferencia').addEventListener('click', (e) => {
-            if (e.target.id === 'modal-transferencia') {
-                e.target.classList.add('hidden');
-                document.getElementById('formulario-transferencia').reset();
+    // Configurar eventos del formulario principal
+    const formulario = document.getElementById('formulario-transaccion');
+    if (formulario) {
+        formulario.addEventListener('submit', async (e) => {
+            try {
+                await handleSubmitFormulario(e);
+            } catch (error) {
+                mostrarMensaje('Error al procesar el formulario', 'error');
+                console.error('Error en submit:', error);
             }
         });
+    }
 
-        // Delegación de eventos para acciones dinámicas
-        document.addEventListener('click', async (e) => {
-            const target = e.target.closest('button');
-            if (!target) return;
+    document.getElementById('categoria')
+        .addEventListener('change', handleCategoriaChange);
 
-            const indice = target.dataset.indice;
-            if (!indice && !target.classList.contains('boton-eliminar-categoria')) return;
+    // Configurar eventos de exportación
+    document.getElementById('exportar-excel')
+        .addEventListener('click', exportarExcel);
+
+    document.getElementById('exportar-pdf')
+        .addEventListener('click', exportarPDF);
+
+    document.getElementById('exportar-json')
+        .addEventListener('click', exportarJSON);
+
+    document.getElementById('importar-json')
+        .addEventListener('change', importarJSON);
+
+    // Delegación de eventos para los botones
+    document.addEventListener('click', async (e) => {
+        const target = e.target.closest('button');
+        if (!target) return;
+
+        // Prevenir doble clic
+        if (target.disabled) return;
+        target.disabled = true;
+
+        try {
+            const indice = parseInt(target.closest('[data-indice]')?.dataset.indice);
 
             if (target.classList.contains('boton-eliminar')) {
-                await confirmarEliminarTransaccion(indice);
-            } else if (target.classList.contains('boton-editar-descripcion')) {
-                await editarDescripcion(indice);
-            } else if (target.classList.contains('boton-editar-monto')) {
-                await editarMonto(indice);
-            } else if (target.classList.contains('boton-editar-fecha')) {
-                await editarFecha(indice);
-            } else if (target.classList.contains('boton-eliminar-categoria')) {
-                const categoria = target.dataset.categoria;
-                await eliminarCategoria(categoria);
+                if (confirm('¿Está seguro de que desea eliminar esta transacción?')) {
+                    AppState.transacciones.splice(indice, 1);
+                    await EstadoManager.recalcularTotales();
+                    await EstadoManager.guardarCambios();
+                    mostrarMensaje('Transacción eliminada con éxito', 'success');
+                }
             }
-        });
+            else if (target.classList.contains('boton-editar-descripcion')) {
+                const fila = target.closest('tr');
+                const descripcionTexto = fila.querySelector('.descripcion-texto');
+                const descripcionInput = fila.querySelector('.editar-descripcion');
 
-        // Agregar evento para la transferencia entre categorías
-        document.getElementById('formulario-transferencia')
-            .addEventListener('submit', transferirEntreCategorias);
-    } catch (error) {
-        mostrarMensaje('Error al inicializar la aplicación', 'error');
-        console.error('Error en inicialización:', error);
-    }
+                if (descripcionInput.style.display === 'none') {
+                    // Modo edición
+                    descripcionTexto.style.display = 'none';
+                    descripcionInput.style.display = 'block';
+                    descripcionInput.value = AppState.transacciones[indice].descripcion || '';
+                    descripcionInput.focus();
+                    target.innerHTML = '<i data-feather="check"></i>';
+                    feather.replace();
+                } else {
+                    // Guardar cambios
+                    const nuevaDescripcion = descripcionInput.value.trim();
+                    AppState.transacciones[indice].descripcion = nuevaDescripcion || null;
+                    descripcionTexto.textContent = capitalizarPalabras(nuevaDescripcion || 'Sin descripción');
+                    descripcionTexto.style.display = 'block';
+                    descripcionInput.style.display = 'none';
+                    target.innerHTML = '<i data-feather="edit-2"></i>';
+                    await EstadoManager.guardarCambios();
+                    feather.replace();
+                }
+            }
+            else if (target.classList.contains('boton-editar-monto')) {
+                const fila = target.closest('tr');
+                const montoTexto = fila.querySelector('.monto-texto');
+                const montoInput = fila.querySelector('.editar-monto');
+
+                if (montoInput.style.display === 'none') {
+                    // Modo edición
+                    montoTexto.style.display = 'none';
+                    montoInput.style.display = 'block';
+                    montoInput.value = AppState.transacciones[indice].monto;
+                    montoInput.focus();
+                    target.innerHTML = '<i data-feather="check"></i>';
+                    feather.replace();
+                } else {
+                    // Guardar cambios
+                    const nuevoMonto = parseFloat(montoInput.value);
+                    if (isNaN(nuevoMonto) || nuevoMonto <= 0) {
+                        mostrarMensaje('Por favor, ingrese un monto válido mayor que 0', 'error');
+                        return;
+                    }
+                    AppState.transacciones[indice].monto = nuevoMonto;
+                    montoTexto.textContent = `$${formatearNumero(nuevoMonto)}`;
+                    montoTexto.style.display = 'block';
+                    montoInput.style.display = 'none';
+                    target.innerHTML = '<i data-feather="dollar-sign"></i>';
+                    await EstadoManager.recalcularTotales();
+                    await EstadoManager.guardarCambios();
+                    feather.replace();
+                }
+            }
+            else if (target.classList.contains('boton-editar-fecha')) {
+                const fila = target.closest('tr');
+                const fechaTexto = fila.querySelector('.fecha-texto');
+                const fechaInput = fila.querySelector('.editar-fecha');
+
+                if (fechaInput.style.display === 'none') {
+                    // Modo edición
+                    fechaTexto.style.display = 'none';
+                    fechaInput.style.display = 'block';
+                    fechaInput.value = AppState.transacciones[indice].fecha.slice(0, 16);
+                    fechaInput.focus();
+                    target.innerHTML = '<i data-feather="check"></i>';
+                    feather.replace();
+                } else {
+                    // Guardar cambios
+                    const nuevaFecha = new Date(fechaInput.value);
+                    if (isNaN(nuevaFecha.getTime())) {
+                        mostrarMensaje('Por favor, seleccione una fecha válida', 'error');
+                        return;
+                    }
+                    AppState.transacciones[indice].fecha = nuevaFecha.toISOString();
+                    fechaTexto.textContent = formatearFechaHora(nuevaFecha);
+                    fechaTexto.style.display = 'block';
+                    fechaInput.style.display = 'none';
+                    target.innerHTML = '<i data-feather="calendar"></i>';
+                    await EstadoManager.guardarCambios();
+                    feather.replace();
+                }
+            }
+            else if (target.classList.contains('boton-eliminar-categoria')) {
+                const categoria = target.dataset.categoria;
+                if (categoria && confirm(`¿Está seguro que desea eliminar la categoría "${capitalizarPalabras(categoria)}"?`)) {
+                    if (categoria.toLowerCase() === 'sin clasificar' || categoria.toLowerCase() === 'otro') {
+                        mostrarMensaje('No se pueden eliminar las categorías predeterminadas', 'error');
+                        return;
+                    }
+
+                    AppState.transacciones = AppState.transacciones.map(trans => {
+                        if (trans.categoria.toLowerCase() === categoria.toLowerCase()) {
+                            return { ...trans, categoria: 'sin clasificar' };
+                        }
+                        return trans;
+                    });
+
+                    const index = AppState.categorias.findIndex(
+                        cat => cat.toLowerCase() === categoria.toLowerCase()
+                    );
+                    if (index !== -1) {
+                        AppState.categorias.splice(index, 1);
+                        await EstadoManager.recalcularTotales();
+                        await EstadoManager.guardarCambios();
+                        mostrarMensaje('Categoría eliminada con éxito', 'success');
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error en acción:', error);
+            mostrarMensaje('Error al realizar la acción', 'error');
+        } finally {
+            target.disabled = false;
+        }
+    });
+
+    // Agregar evento para la transferencia entre categorías
+    document.getElementById('formulario-transferencia')
+        .addEventListener('submit', transferirEntreCategorias);
 });
 
 // Transferencia entre categorías
@@ -1089,6 +1171,7 @@ const transferirEntreCategorias = async (e) => {
         descripcion: `Transferencia desde ${capitalizarPalabras(categoriaOrigen)}`,
         monto: monto,
         tipo: 'ingreso',
+
         categoria: categoriaDestino,
         fecha: new Date().toISOString()
     };
