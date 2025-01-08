@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Versión 4.0.1: Vaya cagada me estoy mandando."
+git commit -m "Versión 4.44.0: Mejoras en el manejo de scroll, exportación a PDF y funciones de edición."
 
 git push origin main
 

@@ -1,6 +1,6 @@
 # Control de Gastos Personales
 
-## Versión 1.43.0
+## Versión 1.44.0
 
 Una aplicación web moderna para gestionar gastos e ingresos personales, con un diseño intuitivo y profesional.
 
@@ -16,7 +16,7 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - ♿ Accesibilidad mejorada
 - 🗑️ Eliminación de transacciones por categoría
 
-### Novedades en la Versión 1.43.0
+### Novedades en la Versión 1.44.0
 
 #### Interfaz de Usuario
 
@@ -38,6 +38,12 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - Scripts externos asíncronos
 - Mejoras en la responsividad
 - Optimización general
+
+#### Mejoras Técnicas
+
+- Manejo de scroll mejorado con debouncing y transiciones suaves
+- Exportación a PDF con mejor manejo de errores y validación
+- Funciones de edición mejoradas con validación y manejo de errores
 
 ### Tecnologías Utilizadas
 
@@ -104,6 +110,7 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 
 - [ ] Modo oscuro
 - [ ] Gráficos estadísticos
+
 - [ ] Filtros avanzados
 - [ ] Presupuestos mensuales
 - [ ] Sincronización en la nube

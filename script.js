@@ -13,16 +13,18 @@ const AppState = {
 let lastScrollPosition = 0;
 let isScrolling = false;
 
-// Función para manejar el scroll y ocultar/mostrar el header
+// Improved scroll handling with debouncing and smoother transitions
 function handleScroll() {
     if (!isScrolling) {
         window.requestAnimationFrame(() => {
-            const currentScroll = window.pageYOffset;
+            const currentScroll = window.scrollY;
             const header = document.querySelector('header');
 
+            // Only hide header after scrolling down 50px
             if (currentScroll > lastScrollPosition && currentScroll > 50) {
-                header.classList.add('hidden');            } else if (currentScroll < lastScrollPosition) {
-                header.classList.remove('hidden');
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
             }
 
             lastScrollPosition = currentScroll;
@@ -501,30 +503,55 @@ const exportarExcel = async () => {
 
 const exportarPDF = async () => {
     try {
+        // Wait for jsPDF to be loaded
+        await new Promise(resolve => {
+            if (window.jspdf) {
+                resolve();
+            } else {
+                const checkJsPDF = setInterval(() => {
+                    if (window.jspdf) {
+                        clearInterval(checkJsPDF);
+                        resolve();
+                    }
+                }, 100);
+            }
+        });
+
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        doc.text("Control de Gastos Personales", 14, 15);
-        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 25);
-        doc.text(`Saldo Total: $${formatearNumero(AppState.saldo)}`, 14, 35);
-        doc.text(`Total Ingresos: $${formatearNumero(AppState.ingresos)}`, 14, 45);
-        doc.text(`Total Gastos: $${formatearNumero(AppState.gastos)}`, 14, 55);
+        // Add header
+        doc.setFontSize(20);
+        doc.text("Control de Gastos Personales", 14, 20);
 
+        // Add summary
+        doc.setFontSize(12);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 30);
+        doc.text(`Saldo Total: $${formatearNumero(AppState.saldo)}`, 14, 40);
+        doc.text(`Total Ingresos: $${formatearNumero(AppState.ingresos)}`, 14, 50);
+        doc.text(`Total Gastos: $${formatearNumero(AppState.gastos)}`, 14, 60);
+
+        // Create table data
         const columns = ["Descripción", "Monto", "Tipo", "Categoría", "Fecha"];
         const data = AppState.transacciones.map(t => [
             capitalizarPrimeraLetra(t.descripcion || 'Sin descripción'),
             `$${formatearNumero(t.monto)}`,
             capitalizarPrimeraLetra(t.tipo),
             capitalizarPrimeraLetra(t.categoria),
-            new Date(t.fecha).toLocaleDateString()
+            formatearFechaHora(t.fecha)
         ]);
 
+        // Add table
         doc.autoTable({
             head: [columns],
             body: data,
-            startY: 65,
+            startY: 70,
+            styles: { fontSize: 8 },
+            headStyles: { fillColor: [0, 0, 0] },
+            alternateRowStyles: { fillColor: [245, 245, 245] }
         });
 
+        // Save the PDF
         doc.save("Control De Gastos Personales.pdf");
         mostrarMensaje('Archivo PDF exportado con éxito', 'success');
     } catch (error) {
@@ -725,95 +752,112 @@ const resetFeatherCache = () => {
     memoizedFeatherReplace.cache = null;
 };
 
+// Improved edit functions with better error handling and validation
 const editarDescripcion = async (indice) => {
-    const transaccion = AppState.transacciones[indice];
-    const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-descripcion)`);
-    if (!fila) {
-        mostrarMensaje('Elemento no encontrado', 'error');
-        return;
-    }
-    const descripcionTexto = fila.querySelector('.descripcion-texto');
-    const descripcionInput = fila.querySelector('.editar-descripcion');
-    const botonEditar = fila.querySelector('.boton-editar-descripcion');
+    try {
+        const transaccion = AppState.transacciones[indice];
+        const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-descripcion)`);
+        if (!fila) {
+            throw new Error('Elemento no encontrado');
+        }
 
-    if (descripcionInput.style.display === 'none') {
-        descripcionTexto.style.display = 'none';
-        descripcionInput.style.display = 'inline-block';
-        descripcionInput.focus();
-        botonEditar.innerHTML = '<i data-feather="check"></i>';
-    } else {
-        const nuevaDescripcion = descripcionInput.value.trim();
-        transaccion.descripcion = nuevaDescripcion || null;
-        descripcionTexto.textContent = capitalizarPalabras(nuevaDescripcion || 'Sin descripción');
-        descripcionTexto.style.display = 'inline-block';
-        descripcionInput.style.display = 'none';
-        botonEditar.innerHTML = '<i data-feather="edit-2"></i>';
-        await EstadoManager.guardarCambios();
+        const descripcionTexto = fila.querySelector('.descripcion-texto');
+        const descripcionInput = fila.querySelector('.editar-descripcion');
+        const botonEditar = fila.querySelector('.boton-editar-descripcion');
+
+        if (descripcionInput.style.display === 'none') {
+            descripcionTexto.style.display = 'none';
+            descripcionInput.style.display = 'inline-block';
+            descripcionInput.focus();
+            botonEditar.innerHTML = '<i data-feather="check"></i>';
+        } else {
+            const nuevaDescripcion = descripcionInput.value.trim();
+            transaccion.descripcion = nuevaDescripcion || null;
+            descripcionTexto.textContent = capitalizarPalabras(nuevaDescripcion || 'Sin descripción');
+            descripcionTexto.style.display = 'inline-block';
+            descripcionInput.style.display = 'none';
+            botonEditar.innerHTML = '<i data-feather="edit-2"></i>';
+            await EstadoManager.guardarCambios();
+            mostrarMensaje('Descripción actualizada con éxito', 'success');
+        }
+        feather.replace();
+    } catch (error) {
+        mostrarMensaje('Error al editar la descripción', 'error');
+        console.error('Error al editar descripción:', error);
     }
-    memoizedFeatherReplace();
 };
 
 const editarMonto = async (indice) => {
-    const transaccion = AppState.transacciones[indice];
-    const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-monto)`);
-    const montoTexto = fila.querySelector('.monto-texto');
-    const montoInput = fila.querySelector('.editar-monto');
-    const botonEditar = fila.querySelector('.boton-editar-monto');
+    try {
+        const transaccion = AppState.transacciones[indice];
+        const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-monto)`);
+        const montoTexto = fila.querySelector('.monto-texto');
+        const montoInput = fila.querySelector('.editar-monto');
+        const botonEditar = fila.querySelector('.boton-editar-monto');
 
-    if (montoInput.style.display === 'none') {
-        montoTexto.style.display = 'none';
-        montoInput.style.display = 'inline-block';
-        montoInput.focus();
-        botonEditar.innerHTML = '<i data-feather="check"></i>';
-    } else {
-        const nuevoMonto = parseFloat(montoInput.value);
-        if (isNaN(nuevoMonto) || nuevoMonto <= 0) {
-            mostrarMensaje('Por favor, ingrese un monto válido mayor que 0', 'error');
-            return;
+        if (montoInput.style.display === 'none') {
+            montoTexto.style.display = 'none';
+            montoInput.style.display = 'inline-block';
+            montoInput.focus();
+            botonEditar.innerHTML = '<i data-feather="check"></i>';
+        } else {
+            const nuevoMonto = parseFloat(montoInput.value);
+            if (isNaN(nuevoMonto) || nuevoMonto <= 0) {
+                mostrarMensaje('Por favor, ingrese un monto válido mayor que 0', 'error');
+                return;
+            }
+
+            transaccion.monto = nuevoMonto;
+            await EstadoManager.recalcularTotales();
+            await EstadoManager.guardarCambios();
+
+            montoTexto.textContent = `$${formatearNumero(nuevoMonto)}`;
+            montoTexto.style.display = 'inline-block';
+            montoInput.style.display = 'none';
+            botonEditar.innerHTML = '<i data-feather="dollar-sign"></i>';
         }
-
-        transaccion.monto = nuevoMonto;
-        await EstadoManager.recalcularTotales();
-        await EstadoManager.guardarCambios();
-
-        montoTexto.textContent = `$${formatearNumero(nuevoMonto)}`;
-        montoTexto.style.display = 'inline-block';
-        montoInput.style.display = 'none';
-        botonEditar.innerHTML = '<i data-feather="dollar-sign"></i>';
+        feather.replace();
+    } catch (error) {
+        mostrarMensaje('Error al editar el monto', 'error');
+        console.error('Error al editar monto:', error);
     }
-    memoizedFeatherReplace();
 };
 
 const editarFecha = async (indice) => {
-    const transaccion = AppState.transacciones[indice];
-    const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-fecha)`);
-    const fechaTexto = fila.querySelector('.fecha-texto');
-    const fechaInput = fila.querySelector('.editar-fecha');
-    const botonEditar = fila.querySelector('.boton-editar-fecha');
+    try {
+        const transaccion = AppState.transacciones[indice];
+        const fila = document.querySelector(`tr:has(button[data-indice="${indice}"].boton-editar-fecha)`);
+        const fechaTexto = fila.querySelector('.fecha-texto');
+        const fechaInput = fila.querySelector('.editar-fecha');
+        const botonEditar = fila.querySelector('.boton-editar-fecha');
 
-    if (fechaInput.style.display === 'none') {
-        fechaTexto.style.display = 'none';
-        fechaInput.style.display = 'inline-block';
-        fechaInput.type = 'datetime-local';
-        fechaInput.value = transaccion.fecha.slice(0, 16);
-        fechaInput.focus();
-        botonEditar.innerHTML = '<i data-feather="check"></i>';
-    } else {
-        const nuevaFecha = fechaInput.value;
-        if (!nuevaFecha) {
-            mostrarMensaje('Por favor, seleccione una fecha y hora válida', 'error');
-            return;
+        if (fechaInput.style.display === 'none') {
+            fechaTexto.style.display = 'none';
+            fechaInput.style.display = 'inline-block';
+            fechaInput.type = 'datetime-local';
+            fechaInput.value = transaccion.fecha.slice(0, 16);
+            fechaInput.focus();
+            botonEditar.innerHTML = '<i data-feather="check"></i>';
+        } else {
+            const nuevaFecha = fechaInput.value;
+            if (!nuevaFecha) {
+                mostrarMensaje('Por favor, seleccione una fecha y hora válida', 'error');
+                return;
+            }
+
+            transaccion.fecha = new Date(nuevaFecha).toISOString();
+            fechaTexto.textContent = formatearFechaHora(transaccion.fecha);
+            fechaTexto.style.display = 'inline-block';
+            fechaInput.style.display = 'none';
+            botonEditar.innerHTML = '<i data-feather="calendar"></i>';
+
+            await EstadoManager.guardarCambios();
         }
-
-        transaccion.fecha = new Date(nuevaFecha).toISOString();
-        fechaTexto.textContent = formatearFechaHora(transaccion.fecha);
-        fechaTexto.style.display = 'inline-block';
-        fechaInput.style.display = 'none';
-        botonEditar.innerHTML = '<i data-feather="calendar"></i>';
-
-        await EstadoManager.guardarCambios();
+        feather.replace();
+    } catch (error) {
+        mostrarMensaje('Error al editar la fecha', 'error');
+        console.error('Error al editar fecha:', error);
     }
-    memoizedFeatherReplace();
 };
 
 const confirmarEliminarTransaccion = async (indice) => {
@@ -899,91 +943,105 @@ const ocultarCargando = () => {
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar el estado de la aplicación y configurar eventos
-    EstadoManager.inicializar();
-    feather.replace();
-    resetFeatherCache();
+    try {
+        // Inicializar el estado de la aplicación y configurar eventos
+        EstadoManager.inicializar();
+        feather.replace();
+        resetFeatherCache();
 
-    // Agregar evento de scroll
-    window.addEventListener('scroll', handleScroll, { passive: true });
+        // Agregar evento de scroll
+        window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // Configurar eventos del formulario principal
-    document.getElementById('formulario-transaccion')
-        .addEventListener('submit', handleSubmitFormulario);
+        // Configurar eventos del formulario principal
+        const formulario = document.getElementById('formulario-transaccion');
+        if (formulario) {
+            formulario.addEventListener('submit', async (e) => {
+                try {
+                    await handleSubmitFormulario(e);
+                } catch (error) {
+                    mostrarMensaje('Error al procesar el formulario', 'error');
+                    console.error('Error en submit:', error);
+                }
+            });
+        }
 
-    document.getElementById('categoria')
-        .addEventListener('change', handleCategoriaChange);
+        document.getElementById('categoria')
+            .addEventListener('change', handleCategoriaChange);
 
-    // Configurar eventos de exportación
-    document.getElementById('exportar-excel')
-        .addEventListener('click', exportarExcel);
+        // Configurar eventos de exportación
+        document.getElementById('exportar-excel')
+            .addEventListener('click', exportarExcel);
 
-    document.getElementById('exportar-pdf')
-        .addEventListener('click', exportarPDF);
+        document.getElementById('exportar-pdf')
+            .addEventListener('click', exportarPDF);
 
-    document.getElementById('exportar-json')
-        .addEventListener('click', exportarJSON);
+        document.getElementById('exportar-json')
+            .addEventListener('click', exportarJSON);
 
-    document.getElementById('importar-json')
-        .addEventListener('change', importarJSON);
+        document.getElementById('importar-json')
+            .addEventListener('change', importarJSON);
 
-    // Botones del modal de transferencia
-    document.getElementById('abrir-modal-transferencia')
-        .addEventListener('click', () => {
-            const modal = document.getElementById('modal-transferencia');
-            const selectOrigen = document.getElementById('categoria-origen');
-            const selectDestino = document.getElementById('categoria-destino');
+        // Botones del modal de transferencia
+        document.getElementById('abrir-modal-transferencia')
+            .addEventListener('click', () => {
+                const modal = document.getElementById('modal-transferencia');
+                const selectOrigen = document.getElementById('categoria-origen');
+                const selectDestino = document.getElementById('categoria-destino');
 
-            // Actualizar las opciones de categorías
-            const optionsHTML = AppState.categorias
-                .map(categoria => `<option value="${categoria}">${capitalizarPalabras(categoria)}</option>`)
-                .join('');
+                // Actualizar las opciones de categorías
+                const optionsHTML = AppState.categorias
+                    .map(categoria => `<option value="${categoria}">${capitalizarPalabras(categoria)}</option>`)
+                    .join('');
 
-            selectOrigen.innerHTML = optionsHTML;
-            selectDestino.innerHTML = optionsHTML;
+                selectOrigen.innerHTML = optionsHTML;
+                selectDestino.innerHTML = optionsHTML;
 
-            modal.classList.remove('hidden');
+                modal.classList.remove('hidden');
+            });
+
+        document.getElementById('cerrar-modal-transferencia')
+            .addEventListener('click', () => {
+                document.getElementById('modal-transferencia').classList.add('hidden');
+                document.getElementById('formulario-transferencia').reset();
+            });
+
+        // Cerrar modal al hacer clic fuera del contenido
+        document.getElementById('modal-transferencia').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-transferencia') {
+                e.target.classList.add('hidden');
+                document.getElementById('formulario-transferencia').reset();
+            }
         });
 
-    document.getElementById('cerrar-modal-transferencia')
-        .addEventListener('click', () => {
-            document.getElementById('modal-transferencia').classList.add('hidden');
-            document.getElementById('formulario-transferencia').reset();
+        // Delegación de eventos para acciones dinámicas
+        document.addEventListener('click', async (e) => {
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            const indice = target.dataset.indice;
+            if (!indice && !target.classList.contains('boton-eliminar-categoria')) return;
+
+            if (target.classList.contains('boton-eliminar')) {
+                await confirmarEliminarTransaccion(indice);
+            } else if (target.classList.contains('boton-editar-descripcion')) {
+                await editarDescripcion(indice);
+            } else if (target.classList.contains('boton-editar-monto')) {
+                await editarMonto(indice);
+            } else if (target.classList.contains('boton-editar-fecha')) {
+                await editarFecha(indice);
+            } else if (target.classList.contains('boton-eliminar-categoria')) {
+                const categoria = target.dataset.categoria;
+                await eliminarCategoria(categoria);
+            }
         });
 
-    // Cerrar modal al hacer clic fuera del contenido
-    document.getElementById('modal-transferencia').addEventListener('click', (e) => {
-        if (e.target.id === 'modal-transferencia') {
-            e.target.classList.add('hidden');
-            document.getElementById('formulario-transferencia').reset();
-        }
-    });
-
-    // Delegación de eventos para acciones dinámicas
-    document.addEventListener('click', async (e) => {
-        const target = e.target.closest('button');
-        if (!target) return;
-
-        const indice = target.dataset.indice;
-        if (!indice && !target.classList.contains('boton-eliminar-categoria')) return;
-
-        if (target.classList.contains('boton-eliminar')) {
-            await confirmarEliminarTransaccion(indice);
-        } else if (target.classList.contains('boton-editar-descripcion')) {
-            await editarDescripcion(indice);
-        } else if (target.classList.contains('boton-editar-monto')) {
-            await editarMonto(indice);
-        } else if (target.classList.contains('boton-editar-fecha')) {
-            await editarFecha(indice);
-        } else if (target.classList.contains('boton-eliminar-categoria')) {
-            const categoria = target.dataset.categoria;
-            await eliminarCategoria(categoria);
-        }
-    });
-
-    // Agregar evento para la transferencia entre categorías
-    document.getElementById('formulario-transferencia')
-        .addEventListener('submit', transferirEntreCategorias);
+        // Agregar evento para la transferencia entre categorías
+        document.getElementById('formulario-transferencia')
+            .addEventListener('submit', transferirEntreCategorias);
+    } catch (error) {
+        mostrarMensaje('Error al inicializar la aplicación', 'error');
+        console.error('Error en inicialización:', error);
+    }
 });
 
 // Transferencia entre categorías
@@ -1038,6 +1096,7 @@ const transferirEntreCategorias = async (e) => {
     // Agregar ambas transacciones
     AppState.transacciones.push(transaccionOrigen, transaccionDestino);
 
+
     // Recalcular totales y actualizar UI
     await EstadoManager.recalcularTotales();
     await EstadoManager.guardarCambios();
@@ -1047,3 +1106,4 @@ const transferirEntreCategorias = async (e) => {
     document.getElementById('formulario-transferencia').reset();
     mostrarMensaje('Transferencia realizada con éxito', 'success');
 };
+
