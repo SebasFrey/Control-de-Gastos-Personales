@@ -127,11 +127,11 @@
               </button>
               <button
                 type="button"
-                id="agregar-categoria"
+                id="abrir-modal-transferencia"
                 class="boton-secundario"
               >
-                <i data-feather="folder-plus"></i>
-                Agregar Nueva Categoría
+                <i data-feather="repeat"></i>
+                Transferir entre Categorías
               </button>
             </div>
             <div class="grupo-botones grupo-datos">
@@ -195,6 +195,57 @@
     </main>
 
     <div id="mensajes" class="mensajes" role="alert" aria-live="polite"></div>
+
+    <!-- Modal para transferencia entre categorías -->
+    <div id="modal-transferencia" class="modal hidden">
+      <div class="modal-contenido">
+        <span class="cerrar-modal" id="cerrar-modal-transferencia">&times;</span>
+        <h2>Transferir entre Categorías</h2>
+        <form id="formulario-transferencia">
+          <div class="grupo-formulario">
+            <label for="monto-transferencia">Monto <span aria-hidden="true">*</span></label>
+            <div class="input-container">
+              <i data-feather="dollar-sign" class="input-icon"></i>
+              <input
+                type="number"
+                id="monto-transferencia"
+                name="monto-transferencia"
+                step="0.01"
+                min="0.01"
+                required
+                aria-required="true"
+                aria-invalid="false"
+                placeholder="Ingrese el monto"
+              />
+            </div>
+          </div>
+          <div class="grupo-formulario">
+            <label for="categoria-origen">Categoría Origen <span aria-hidden="true">*</span></label>
+            <div class="input-container">
+              <i data-feather="tag" class="input-icon"></i>
+              <select id="categoria-origen" name="categoria-origen" required aria-required="true">
+                <!-- Opciones de categorías se llenarán dinámicamente -->
+              </select>
+            </div>
+          </div>
+          <div class="grupo-formulario">
+            <label for="categoria-destino">Categoría Destino <span aria-hidden="true">*</span></label>
+            <div class="input-container">
+              <i data-feather="tag" class="input-icon"></i>
+              <select id="categoria-destino" name="categoria-destino" required aria-required="true">
+                <!-- Opciones de categorías se llenarán dinámicamente -->
+              </select>
+            </div>
+          </div>
+          <div class="grupo-botones">
+            <button type="submit" class="boton-principal">
+              <i data-feather="repeat"></i>
+              Transferir
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- Load non-critical scripts async -->
     <script

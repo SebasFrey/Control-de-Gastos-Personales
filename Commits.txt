@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Versión 4.44.5: Correcciones en eventos y estructura de datos."
+git commit -m "Versión 4.44.6: Añadida funcionalidad para transferir entre categorías y crear nuevas categorías."
 
 git push origin main
 

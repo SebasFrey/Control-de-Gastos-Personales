@@ -261,6 +261,7 @@ const handleSubmitFormulario = async (e) => {
             categoria = formData.get('otra-categoria').trim().toLowerCase();
             if (!AppState.categorias.includes(categoria)) {
                 AppState.categorias.push(categoria);
+                actualizarSelectCategorias(); // Actualizar el select de categorías
             }
         }
 
@@ -946,6 +947,96 @@ const ocultarCargando = () => {
     }
 };
 
+// Funciones de transferencia entre categorías
+const abrirModalTransferencia = () => {
+    const modal = document.getElementById('modal-transferencia');
+    modal.classList.remove('hidden');
+
+    // Llenar las opciones de categorías en los select
+    const categoriaOrigenSelect = document.getElementById('categoria-origen');
+    const categoriaDestinoSelect = document.getElementById('categoria-destino');
+    categoriaOrigenSelect.innerHTML = '';
+    categoriaDestinoSelect.innerHTML = '';
+
+    AppState.categorias.forEach(categoria => {
+        const optionOrigen = document.createElement('option');
+        optionOrigen.value = categoria;
+        optionOrigen.textContent = capitalizarPalabras(categoria);
+        categoriaOrigenSelect.appendChild(optionOrigen);
+
+        const optionDestino = document.createElement('option');
+        optionDestino.value = categoria;
+        optionDestino.textContent = capitalizarPalabras(categoria);
+        categoriaDestinoSelect.appendChild(optionDestino);
+    });
+};
+
+const cerrarModalTransferencia = () => {
+    const modal = document.getElementById('modal-transferencia');
+    modal.classList.add('hidden');
+};
+
+const transferirEntreCategorias = async (e) => {
+    e.preventDefault();
+
+    const monto = parseFloat(document.getElementById('monto-transferencia').value);
+    const categoriaOrigen = document.getElementById('categoria-origen').value;
+    const categoriaDestino = document.getElementById('categoria-destino').value;
+
+    if (isNaN(monto) || monto <= 0) {
+        mostrarMensaje('Ingrese un monto válido mayor que 0', 'error');
+        return;
+    }
+
+    if (categoriaOrigen === categoriaDestino) {
+        mostrarMensaje('La categoría de origen y destino no pueden ser iguales', 'error');
+        return;
+    }
+
+    // Verificar si hay saldo suficiente en la categoría origen
+    if (!AppState.resumenCategoria[categoriaOrigen] || AppState.resumenCategoria[categoriaOrigen] < monto) {
+        mostrarMensaje('Saldo insuficiente en la categoría origen', 'error');
+        return;
+    }
+
+    // Verificar si la categoría de origen tiene transacciones
+    const tieneTransacciones = AppState.transacciones.some(trans => trans.categoria === categoriaOrigen);
+    if (!tieneTransacciones) {
+        mostrarMensaje('La categoría de origen no tiene transacciones', 'error');
+        return;
+    }
+
+    // Crear transacción de salida (origen)
+    const transaccionOrigen = {
+        descripcion: `Transferencia hacia ${capitalizarPalabras(categoriaDestino)}`,
+        monto: monto,
+        tipo: 'gasto',
+        categoria: categoriaOrigen,
+        fecha: new Date().toISOString()
+    };
+
+    // Crear transacción de entrada (destino)
+    const transaccionDestino = {
+        descripcion: `Transferencia desde ${capitalizarPalabras(categoriaOrigen)}`,
+        monto: monto,
+        tipo: 'ingreso',
+        categoria: categoriaDestino,
+        fecha: new Date().toISOString()
+    };
+
+    // Agregar ambas transacciones
+    AppState.transacciones.push(transaccionOrigen, transaccionDestino);
+
+    // Recalcular totales y actualizar UI
+    await EstadoManager.recalcularTotales();
+    await EstadoManager.guardarCambios();
+
+    // Cerrar modal y mostrar mensaje de éxito
+    cerrarModalTransferencia();
+    document.getElementById('formulario-transferencia').reset();
+    mostrarMensaje('Transferencia realizada con éxito', 'success');
+};
+
 // Reemplaza la sección de eventos en el DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
     EstadoManager.inicializar();
@@ -1121,71 +1212,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Agregar evento para abrir el modal de transferencia
+    document.getElementById('abrir-modal-transferencia')
+        .addEventListener('click', abrirModalTransferencia);
+
+    // Agregar evento para cerrar el modal de transferencia
+    document.getElementById('cerrar-modal-transferencia')
+        .addEventListener('click', cerrarModalTransferencia);
+
     // Agregar evento para la transferencia entre categorías
     document.getElementById('formulario-transferencia')
         .addEventListener('submit', transferirEntreCategorias);
 });
-
-// Transferencia entre categorías
-const transferirEntreCategorias = async (e) => {
-    e.preventDefault();
-
-    const monto = parseFloat(document.getElementById('monto-transferencia').value);
-    const categoriaOrigen = document.getElementById('categoria-origen').value;
-    const categoriaDestino = document.getElementById('categoria-destino').value;
-
-    if (isNaN(monto) || monto <= 0) {
-        mostrarMensaje('Ingrese un monto válido mayor que 0', 'error');
-        return;
-    }
-
-    if (categoriaOrigen === categoriaDestino) {
-        mostrarMensaje('La categoría de origen y destino no pueden ser iguales', 'error');
-        return;
-    }
-
-    // Verificar si hay saldo suficiente en la categoría origen
-    if (!AppState.resumenCategoria[categoriaOrigen] || AppState.resumenCategoria[categoriaOrigen] < monto) {
-        mostrarMensaje('Saldo insuficiente en la categoría origen', 'error');
-        return;
-    }
-
-    // Verificar si la categoría de origen tiene transacciones
-    const tieneTransacciones = AppState.transacciones.some(trans => trans.categoria === categoriaOrigen);
-    if (!tieneTransacciones) {
-        mostrarMensaje('La categoría de origen no tiene transacciones', 'error');
-        return;
-    }
-
-    // Crear transacción de salida (origen)
-    const transaccionOrigen = {
-        descripcion: `Transferencia hacia ${capitalizarPalabras(categoriaDestino)}`,
-        monto: monto,
-        tipo: 'gasto',
-        categoria: categoriaOrigen,
-        fecha: new Date().toISOString()
-    };
-
-    // Crear transacción de entrada (destino)
-    const transaccionDestino = {
-        descripcion: `Transferencia desde ${capitalizarPalabras(categoriaOrigen)}`,
-        monto: monto,
-        tipo: 'ingreso',
-
-        categoria: categoriaDestino,
-        fecha: new Date().toISOString()
-    };
-
-    // Agregar ambas transacciones
-    AppState.transacciones.push(transaccionOrigen, transaccionDestino);
-
-
-    // Recalcular totales y actualizar UI
-    await EstadoManager.recalcularTotales();
-    await EstadoManager.guardarCambios();
-
-    // Cerrar modal y mostrar mensaje de éxito
-    document.getElementById('modal-transferencia').classList.add('hidden');
-    document.getElementById('formulario-transferencia').reset();
-    mostrarMensaje('Transferencia realizada con éxito', 'success');
-};
