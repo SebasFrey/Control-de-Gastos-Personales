@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Versión 4.44.6: Añadida funcionalidad para transferir entre categorías y crear nuevas categorías."
+git commit -m "Versión 4.45.0: Eliminadas funciones no utilizadas y optimizado el código en script.js."
 
 git push origin main
 

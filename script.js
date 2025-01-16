@@ -9,6 +9,13 @@ const AppState = {
     transaccionesPorFecha: {}
 };
 
+// Añade este nuevo tipo de transacción a tus constantes o configuración
+const TIPOS_TRANSACCION = {
+    INGRESO: 'ingreso',
+    GASTO: 'gasto',
+    TRANSFERENCIA: 'transferencia'
+};
+
 // Variables para el manejo del scroll
 let lastScrollPosition = 0;
 let isScrolling = false;
@@ -623,47 +630,6 @@ const importarExcel = async (e) => {
     } catch (error) {
         mostrarMensaje('Error al importar desde Excel', 'error');
         console.error('Error en importación Excel:', error);
-    }
-};
-
-const importarPDF = async (e) => {
-    try {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-            const pdf = await pdfjsLib.getDocument({ data: event.target.result }).promise;
-            const transaccionesImportadas = [];
-
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                const textItems = textContent.items.map(item => item.str);
-
-                for (let j = 0; j < textItems.length; j += 5) {
-                    const transaccion = {
-                        descripcion: textItems[j] || null,
-                        monto: parseFloat(textItems[j + 1].replace('$', '')),
-                        tipo: textItems[j + 2].toLowerCase(),
-                        categoria: textItems[j + 3].toLowerCase(),
-                        fecha: new Date(textItems[j + 4]).toISOString()
-                    };
-                    transaccionesImportadas.push(transaccion);
-                }
-            }
-
-            AppState.transacciones = transaccionesImportadas;
-
-            await EstadoManager.recalcularTotales();
-            await EstadoManager.guardarCambios();
-
-            mostrarMensaje('Archivo PDF importado con éxito', 'success');
-        };
-        reader.readAsArrayBuffer(file);
-    } catch (error) {
-        mostrarMensaje('Error al importar desde PDF', 'error');
-        console.error('Error en importación PDF:', error);
     }
 };
 
