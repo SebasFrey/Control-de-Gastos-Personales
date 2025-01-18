@@ -917,6 +917,7 @@ const ocultarCargando = () => {
 const abrirModalTransferencia = () => {
     const modal = document.getElementById('modal-transferencia');
     modal.classList.remove('hidden');
+    modal.classList.add('active');
 
     // Llenar las opciones de categorías en los select
     const categoriaOrigenSelect = document.getElementById('categoria-origen');
@@ -925,22 +926,43 @@ const abrirModalTransferencia = () => {
     categoriaDestinoSelect.innerHTML = '';
 
     AppState.categorias.forEach(categoria => {
-        const optionOrigen = document.createElement('option');
-        optionOrigen.value = categoria;
-        optionOrigen.textContent = capitalizarPalabras(categoria);
-        categoriaOrigenSelect.appendChild(optionOrigen);
-
-        const optionDestino = document.createElement('option');
-        optionDestino.value = categoria;
-        optionDestino.textContent = capitalizarPalabras(categoria);
-        categoriaDestinoSelect.appendChild(optionDestino);
+        if (categoria !== 'otro') { // Opcional: excluir la categoría "otro"
+            const optionOrigen = document.createElement('option');
+            optionOrigen.value = categoria;
+            optionOrigen.textContent = capitalizarPalabras(categoria);
+            categoriaOrigenSelect.appendChild(optionOrigen.cloneNode(true));
+            categoriaDestinoSelect.appendChild(optionOrigen);
+        }
     });
+
+    // Prevenir scroll del body mientras el modal está abierto
+    document.body.style.overflow = 'hidden';
 };
 
 const cerrarModalTransferencia = () => {
     const modal = document.getElementById('modal-transferencia');
-    modal.classList.add('hidden');
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300); // Coincidir con la duración de la transición CSS
+
+    // Restaurar scroll del body
+    document.body.style.overflow = '';
 };
+
+// Agregar evento para cerrar el modal al hacer clic fuera del contenido
+document.getElementById('modal-transferencia').addEventListener('click', (e) => {
+    if (e.target.id === 'modal-transferencia') {
+        cerrarModalTransferencia();
+    }
+});
+
+// Agregar evento para cerrar con la tecla Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !document.getElementById('modal-transferencia').classList.contains('hidden')) {
+        cerrarModalTransferencia();
+    }
+});
 
 const transferirEntreCategorias = async (e) => {
     e.preventDefault();
@@ -1190,3 +1212,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('formulario-transferencia')
         .addEventListener('submit', transferirEntreCategorias);
 });
+

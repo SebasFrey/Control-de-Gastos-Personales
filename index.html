@@ -31,7 +31,11 @@
     <main>
       <section id="seccion-formulario">
         <h2 id="form-title">Nueva Transacción</h2>
-        <form id="formulario-transaccion" novalidate aria-labelledby="form-title">
+        <form
+          id="formulario-transaccion"
+          novalidate
+          aria-labelledby="form-title"
+        >
           <div class="grupo-formulario">
             <label for="monto">Monto <span aria-hidden="true">*</span></label>
             <div class="input-container">
@@ -199,11 +203,15 @@
     <!-- Modal para transferencia entre categorías -->
     <div id="modal-transferencia" class="modal hidden">
       <div class="modal-contenido">
-        <span class="cerrar-modal" id="cerrar-modal-transferencia">&times;</span>
+        <span class="cerrar-modal" id="cerrar-modal-transferencia"
+          >&times;</span
+        >
         <h2>Transferir entre Categorías</h2>
         <form id="formulario-transferencia">
           <div class="grupo-formulario">
-            <label for="monto-transferencia">Monto <span aria-hidden="true">*</span></label>
+            <label for="monto-transferencia"
+              >Monto <span aria-hidden="true">*</span></label
+            >
             <div class="input-container">
               <i data-feather="dollar-sign" class="input-icon"></i>
               <input
@@ -220,19 +228,33 @@
             </div>
           </div>
           <div class="grupo-formulario">
-            <label for="categoria-origen">Categoría Origen <span aria-hidden="true">*</span></label>
+            <label for="categoria-origen"
+              >Categoría Origen <span aria-hidden="true">*</span></label
+            >
             <div class="input-container">
               <i data-feather="tag" class="input-icon"></i>
-              <select id="categoria-origen" name="categoria-origen" required aria-required="true">
+              <select
+                id="categoria-origen"
+                name="categoria-origen"
+                required
+                aria-required="true"
+              >
                 <!-- Opciones de categorías se llenarán dinámicamente -->
               </select>
             </div>
           </div>
           <div class="grupo-formulario">
-            <label for="categoria-destino">Categoría Destino <span aria-hidden="true">*</span></label>
+            <label for="categoria-destino"
+              >Categoría Destino <span aria-hidden="true">*</span></label
+            >
             <div class="input-container">
               <i data-feather="tag" class="input-icon"></i>
-              <select id="categoria-destino" name="categoria-destino" required aria-required="true">
+              <select
+                id="categoria-destino"
+                name="categoria-destino"
+                required
+                aria-required="true"
+              >
                 <!-- Opciones de categorías se llenarán dinámicamente -->
               </select>
             </div>

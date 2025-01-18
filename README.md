@@ -1,6 +1,6 @@
 # Control de Gastos Personales
 
-## Versión 4.44.6
+## Versión 4.46.0
 
 Una aplicación web moderna para gestionar gastos e ingresos personales, con un diseño intuitivo y profesional.
 
@@ -17,7 +17,7 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - 🗑️ Eliminación de transacciones por categoría
 - 🔄 Transferencia entre categorías
 
-### Novedades en la Versión 4.44.6
+### Novedades en la Versión 4.46.0
 
 #### Interfaz de Usuario
 
@@ -48,6 +48,8 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - Verificación de la estructura de datos importados/exportados
 - Aseguramiento de que todos los elementos del DOM utilizados en JavaScript existen en el HTML
 - Revisión y corrección de eventos para asegurar que estén correctamente enlazados y no haya conflictos
+- Eliminadas funciones no utilizadas y optimizado el código en script.js
+- Añadido modal para transferencia entre categorías con mejor manejo de eventos y accesibilidad
 
 ### Tecnologías Utilizadas
 
