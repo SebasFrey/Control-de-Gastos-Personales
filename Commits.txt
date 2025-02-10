@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Versión 4.50.1: Correcciones y Mejoras"
+git commit -m "Versión 4.50.2:Mejoras"
 
 git push origin main
 

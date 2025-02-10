@@ -129,12 +129,6 @@ button:hover,
   transform: translateY(-1px);
 }
 
-button:focus-visible,
-.boton-exportar:focus-visible {
-  outline: 2px solid var(--color-primario);
-  outline-offset: 2px;
-}
-
 .grupos-botones {
   display: flex;
   flex-direction: column;
@@ -221,8 +215,6 @@ button:focus-visible,
   background-color: var(--color-blanco);
   box-shadow: var(--sombra-media);
   animation: slideIn 0.3s ease;
-  transform: translateZ(0);
-  will-change: transform;
 }
 
 .mensaje-success {
@@ -294,19 +286,6 @@ button:focus-visible,
     right: 1rem;
     bottom: 1rem;
   }
-  .input-container {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .input-icon {
-    display: block;
-  }
-
-  input,
-  select {
-    padding: 0.75rem 1rem 0.75rem 3rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -329,6 +308,184 @@ button:focus-visible,
   input,
   select {
     padding: 0.75rem 1rem;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-contenido {
+  background-color: var(--color-blanco);
+  padding: 2rem;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-media);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+
+.modal:not(.hidden) .modal-contenido {
+  transform: translateY(0);
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transicion);
+}
+
+.cerrar-modal:hover {
+  background-color: var(--color-acento);
+}
+
+/* Nuevos estilos para el historial de transacciones */
+.acordeon-dia {
+  border: 1px solid var(--color-acento);
+  border-radius: var(--radio-borde);
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.acordeon-cabecera {
+  background-color: var(--color-blanco);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transicion);
+}
+
+.acordeon-cabecera:hover {
+  background-color: var(--color-fondo);
+}
+
+.acordeon-fecha {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.acordeon-resumen {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-secundario);
+}
+
+.acordeon-contenido {
+  background-color: var(--color-blanco);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.acordeon-contenido.activo {
+  max-height: 1000px;
+}
+
+.lista-transacciones {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.transaccion-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-acento);
+  align-items: center;
+}
+
+.transaccion-item:last-child {
+  border-bottom: none;
+}
+
+.transaccion-descripcion {
+  font-weight: 500;
+}
+
+.transaccion-categoria {
+  color: var(--color-secundario);
+  font-size: 0.9rem;
+}
+
+.transaccion-monto {
+  font-weight: 500;
+  text-align: right;
+}
+
+.transaccion-acciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.boton-eliminar {
+  padding: 0.25rem;
+  background: none;
+  color: var(--color-secundario);
+}
+
+.boton-eliminar:hover {
+  color: var(--color-error);
+  background-color: rgba(214, 48, 49, 0.1);
+}
+
+@media (max-width: 767px) {
+  .transaccion-item {
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+  }
+
+  .transaccion-descripcion {
+    grid-column: 1 / -1;
+  }
+
+  .transaccion-categoria {
+    grid-column: 1 / 2;
+  }
+
+  .transaccion-monto {
+    grid-column: 1 / 2;
+  }
+
+  .transaccion-acciones {
+    grid-column: 2 / 3;
+    grid-row: 2 / 4;
+    align-self: center;
   }
 }
 
