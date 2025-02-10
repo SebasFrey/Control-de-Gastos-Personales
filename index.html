@@ -1,293 +1,138 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <meta
-      name="description"
-      content="Control de Gastos Personales - Gestiona tus finanzas de manera eficiente"
-    />
-    <meta name="theme-color" content="#000000" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Gastos Personales</title>
-    <link rel="stylesheet" href="estilos.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Preload critical resources -->
-    <link
-      rel="preload"
-      href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"
-      as="script"
-    />
-  </head>
-  <body>
-    <header role="banner">
-      <h1 id="page-title">Control de Gastos Personales</h1>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Control de Gastos Personales</h1>
     </header>
+
     <main>
-      <section id="seccion-formulario">
-        <h2 id="form-title">Nueva Transacción</h2>
-        <form
-          id="formulario-transaccion"
-          novalidate
-          aria-labelledby="form-title"
-        >
-          <div class="grupo-formulario">
-            <label for="monto">Monto <span aria-hidden="true">*</span></label>
-            <div class="input-container">
-              <i data-feather="dollar-sign" class="input-icon"></i>
-              <input
-                type="number"
-                id="monto"
-                name="monto"
-                step="0.01"
-                min="0.01"
-                required
-                aria-required="true"
-                aria-invalid="false"
-                aria-describedby="error-monto"
-                placeholder="Ingrese el monto"
-              />
+        <section id="seccion-formulario">
+            <div class="tarjeta">
+                <h2>Nueva Transacción</h2>
+                <form id="formulario-transaccion">
+                    <div class="grupo-formulario">
+                        <label for="monto">Monto</label>
+                        <div class="input-container">
+                            <i data-feather="dollar-sign" class="input-icon"></i>
+                            <input type="number" id="monto" name="monto" step="0.01" min="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="grupo-formulario">
+                        <label for="tipo">Tipo</label>
+                        <div class="input-container">
+                            <i data-feather="repeat" class="input-icon"></i>
+                            <select id="tipo" name="tipo" required>
+                                <option value="ingreso">Ingreso</option>
+                                <option value="gasto">Gasto</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grupo-formulario">
+                        <label for="categoria">Categoría</label>
+                        <div class="input-container">
+                            <i data-feather="tag" class="input-icon"></i>
+                            <select id="categoria" name="categoria" required>
+                                <option value="sin clasificar">Sin clasificar</option>
+                                <option value="otro">Otra categoría</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grupo-formulario" id="contenedor-otra-categoria" style="display: none;">
+                        <label for="otra-categoria">Nueva Categoría</label>
+                        <div class="input-container">
+                            <i data-feather="plus-circle" class="input-icon"></i>
+                            <input type="text" id="otra-categoria" name="otra-categoria" placeholder="Nombre de la nueva categoría">
+                        </div>
+                    </div>
+
+                    <div class="grupo-formulario">
+                        <label for="descripcion">Descripción</label>
+                        <div class="input-container">
+                            <i data-feather="file-text" class="input-icon"></i>
+                            <input type="text" id="descripcion" name="descripcion" placeholder="Descripción opcional">
+                        </div>
+                    </div>
+
+                    <div class="grupos-botones">
+                        <div class="grupo-botones grupo-gestion">
+                            <button type="submit">
+                                <i data-feather="plus"></i>
+                                Agregar
+                            </button>
+                        </div>
+
+                        <div class="grupo-botones grupo-datos">
+                            <button type="button" id="exportar-excel">
+                                <i data-feather="file-text"></i>
+                                Excel
+                            </button>
+                            <button type="button" id="exportar-pdf">
+                                <i data-feather="file"></i>
+                                PDF
+                            </button>
+                            <button type="button" id="exportar-json">
+                                <i data-feather="save"></i>
+                                Exportar
+                            </button>
+                            <label for="importar-json" class="boton-exportar">
+                                <i data-feather="upload"></i>
+                                Importar
+                                <input type="file" id="importar-json" accept=".json" class="hidden">
+                            </label>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="mensaje-error" id="error-monto"></div>
-          </div>
-          <div class="grupo-formulario">
-            <label for="tipo">Tipo <span aria-hidden="true">*</span></label>
-            <div class="input-container">
-              <i data-feather="repeat" class="input-icon"></i>
-              <select id="tipo" name="tipo" required aria-required="true">
-                <option value="ingreso">Ingreso</option>
-                <option value="gasto">Gasto</option>
-              </select>
+        </section>
+
+        <section id="seccion-resumen">
+            <div class="tarjetas-resumen">
+                <div id="saldo-total" class="tarjeta">
+                    <h3>Saldo Total</h3>
+                    <p>$<span id="saldo">0.00</span></p>
+                </div>
+                <div class="tarjeta">
+                    <h3>Total Ingresos</h3>
+                    <p>$<span id="ingresos">0.00</span></p>
+                </div>
+                <div class="tarjeta">
+                    <h3>Total Gastos</h3>
+                    <p>$<span id="gastos">0.00</span></p>
+                </div>
             </div>
-            <div class="mensaje-error" id="error-tipo"></div>
-          </div>
-          <div class="grupo-formulario">
-            <label for="categoria"
-              >Categoría <span aria-hidden="true">*</span></label
-            >
-            <div class="input-container">
-              <i data-feather="tag" class="input-icon"></i>
-              <select
-                id="categoria"
-                name="categoria"
-                required
-                aria-required="true"
-              >
-                <option value="sin clasificar">Sin clasificar</option>
-                <option value="otro">Otro</option>
-              </select>
+
+            <div class="tarjeta">
+                <h3>Resumen por Categoría</h3>
+                <ul id="lista-categoria"></ul>
             </div>
-            <div class="mensaje-error" id="error-categoria"></div>
-          </div>
-          <div
-            class="grupo-formulario"
-            id="contenedor-otra-categoria"
-            style="display: none"
-          >
-            <label for="otra-categoria"
-              >Nueva Categoría <span aria-hidden="true">*</span></label
-            >
-            <div class="input-container">
-              <i data-feather="plus-circle" class="input-icon"></i>
-              <input
-                type="text"
-                id="otra-categoria"
-                name="otra-categoria"
-                placeholder="Nombre de la nueva categoría"
-                pattern="[A-Za-zÀ-ÿ\s]{2,30}"
-                minlength="2"
-                maxlength="30"
-              />
-            </div>
-            <div class="mensaje-error" id="error-otra-categoria"></div>
-          </div>
-          <div class="grupo-formulario">
-            <label for="descripcion">Descripción</label>
-            <div class="input-container">
-              <i data-feather="file-text" class="input-icon"></i>
-              <input
-                type="text"
-                id="descripcion"
-                name="descripcion"
-                placeholder="Descripción opcional"
-                maxlength="100"
-              />
-            </div>
-          </div>
-          <div class="grupos-botones">
-            <div class="grupo-botones grupo-gestion">
-              <button
-                type="submit"
-                class="boton-principal"
-                aria-label="Agregar nueva transacción"
-              >
-                <i data-feather="plus" aria-hidden="true"></i>
-                <span>Agregar Transacción</span>
-              </button>
-              <button
-                type="button"
-                id="abrir-modal-transferencia"
-                class="boton-secundario"
-              >
-                <i data-feather="repeat"></i>
-                Transferir entre Categorías
-              </button>
-            </div>
-            <div class="grupo-botones grupo-datos">
-              <button type="button" id="exportar-excel" class="boton-exportar">
-                <i data-feather="file-text"></i>
-                Exportar a Excel
-              </button>
-              <button type="button" id="exportar-pdf" class="boton-exportar">
-                <i data-feather="file"></i>
-                Exportar a PDF
-              </button>
-              <button type="button" id="exportar-json" class="boton-exportar">
-                <i data-feather="save"></i>
-                Exportar datos
-              </button>
-              <label
-                for="importar-json"
-                class="boton-exportar"
-                role="button"
-                tabindex="0"
-              >
-                <i data-feather="upload"></i>
-                Importar datos
-                <input
-                  type="file"
-                  id="importar-json"
-                  accept=".json"
-                  aria-label="Importar datos desde archivo JSON"
-                  class="hidden"
-                />
-              </label>
-            </div>
-          </div>
-        </form>
-      </section>
-      <section id="seccion-resumen" aria-labelledby="resumen-title">
-        <h2 id="resumen-title">Resumen Financiero</h2>
-        <div class="tarjetas-resumen">
-          <div id="saldo-total" class="tarjeta">
-            <h3>Saldo Total</h3>
-            <p>$<span id="saldo">0.00</span></p>
-          </div>
-          <div id="total-ingresos" class="tarjeta ingreso">
-            <h3>Total Ingresos</h3>
-            <p>$<span id="ingresos">0.00</span></p>
-          </div>
-          <div id="total-gastos" class="tarjeta gasto">
-            <h3>Total Gastos</h3>
-            <p>$<span id="gastos">0.00</span></p>
-          </div>
-        </div>
-        <div id="resumen-categoria" class="tarjeta">
-          <h3>Resumen por Categoría</h3>
-          <ul id="lista-categoria" role="list"></ul>
-        </div>
-      </section>
-      <section id="seccion-historial">
-        <h2>Historial de Transacciones</h2>
-        <div id="lista-transacciones" role="region" aria-live="polite"></div>
-      </section>
+        </section>
+
+        <section id="seccion-historial">
+            <h2>Historial de Transacciones</h2>
+            <div id="lista-transacciones"></div>
+        </section>
     </main>
 
-    <div id="mensajes" class="mensajes" role="alert" aria-live="polite"></div>
+    <div id="mensajes"></div>
 
-    <!-- Modal para transferencia entre categorías -->
-    <div id="modal-transferencia" class="modal hidden">
-      <div class="modal-contenido">
-        <span class="cerrar-modal" id="cerrar-modal-transferencia"
-          >&times;</span
-        >
-        <h2>Transferir entre Categorías</h2>
-        <form id="formulario-transferencia">
-          <div class="grupo-formulario">
-            <label for="monto-transferencia"
-              >Monto <span aria-hidden="true">*</span></label
-            >
-            <div class="input-container">
-              <i data-feather="dollar-sign" class="input-icon"></i>
-              <input
-                type="number"
-                id="monto-transferencia"
-                name="monto-transferencia"
-                step="0.01"
-                min="0.01"
-                required
-                aria-required="true"
-                aria-invalid="false"
-                placeholder="Ingrese el monto"
-              />
-            </div>
-          </div>
-          <div class="grupo-formulario">
-            <label for="categoria-origen"
-              >Categoría Origen <span aria-hidden="true">*</span></label
-            >
-            <div class="input-container">
-              <i data-feather="tag" class="input-icon"></i>
-              <select
-                id="categoria-origen"
-                name="categoria-origen"
-                required
-                aria-required="true"
-              >
-                <!-- Opciones de categorías se llenarán dinámicamente -->
-              </select>
-            </div>
-          </div>
-          <div class="grupo-formulario">
-            <label for="categoria-destino"
-              >Categoría Destino <span aria-hidden="true">*</span></label
-            >
-            <div class="input-container">
-              <i data-feather="tag" class="input-icon"></i>
-              <select
-                id="categoria-destino"
-                name="categoria-destino"
-                required
-                aria-required="true"
-              >
-                <!-- Opciones de categorías se llenarán dinámicamente -->
-              </select>
-            </div>
-          </div>
-          <div class="grupo-botones">
-            <button type="submit" class="boton-principal">
-              <i data-feather="repeat"></i>
-              Transferir
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Load non-critical scripts async -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-      async
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"
-      async
-    ></script>
-    <script
-      src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"
-      async
-    ></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="script.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
         feather.replace();
-      });
     </script>
-  </body>
+</body>
 </html>
+

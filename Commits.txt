@@ -1,6 +1,6 @@
 git add .
 
-git commit -m "Versión 4.46.0: Añadido modal para transferencia entre categorías con mejor manejo de eventos y accesibilidad."
+git commit -m "Versión 4.50.0"
 
 git push origin main
 
