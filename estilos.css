@@ -129,6 +129,12 @@ button:hover,
   transform: translateY(-1px);
 }
 
+button:focus-visible,
+.boton-exportar:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
+}
+
 .grupos-botones {
   display: flex;
   flex-direction: column;
@@ -215,6 +221,8 @@ button:hover,
   background-color: var(--color-blanco);
   box-shadow: var(--sombra-media);
   animation: slideIn 0.3s ease;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .mensaje-success {
@@ -241,76 +249,86 @@ button:hover,
 }
 
 @media (min-width: 768px) {
-    main {
-        grid-template-columns: 1fr 2fr;
-    }
+  main {
+    grid-template-columns: 1fr 2fr;
+  }
 
-    #seccion-formulario {
-        grid-column: 1 / 2;
-    }
+  #seccion-formulario {
+    grid-column: 1 / 2;
+  }
 
-    #seccion-resumen {
-        grid-column: 2 / 3;
-        grid-row: 1 / 3;```tsx file="estilos.css"
-    #seccion-resumen {
-        grid-column: 2 / 3;
-        grid-row: 1 / 3;
-    }
+  #seccion-resumen {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+  }
 
-    #seccion-historial {
-        grid-column: 1 / -1;
-    }
+  #seccion-historial {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 767px) {
-    body {
-        font-size: 14px;
-    }
+  body {
+    font-size: 14px;
+  }
 
-    .grupos-botones {
-        gap: 0.75rem;
-    }
+  .grupos-botones {
+    gap: 0.75rem;
+  }
 
-    .grupo-botones {
-        flex-direction: column;
-    }
+  .grupo-botones {
+    flex-direction: column;
+  }
 
-    button,
-    .boton-exportar {
-        width: 100%;
-    }
+  button,
+  .boton-exportar {
+    width: 100%;
+  }
 
-    .tarjetas-resumen {
-        grid-template-columns: 1fr;
-    }
+  .tarjetas-resumen {
+    grid-template-columns: 1fr;
+  }
 
-    .mensaje {
-        left: 1rem;
-        right: 1rem;
-        bottom: 1rem;
-    }
+  .mensaje {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+  .input-container {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .input-icon {
+    display: block;
+  }
+
+  input,
+  select {
+    padding: 0.75rem 1rem 0.75rem 3rem;
+  }
 }
 
 @media (max-width: 480px) {
-    body {
-        font-size: 13px;
-    }
+  body {
+    font-size: 13px;
+  }
 
-    h1 {
-        font-size: 1.5rem;
-    }
+  h1 {
+    font-size: 1.5rem;
+  }
 
-    .input-container {
-        flex-direction: column;
-    }
+  .input-container {
+    flex-direction: column;
+  }
 
-    .input-icon {
-        display: none;
-    }
+  .input-icon {
+    display: none;
+  }
 
-    input,
-    select {
-        padding: 0.75rem 1rem;
-    }
+  input,
+  select {
+    padding: 0.75rem 1rem;
+  }
 }
 

@@ -21,7 +21,7 @@
                         <label for="monto">Monto</label>
                         <div class="input-container">
                             <i data-feather="dollar-sign" class="input-icon"></i>
-                            <input type="number" id="monto" name="monto" step="0.01" min="0.01" required>
+                            <input type="number" id="monto" name="monto" step="0.01" min="0.01" required aria-required="true">
                         </div>
                     </div>
 
@@ -65,8 +65,8 @@
 
                     <div class="grupos-botones">
                         <div class="grupo-botones grupo-gestion">
-                            <button type="submit">
-                                <i data-feather="plus"></i>
+                            <button type="submit" aria-label="Agregar transacción">
+                                <i data-feather="plus" aria-hidden="true"></i>
                                 Agregar
                             </button>
                         </div>
@@ -125,11 +125,11 @@
 
     <div id="mensajes"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
     <script>
         feather.replace();
     </script>

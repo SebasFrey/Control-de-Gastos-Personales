@@ -1,6 +1,6 @@
 # Control de Gastos Personales
 
-## Versión 4.46.0
+## Versión 4.50.1
 
 Una aplicación web moderna para gestionar gastos e ingresos personales, con un diseño intuitivo y profesional.
 
@@ -17,39 +17,28 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
 - 🗑️ Eliminación de transacciones por categoría
 - 🔄 Transferencia entre categorías
 
-### Novedades en la Versión 4.46.0
+### Novedades en la Versión 4.50.1
+
+#### Correcciones y Mejoras
+- Corregido el manejo de feather icons
+- Mejorada la validación de formularios
+- Optimizado el rendimiento del localStorage
+- Corregidos problemas de responsive design
+- Mejorada la accesibilidad general
+- Actualizada la gestión de estado
+- Optimizado el manejo de errores
 
 #### Interfaz de Usuario
-
-- Nuevo diseño visual más moderno y profesional
-- Iconografía mejorada en botones y campos
-- Animaciones y transiciones suaves
-- Mejor jerarquía visual y uso del espacio
-
-#### Experiencia de Usuario
-
-- Sistema simplificado de categorías
-- Feedback visual mejorado
-- Mensajes de estado más claros
-- Mayor accesibilidad
+- Diseño más consistente y profesional
+- Mejor manejo de espacios y márgenes
+- Optimización de animaciones
+- Mejora en la visualización de mensajes
 
 #### Rendimiento
-
-- Carga optimizada de recursos
-- Scripts externos asíncronos
-- Mejoras en la responsividad
-- Optimización general
-
-#### Mejoras Técnicas
-
-- Manejo de scroll mejorado con debouncing y transiciones suaves
-- Exportación a PDF con mejor manejo de errores y validación
-- Funciones de edición mejoradas con validación y manejo de errores
-- Verificación de la estructura de datos importados/exportados
-- Aseguramiento de que todos los elementos del DOM utilizados en JavaScript existen en el HTML
-- Revisión y corrección de eventos para asegurar que estén correctamente enlazados y no haya conflictos
-- Eliminadas funciones no utilizadas y optimizado el código en script.js
-- Añadido modal para transferencia entre categorías con mejor manejo de eventos y accesibilidad
+- Optimización de operaciones asíncronas
+- Mejor manejo de memoria
+- Reducción de reflows y repaints
+- Optimización de cálculos financieros
 
 ### Tecnologías Utilizadas
 
@@ -63,41 +52,4 @@ Una aplicación web moderna para gestionar gastos e ingresos personales, con un 
   - jsPDF para PDF
   - Feather Icons
 
-### Requisitos del Sistema
-
-- Navegador moderno con soporte para:
-  - JavaScript ES6+
-  - CSS Grid y Flexbox
-  - LocalStorage
-  - Async/Await
-
-### Uso
-
-1. Gestión de Transacciones
-
-   - Agregar ingresos y gastos
-   - Categorizar transacciones
-   - Editar o eliminar registros
-   - Eliminar transacciones por categoría
-
-2. Categorías
-
-   - Sistema simplificado con dos categorías predeterminadas
-   - Añadir categorías personalizadas
-   - Gestionar categorías existentes
-   - Transferir entre categorías
-
-3. Exportación/Importación
-   - Excel
-   - PDF
-   - JSON
-
-### Próximas Mejoras
-
-- [ ] Modo oscuro
-- [ ] Gráficos estadísticos
-- [ ] Filtros avanzados
-- [ ] Presupuestos mensuales
-- [ ] Sincronización en la nube
-- [ ] Múltiples monedas
 
